@@ -20,6 +20,10 @@ def make_list(right_answer):
         right_answer_list = right_answer.split(",")
     except:
         right_answer_list = [str(right_answer)]
+
+    lang = button8.cget("text")
+    if lang == "연표":
+        right_answer_list += [str(right_answer)[2:]]
     return right_answer_list
 
 
@@ -109,16 +113,12 @@ def tkinter_eng_word_test(data_direct, filename):
                 ############################
                 ############################
                 ############################
-                answer2 = answer
-                right_answer2 = right_answer
-                try:
-                    answer = answer.replace(" ","")
-                except:
-                    pass
-                try:
-                    right_answer = right_answer.replace(" ","")
-                except:
-                    pass
+                right_answer2 = str(right_answer)
+                right_answer = str(right_answer).replace(" ", "")
+                answer2 = str(answer)
+                answer = str(answer).replace(" ", "")
+                if lang =="연표" and len(answer)==2 and len(right_answer) > 2:
+                    answer = right_answer[:2]+answer
                 right_answer_list = make_list(right_answer)
 
                 if answer != "" and answer in right_answer_list:
@@ -195,7 +195,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer = df["Text 2"][i]
                 exp = df["Text 3"][i]
             text.insert(
-                "1.0", " ( {0}/{1} )\n\n\n".format(count, num_total))
+                "1.0", " ( {0}/{1} )\n\n\n\n\n\n".format(count, num_total))
             if lang != "순서배열":
                 try:
                     text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
@@ -238,17 +238,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer = answer.replace("2","ㄴ")
                     answer = answer.replace("3","ㄷ")
                     answer = answer.replace("4","ㄹ")
-                right_answer2 = right_answer
-                answer2 = answer
-                answer = answer.replace(" ", "")
-                try:
-                    answer = answer.replace(" ","")
-                except:
-                    pass
-                try:
-                    right_answer = right_answer.replace(" ","")
-                except:
-                    pass
+                right_answer2 = str(right_answer)
+                right_answer = str(right_answer).replace(" ", "")
+                answer2 = str(answer)
+                answer = str(answer).replace(" ", "")
+                if lang =="연표" and len(answer)==2 and len(right_answer) > 2:
+                    answer = right_answer[:2]+answer
+
                 right_answer_list = make_list(right_answer)
 
                 if answer != "" and answer in right_answer_list:
@@ -448,8 +444,12 @@ def click_open_btn():
         else:
             text.insert("1.0", f"\n")
             for i in range(len(key_word)):
-                text.insert(
-                    "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
+                if line == "줄바꿈 0" and i != 0 and (str(key_word[len(key_word)-i-1]).replace(" ","") != str(key_word[len(key_word)-i]).replace(" ","")):
+                    text.insert(
+                        "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n\n{b}")
+                else:
+                    text.insert(
+                        "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
                 text.insert(
                     "1.0", f"{'%-5s' % key_word[len(key_word)-i-1]}{a}", "emphasis")
                 text.insert(
