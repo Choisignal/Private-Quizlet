@@ -1,0 +1,94 @@
+
+import numpy as np
+from pandas import read_excel
+import pandas as pd
+import random
+
+def 연표_통합(파일명):
+    df = read_excel(f"{파일명}.xlsx")
+    df = df.dropna()
+    연도 = np.array(df["연도"])
+    사건 = np.array(df["사건"])
+    새연표 = {}
+    for i in range(연도.size):
+        해 = int(연도[i])
+        if 해 not in 새연표.keys():
+            새연표[해] = []
+        새연표[해] = 새연표[해] + [사건[i]]
+
+    연도 = list(새연표)
+    사건목록 = []
+    for 해 in 연도:
+        저장사건 = ""
+        for 사건 in 새연표[해]:
+            저장사건 = 저장사건 + f"{사건}\n"
+        저장사건 = 저장사건[0:-1]
+        사건목록 = 사건목록 + [저장사건]
+
+    새연표 = {"연도": 연도, "사건": 사건목록}
+    새연표 = pd.DataFrame(새연표)
+    새연표.to_excel(f"{파일명}_연도별모음.xlsx", index=False)
+    return f"{파일명}_연도별모음"
+
+def 문제만들기_샘플(파일명):
+    df = read_excel(f"{파일명}.xlsx")
+
+    엑셀용_리스트_문제 = []
+    엑셀용_리스트_정답 = []
+    엑셀용_리스트_해설 = []
+
+    for i in range(100):
+        리스트_문제 = []
+        리스트_원래 = []
+        리스트_연도 = []
+        리스트_원래_연도용 = []
+        리스트_연도_해설용 = []
+        리스트_원래_해설용 = []
+        for i in range(df["사건"].size):
+            contents = df["사건"][i].split("\n")
+            content = np.random.choice(contents, size=1)[0]
+            리스트_문제 += [content]
+            리스트_원래 += [content]
+            리스트_원래_연도용 += [content]
+            year = df["연도"][i]
+            리스트_연도 += [year]
+
+        random.shuffle(리스트_문제)
+        리스트_문제 = 리스트_문제[0:4]
+        #리스트_원래 = [x for i in 리스트_원래 for x in 리스트_문제 if i in x]
+        리스트_원래2 = []
+        for x in 리스트_원래:
+            if x in 리스트_문제:
+                리스트_원래2 += [x]
+        리스트_원래 = 리스트_원래2
+
+        for i in range(len(리스트_원래_연도용)):
+            if 리스트_원래_연도용[i] in 리스트_원래:
+                리스트_원래_해설용 += [리스트_원래_연도용[i]]
+                리스트_연도_해설용 += [리스트_연도[i]]
+
+        dic = {'label':['ㄱ','ㄴ','ㄷ','ㄹ'],'original':리스트_원래,'new':리스트_문제}
+        new_df = pd.DataFrame(dic)
+
+        정답 = ""
+        문제 = ""
+        for i in 리스트_원래:
+            정답 += list(new_df["label"][new_df["new"] == i])[0] + ""
+
+        for i in range(4):
+            문제 += f"{new_df['label'][i]}. {리스트_문제[i]} \n"
+        문제 = 문제[0:-2]
+        정답 = 정답
+        해설 = ""
+        for i in range(4):
+            해설 += f"{정답[i]}. {리스트_연도_해설용[i]} - {리스트_원래_해설용[i]}\n"
+        엑셀용_리스트_문제 += [문제]
+        엑셀용_리스트_정답 += [정답]
+        엑셀용_리스트_해설 += [해설]
+
+    저장용={'Text 1':엑셀용_리스트_문제, 'Text 2':엑셀용_리스트_정답, 'Text 3': 엑셀용_리스트_해설}
+    저장용 = pd.DataFrame(저장용)
+    저장용.to_excel(f"{파일명}_문제.xlsx".replace("연표","순서배열"),index=False)
+
+파일명 = 연표_통합(파일명="./학습자료/연표_한국사_제6공화국~노무현") # 사건을 연도별로 모아준다
+문제만들기_샘플(파일명) # ㄱㄴㄷㄹ 순서 배열 문제 만든다
