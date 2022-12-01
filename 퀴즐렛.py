@@ -414,6 +414,9 @@ def click_open_btn():
             a = " "
             b = ""
 
+        search = entry.get()
+        search = search.replace(".", "")
+        search = search.replace("종료", "")
         if lang == "O X 퀴즈":
             k = 1
             for i in range(len(key_word)):
@@ -423,19 +426,29 @@ def click_open_btn():
             text.insert("1.0", f"\n")
             for i in range(len(key_word)):
                 if content_to_print[len(key_word)-i-1] == "ㅇ":
-                    if k-j >= 100:
-                        zfil = 1
-                        if int((k-j)%100)==0 :
-                            text.insert("1.0", f"{k-j}----------------------------------------------------------", "emphasis")
+
+                    if search == "여기 입력하세요!" or search == "":
+                        print_check = True
                     else:
-                        zfil = 0
-                    text.insert(
-                        "1.0", f"{'%-5s' % key_word[len(key_word)-i-1].split('=')[0]}\n{b}")
-                    text.insert(
-                        "1.0", f"{'%-5s' % key_word[len(key_word)-i-1].split('=')[1][:-1]}{a}", "emphasis")
-                    text.insert(
-                        "1.0", f"{str(k-j).zfill(2)[zfil:]}.")
-                    j += 1
+                        if search in str(key_word[len(key_word)-i-1].split('=')[0]) or search in str(key_word[len(key_word)-i-1].split('=')[1][:-1]):
+                            print_check = True
+                        else:
+                            print_check = False
+                    if print_check == True:
+                        if k-j >= 100:
+                            zfil = 1
+                            if int((k-j)%100)==0 :
+                                text.insert("1.0", f"{k-j}----------------------------------------------------------", "emphasis")
+                        else:
+                            zfil = 0
+
+                        text.insert(
+                            "1.0", f"{'%-5s' % key_word[len(key_word)-i-1].split('=')[0]}\n{b}")
+                        text.insert(
+                            "1.0", f"{'%-5s' % key_word[len(key_word)-i-1].split('=')[1][:-1]}{a}", "emphasis")
+                        text.insert(
+                            "1.0", f"{str(k-j).zfill(2)[zfil:]}.")
+                        j += 1
                 '''
                 text.insert(
                     "1.0", f"{str(len(key_word)-i).zfill(2)}. {'%-5s' % key_word[len(key_word)-i-1]}  {content_to_print[len(key_word)-i-1]} \n", "emphasis")
@@ -444,20 +457,30 @@ def click_open_btn():
         else:
             text.insert("1.0", f"\n")
             for i in range(len(key_word)):
-                if line == "줄바꿈 0" and i != 0 and (str(key_word[len(key_word)-i-1]).replace(" ","") != str(key_word[len(key_word)-i]).replace(" ","")):
-                    text.insert(
-                        "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n\n{b}")
+                if search == "여기 입력하세요!" or search == "":
+                    print_check = True
+                    search_check = False
                 else:
+                    if search in str(content_to_print[len(key_word)-i-1]) or search in str(key_word[len(key_word)-i-1]):
+                        print_check = True
+                        search_check = True
+                    else:
+                        print_check = False
+                print(search, print_check)
+                if print_check == True:
+                    if search_check == True:
+                        text.insert(
+                            "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
+                    elif line == "줄바꿈 0" and ((i != 0 and (str(key_word[len(key_word)-i-1]).replace(" ","") != str(key_word[len(key_word)-i]).replace(" ","")))):
+                        text.insert(
+                            "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n\n{b}")
+                    else:
+                        text.insert(
+                            "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
                     text.insert(
-                        "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
-                text.insert(
-                    "1.0", f"{'%-5s' % key_word[len(key_word)-i-1]}{a}", "emphasis")
-                text.insert(
-                    "1.0", f"{str(len(key_word)-i)}.", "emphasis")
-                '''
-                text.insert(
-                    "1.0", f"{str(len(key_word)-i).zfill(2)}. {'%-5s' % key_word[len(key_word)-i-1]}  {content_to_print[len(key_word)-i-1]} \n", "emphasis")
-                '''
+                        "1.0", f"{'%-5s' % key_word[len(key_word)-i-1]}{a}", "emphasis")
+                    text.insert(
+                        "1.0", f"{str(len(key_word)-i).zfill(len(str(len(key_word))))}.")
             text.insert("1.0", "\n")
     else:
         enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
