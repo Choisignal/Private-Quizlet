@@ -66,7 +66,7 @@ def tkinter_eng_word_test(data_direct, filename):
             qusetion_num = int(num_test.split("문항")[0])
             if qusetion_num > num_total:
                 qusetion_num = num_total
-            print(qusetion_num)
+            #print(qusetion_num)
             for i in range_list[0:qusetion_num]:
                 count += 1
                 if lang == "연표":
@@ -195,7 +195,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer = df["Text 2"][i]
                 exp = df["Text 3"][i]
             text.insert(
-                "1.0", " ( {0}/{1} )\n\n\n\n\n\n".format(count, num_total))
+                "1.0", " ( {0}/{1} )\n\n\n\n".format(count, num_total))
             if lang != "순서배열":
                 try:
                     text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
@@ -467,7 +467,7 @@ def click_open_btn():
                 text.insert(
                     "1.0", f"{str(len(key_word)-i).zfill(2)}. {'%-5s' % key_word[len(key_word)-i-1]}  {content_to_print[len(key_word)-i-1]} \n", "emphasis")
                 '''
-            text.insert("1.0", "\n")
+            text.insert("1.0", "\n\n")
         else:
             text.insert("1.0", f"\n")
             for i in range(len(key_word)):
@@ -480,7 +480,7 @@ def click_open_btn():
                         search_check = True
                     else:
                         print_check = False
-                print(search, print_check)
+                ##print(search, print_check)
                 if print_check == True:
                     if search_check == True:
                         text.insert(
@@ -495,7 +495,7 @@ def click_open_btn():
                         "1.0", f"{'%-5s' % key_word[len(key_word)-i-1]}{a}", "emphasis")
                     text.insert(
                         "1.0", f"{str(len(key_word)-i).zfill(len(str(len(key_word))))}.")
-            text.insert("1.0", "\n")
+            text.insert("1.0", "\n\n")
     else:
         enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
 
@@ -649,7 +649,7 @@ def click_memo_btn():
     top.config(menu=mb)
 
     file = "idea.txt"
-    print(file, type(file))
+    ##print(file, type(file))
     top.title(basename(file) + " - 메모장")
     ta.delete(1.0, END)
     try:
