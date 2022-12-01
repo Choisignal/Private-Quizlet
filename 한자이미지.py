@@ -286,12 +286,13 @@ def 한글_동음어(복습=1):
 
     data = {"Text 1": text1, "Text 2": text2, "Text 3": text3}
     data = pd.DataFrame(data)
-    data.to_excel(f"C:\\Users\\SAMSUNG\\Desktop\\한자의지혜복습\\O X 퀴즈_한자의지혜_복습{복습[2:]}.xlsx")
+    data.to_excel(
+        f"./학습자료/O X 퀴즈_한자의지혜_복습{복습[2:]}.xlsx")
 
 
 def 한자의지혜통합(file_path, file_format, 복습목록, save_format, columns=None):
     merge_df = pd.DataFrame()
-    save_path = f"C:\\Users\\SAMSUNG\\Desktop\\한자의지혜복습\\O X 퀴즈_한자의지혜_복습_통합_{min(복습목록)}_{max(복습목록)}.xlsx"
+    save_path = f"./학습자료/O X 퀴즈_한자의지혜_복습_통합_{min(복습목록)}_{max(복습목록)}.xlsx"
     file_list = []
     for 복습 in 복습목록:
         file_list += [f"{file_path}/{file}" for file in os.listdir(
@@ -331,20 +332,17 @@ def 한자의지혜_복습자료만들기():
             except:
                 pass
     '''
-    for n in range(5,8):
-        print(n)
-        복습목록 = list(range(1+(n-1)*5, n*5+1))
-        print(복습목록)
+    복습목록 = [36]
+    for 복습 in 복습목록:
+        # 한자_동음어(복습=복습)
+        한글_동음어(복습=복습)
+    '''
 
-        for 복습 in 복습목록:
-            # 한자_동음어(복습=복습)
-            한글_동음어(복습=복습)
-        한자의지혜통합(file_path="C:\\Users\\SAMSUNG\\Desktop\\한자의지혜복습\\", file_format=".xlsx",
-                복습목록=복습목록, save_format=".xlsx")
-        '''
-        input("종료! (아무 값이나 입력) : ")
-        '''
-    
+    한자의지혜통합(file_path="./학습자료/", file_format=".xlsx",
+            복습목록=복습목록, save_format=".xlsx")
+    '''
+
+
 if __name__ == '__main__':
     # 한자의지혜()
     # translate()
