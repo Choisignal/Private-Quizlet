@@ -214,6 +214,17 @@ def tkinter_eng_word_roof(data_direct, filename):
                 sleep(0.05)
                 window.update()
                 answer = entry.get()
+                if len(answer) != 0 and answer[-1] == "+":
+                    text.delete("1.0", "end")
+                    click_open_btn()
+                    entry.delete(0, END)
+                    if lang != "순서배열":
+                        try:
+                            text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
+                        except:
+                            text.insert("1.0", ask, "emphasis")
+                    else:
+                        text.insert("1.0", f"{ask}\n", "emphasis")
                 if answer == "s.":
                     answer = "ㄴ."
                 elif answer == "d.":
@@ -416,6 +427,7 @@ def click_open_btn():
 
         search = entry.get()
         search = search.replace(".", "")
+        search = search.replace("+", "")
         search = search.replace("종료", "")
         if lang == "O X 퀴즈":
             k = 1
@@ -740,7 +752,7 @@ button3.configure(bg="black", foreground="white",
                   highlightthickness=0)
 
 
-button7 = Button(window, relief="flat", width=12, height=1, text="줄바꿈 2", font=(
+button7 = Button(window, relief="flat", width=12, height=1, text="줄바꿈 0", font=(
     'Courier', 18), activebackground="black", activeforeground="yellow", command=click_line_btn)
 button7.grid(column=2, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
 button7.configure(bg="black", foreground="white", highlightthickness=0)
