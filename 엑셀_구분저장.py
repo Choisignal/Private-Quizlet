@@ -1,7 +1,7 @@
 import pandas as pd
 
 data_direct = "./학습자료/"
-filename = "단답형_국어_기출의지혜_복습목록"
+filename = "단답형_국어기출암기"
 data = pd.read_excel(f"{data_direct}{filename}.xlsx")
 
 구분목록 = list(set(data["구분"]))

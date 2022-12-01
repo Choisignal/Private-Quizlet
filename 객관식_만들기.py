@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 data_direct = "./학습자료/"
-filename = "단답형_영어_유의어"
+filename = "단답형_국어_품사의 통용"
 data = pd.read_excel(f"{data_direct}{filename}.xlsx")
 
 출력_질문목록 = []
