@@ -218,6 +218,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
+                    text.insert(
+                        "1.0", " ( {0}/{1} )".format(count, num_total))
                     if lang != "순서배열":
                         try:
                             text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
