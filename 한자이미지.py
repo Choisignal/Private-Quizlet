@@ -332,19 +332,19 @@ def 한자의지혜_복습자료만들기():
             except:
                 pass
     '''
-    복습목록 = [36]
+    복습목록 = [36, 37]
     for 복습 in 복습목록:
         # 한자_동음어(복습=복습)
         한글_동음어(복습=복습)
-    '''
 
     한자의지혜통합(file_path="./학습자료/", file_format=".xlsx",
             복습목록=복습목록, save_format=".xlsx")
     '''
+    '''
 
 
 if __name__ == '__main__':
-    # 한자의지혜()
+    한자의지혜()
     # translate()
     # makeImg(start_num=449)
     # 한글_동음어()

@@ -7,10 +7,11 @@ from os import makedirs
 import random
 try:
     import winsound as sd
+
     def beepsound():
         fr = 1000    # range : 37 ~ 32767
         du = 1000     # 1000 ms ==1second
-        sd.Beep(fr, du) # winsound.Beep(frequency, duration)
+        sd.Beep(fr, du)  # winsound.Beep(frequency, duration)
 except:
     pass
 
@@ -66,7 +67,7 @@ def tkinter_eng_word_test(data_direct, filename):
             qusetion_num = int(num_test.split("문항")[0])
             if qusetion_num > num_total:
                 qusetion_num = num_total
-            #print(qusetion_num)
+            # print(qusetion_num)
             for i in range_list[0:qusetion_num]:
                 count += 1
                 if lang == "연표":
@@ -76,7 +77,7 @@ def tkinter_eng_word_test(data_direct, filename):
                     ask = df["질문"][i]
                     right_answer = df["대답"][i]
                     try:
-                        ask = ask.replace(right_answer,"[   ]")
+                        ask = ask.replace(right_answer, "[   ]")
                     except:
                         pass
                 else:
@@ -117,7 +118,7 @@ def tkinter_eng_word_test(data_direct, filename):
                 right_answer = str(right_answer).replace(" ", "")
                 answer2 = str(answer)
                 answer = str(answer).replace(" ", "")
-                if lang =="연표" and len(answer)==2 and len(right_answer) > 2:
+                if lang == "연표" and len(answer) == 2 and len(right_answer) > 2:
                     answer = right_answer[:2]+answer
                 right_answer_list = make_list(right_answer)
 
@@ -151,13 +152,14 @@ def tkinter_eng_word_test(data_direct, filename):
             button7.configure(state="normal")
             button8.configure(state="normal")
     except:
-            button2.configure(state="normal")
-            button3.configure(state="normal")
-            button4.configure(state="normal")
-            button5.configure(state="normal")
-            button6.configure(state="normal")
-            button7.configure(state="normal")
-            button8.configure(state="normal")
+        button2.configure(state="normal")
+        button3.configure(state="normal")
+        button4.configure(state="normal")
+        button5.configure(state="normal")
+        button6.configure(state="normal")
+        button7.configure(state="normal")
+        button8.configure(state="normal")
+
 
 def tkinter_eng_word_roof(data_direct, filename):
     text.delete("1.0", "end")
@@ -198,7 +200,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                 "1.0", " ( {0}/{1} )\n\n\n\n".format(count, num_total))
             if lang != "순서배열":
                 try:
-                    text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
+                    text.insert("1.0", ask.replace(
+                        right_answer, "[   ]"), "emphasis")
                 except:
                     text.insert("1.0", ask, "emphasis")
             else:
@@ -222,7 +225,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                         "1.0", " ( {0}/{1} )".format(count, num_total))
                     if lang != "순서배열":
                         try:
-                            text.insert("1.0", ask.replace(right_answer,"[   ]"), "emphasis")
+                            text.insert("1.0", ask.replace(
+                                right_answer, "[   ]"), "emphasis")
                         except:
                             text.insert("1.0", ask, "emphasis")
                     else:
@@ -243,19 +247,19 @@ def tkinter_eng_word_roof(data_direct, filename):
                 ############################
                 ############################
                 if lang == "순서배열":
-                    answer = answer.replace("r","ㄱ")
-                    answer = answer.replace("s","ㄴ")
-                    answer = answer.replace("e","ㄷ")
-                    answer = answer.replace("f","ㄹ")
-                    answer = answer.replace("1","ㄱ")
-                    answer = answer.replace("2","ㄴ")
-                    answer = answer.replace("3","ㄷ")
-                    answer = answer.replace("4","ㄹ")
+                    answer = answer.replace("r", "ㄱ")
+                    answer = answer.replace("s", "ㄴ")
+                    answer = answer.replace("e", "ㄷ")
+                    answer = answer.replace("f", "ㄹ")
+                    answer = answer.replace("1", "ㄱ")
+                    answer = answer.replace("2", "ㄴ")
+                    answer = answer.replace("3", "ㄷ")
+                    answer = answer.replace("4", "ㄹ")
                 right_answer2 = str(right_answer)
                 right_answer = str(right_answer).replace(" ", "")
                 answer2 = str(answer)
                 answer = str(answer).replace(" ", "")
-                if lang =="연표" and len(answer)==2 and len(right_answer) > 2:
+                if lang == "연표" and len(answer) == 2 and len(right_answer) > 2:
                     answer = right_answer[:2]+answer
 
                 right_answer_list = make_list(right_answer)
@@ -293,7 +297,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                         if answer == "ㅇ":
                             text.insert("1.0", f" 입니다.\n")
                             text.insert("1.0", exp, "emphasis")
-                            text.insert("1.0", f" 은(는)  '{ask.split('=')[1][1:-1]}' 이(가) 아니라 ")
+                            text.insert(
+                                "1.0", f" 은(는)  '{ask.split('=')[1][1:-1]}' 이(가) 아니라 ")
                             text.insert("1.0", "\n"+f"오답~,{ask.split('=')[0]}")
                         else:
                             text.insert("1.0", f"이(가) 맞습니다.\n")
@@ -405,11 +410,11 @@ def click_open_btn():
             df = df.drop_duplicates()
             key_word = df["Text 1"].tolist()
             content_to_print = df["Text 2"].tolist()
-        elif lang =="연표":
+        elif lang == "연표":
             df = df.drop_duplicates()
             key_word = df["연도"].tolist()
             content_to_print = df["사건"].tolist()
-        elif lang =="단답형":
+        elif lang == "단답형":
             df = df.drop_duplicates()
             key_word = df["대답"].tolist()
             content_to_print = df["질문"].tolist()
@@ -451,8 +456,9 @@ def click_open_btn():
                     if print_check == True:
                         if k-j >= 100:
                             zfil = 1
-                            if int((k-j)%100)==0 :
-                                text.insert("1.0", f"{k-j}----------------------------------------------------------", "emphasis")
+                            if int((k-j) % 100) == 0:
+                                text.insert(
+                                    "1.0", f"{k-j}----------------------------------------------------------", "emphasis")
                         else:
                             zfil = 0
 
@@ -485,7 +491,7 @@ def click_open_btn():
                     if search_check == True:
                         text.insert(
                             "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n{b}")
-                    elif line == "줄바꿈 0" and ((i != 0 and (str(key_word[len(key_word)-i-1]).replace(" ","") != str(key_word[len(key_word)-i]).replace(" ","")))):
+                    elif line == "줄바꿈 0" and ((i != 0 and (str(key_word[len(key_word)-i-1]).replace(" ", "") != str(key_word[len(key_word)-i]).replace(" ", "")))):
                         text.insert(
                             "1.0", f"{'%-5s' % content_to_print[len(key_word)-i-1]}\n\n{b}")
                     else:
@@ -546,6 +552,7 @@ def click_wrong_btn():
     else:
         enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
 
+
 def click_erase_btn():
     text.delete("1.0", "end")
 
@@ -577,6 +584,7 @@ def click_test_number_btn():
     elif num_test == "30문항":
         button_test.config(text="5문항")
 
+
 def click_line_btn():
     line = button7.cget("text")
     if line == "줄바꿈 0":
@@ -588,12 +596,14 @@ def click_line_btn():
     elif line == "줄바꿈 3":
         button7.config(text="줄바꿈 0")
 
+
 def click_beep_btn():
     lang = button5.cget("text")
     if lang == "소리ON":
         button5.config(text="소리OFF")
     else:
         button5.config(text="소리ON")
+
 
 def on_click(event):
     event.widget.delete(0, END)
@@ -710,10 +720,10 @@ radio2.configure(bg="black", foreground="white", selectcolor="black",
                  activebackground="black", activeforeground="yellow", highlightthickness=0)
 
 button_test = Button(window, relief="flat", overrelief="flat", width=8, height=1, text="5문항", font=('Courier', 20),
-                command=click_test_number_btn)
+                     command=click_test_number_btn)
 button_test.grid(column=8, row=2)
 button_test.configure(bg="black", foreground="white",
-                 activebackground="black", activeforeground="yellow", highlightthickness=0)
+                      activebackground="black", activeforeground="yellow", highlightthickness=0)
 ##############################################################################################################
 
 
