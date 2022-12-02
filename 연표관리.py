@@ -4,7 +4,36 @@ from pandas import read_excel
 import pandas as pd
 import random
 
-def 연표_통합(파일명):
+
+def 엑셀파일구분하기(data_direct, filename):
+    data = pd.read_excel(f"{data_direct}{filename}.xlsx")
+    return_list = []
+    try:
+        날짜목록 = list(set(data["날짜"]))
+        for 날짜 in 날짜목록:
+            save_filename1 = f"{data_direct}{filename}_{날짜}.xlsx"
+            data1 = data[data["날짜"] == 날짜]
+            data1.to_excel(save_filename1, index=False)
+            return_list += [f"{filename}_{날짜}"]
+            print(save_filename1)
+    except:
+        print("날짜 없음!")
+
+    try:
+        구분목록 = list(set(data["구분"]))
+        for 구분 in 구분목록:
+            save_filename2 = f"{data_direct}{filename}_{구분}.xlsx"
+            data2 = data[data["구분"] == 구분]
+            data2.to_excel(save_filename2, index=False)
+            return_list += [f"{filename}_{구분}"]
+            print(save_filename2)
+    except:
+        print("구분 없음!")
+    return return_list
+
+
+def 연표_통합(data_direct, filename):
+    파일명 = data_direct + filename
     df = read_excel(f"{파일명}.xlsx")
     df = df.dropna()
     연도 = np.array(df["연도"])
@@ -28,10 +57,12 @@ def 연표_통합(파일명):
     새연표 = {"연도": 연도, "사건": 사건목록}
     새연표 = pd.DataFrame(새연표)
     새연표.to_excel(f"{파일명}_연도별모음.xlsx", index=False)
+    print(파일명+"_연도별모음.xlsx")
     return f"{파일명}_연도별모음"
 
-def 문제만들기_샘플(파일명):
-    df = read_excel(f"{파일명}.xlsx")
+
+def 문제만들기_샘플(경로_통합파일명):
+    df = read_excel(f"{경로_통합파일명}.xlsx")
 
     엑셀용_리스트_문제 = []
     엑셀용_리스트_정답 = []
@@ -67,7 +98,8 @@ def 문제만들기_샘플(파일명):
                 리스트_원래_해설용 += [리스트_원래_연도용[i]]
                 리스트_연도_해설용 += [리스트_연도[i]]
 
-        dic = {'label':['ㄱ','ㄴ','ㄷ','ㄹ'],'original':리스트_원래,'new':리스트_문제}
+        dic = {'label': ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ'],
+               'original': 리스트_원래, 'new': 리스트_문제}
         new_df = pd.DataFrame(dic)
 
         정답 = ""
@@ -86,9 +118,17 @@ def 문제만들기_샘플(파일명):
         엑셀용_리스트_정답 += [정답]
         엑셀용_리스트_해설 += [해설]
 
-    저장용={'Text 1':엑셀용_리스트_문제, 'Text 2':엑셀용_리스트_정답, 'Text 3': 엑셀용_리스트_해설}
+    저장용 = {'Text 1': 엑셀용_리스트_문제, 'Text 2': 엑셀용_리스트_정답, 'Text 3': 엑셀용_리스트_해설}
     저장용 = pd.DataFrame(저장용)
-    저장용.to_excel(f"{파일명}_문제.xlsx".replace("연표","순서배열"),index=False)
+    final_filename = f"{경로_통합파일명}_문제.xlsx".replace("연표", "순서배열")
+    print(final_filename)
+    저장용.to_excel(final_filename, index=False)
 
-파일명 = 연표_통합(파일명="./학습자료/연표_한국사_제6공화국~노무현") # 사건을 연도별로 모아준다
-문제만들기_샘플(파일명) # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+
+data_direct = "./학습자료/연표/"
+filename = "연표_한국사_일제강점기"
+
+file_list = 엑셀파일구분하기(data_direct, filename)
+for file in file_list:
+    파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
+    문제만들기_샘플(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
