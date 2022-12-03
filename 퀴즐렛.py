@@ -42,6 +42,7 @@ def tkinter_eng_word_test(data_direct, filename):
         button2.configure(state="disable")
         button3.configure(state="disable")
         button4.configure(state="disable")
+        button5.configure(state="disable")
         button6.configure(state="disable")
         button7.configure(state="disable")
         button8.configure(state="disable")
@@ -789,7 +790,7 @@ button6.configure(bg="black", foreground="white",
                   highlightthickness=0)
 
 
-button8 = Button(window, relief="flat", width=10, height=1, text="O X 퀴즈", font=('Courier', 18),
+button8 = Button(window, relief="flat", width=10, height=1, text="단답형", font=('Courier', 18),
                  command=click_kor_eng_btn, activebackground="black", activeforeground="yellow")
 button8.grid(column=6, row=6, rowspan=1, ipadx=0, ipady=7, stick=W)
 button8.configure(bg="black", foreground="white",
