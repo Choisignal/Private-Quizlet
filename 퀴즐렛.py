@@ -421,13 +421,13 @@ def click_open_btn():
             content_to_print = df["질문"].tolist()
         line = button7.cget("text")
         if line == "줄바꿈 1":
-            a = "\n"
+            a = " "
             b = ""
         elif line == "줄바꿈 2":
-            a = "\n"
+            a = ""
             b = "\n"
         elif line == "줄바꿈 3":
-            a = ""
+            a = "\n"
             b = "\n"
         else:
             a = " "
