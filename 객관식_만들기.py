@@ -47,7 +47,7 @@ def 객관식_만들기(파일명, data_direct, 단답형=True):
         선지목록[선지번호[0]-1] = f"{선지번호[0]}. {대답}"
         for j in [1, 2]:
             선지목록[선지번호[j]-1] = f"{선지번호[j]}. {대답목록[j]}"
-        출력_질문 = f"{질문}\n{선지목록[0]}\n{선지목록[1]}\n{선지목록[2]}"
+        출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
         출력_질문목록 += [출력_질문]
         출력_대답목록 += [f"{선지번호[0]}, {대답}"]
 
@@ -79,7 +79,7 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "국어_기출의지혜"
+filename = "영어_유의어"
 if filename == "국어_기출의지혜":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_기출의지혜_속담", data_direct, 단답형=False)
@@ -88,8 +88,9 @@ if filename == "국어_기출의지혜":
     특정구분제거(data_direct, filename, 구분목록=["속담"])
 elif filename == "영어_유의어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
+    객관식_만들기(filename, data_direct, 단답형=False)
     for filename in return_list1:
-        객관식_만들기(filename, data_direct, 단답형=True)
+        객관식_만들기(filename, data_direct, 단답형=False)
 elif filename == "영어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("영어_복습_암기표현", data_direct, 단답형=False)
