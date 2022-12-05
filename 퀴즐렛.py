@@ -406,6 +406,9 @@ def click_open_btn():
     name = label.cget("text")
     name = name.replace("/객관식+단답형_","/")
     name = name.replace("/객관식_","/")
+    name = name.replace("_연도별모음","")
+    name = name.replace("_문제","")
+    name = name.replace("순서배열","연표")
     if isfile(name):
         df = read_excel(name)
         lang = button8.cget("text")
@@ -414,7 +417,7 @@ def click_open_btn():
             df = df.drop_duplicates()
             key_word = df["Text 1"].tolist()
             content_to_print = df["Text 2"].tolist()
-        elif lang == "연표":
+        elif lang == "연표" or lang == "순서배열":
             df = df.drop_duplicates()
             key_word = df["연도"].tolist()
             content_to_print = df["사건"].tolist()
@@ -706,7 +709,7 @@ button.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
                  activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", highlightthickness=0)
 
 label = Label(
-    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20), width=40, height=3, wraplength=500)
+    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20), width=80, height=3, wraplength=1000)
 label.grid(column=1, row=0, rowspan=3, columnspan=7)
 label.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
                 highlightthickness=0)

@@ -120,7 +120,7 @@ def 문제만들기_샘플(경로_통합파일명):
             리스트_연도 += [year]
 
         random.shuffle(리스트_문제)
-        리스트_문제 = 리스트_문제[0:4]
+        리스트_문제 = 리스트_문제[0:3]
         #리스트_원래 = [x for i in 리스트_원래 for x in 리스트_문제 if i in x]
         리스트_원래2 = []
         for x in 리스트_원래:
@@ -133,7 +133,7 @@ def 문제만들기_샘플(경로_통합파일명):
                 리스트_원래_해설용 += [리스트_원래_연도용[i]]
                 리스트_연도_해설용 += [리스트_연도[i]]
 
-        dic = {'label': ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ'],
+        dic = {'label': ['ㄱ', 'ㄴ', 'ㄷ'],
                'original': 리스트_원래, 'new': 리스트_문제}
         new_df = pd.DataFrame(dic)
 
@@ -142,12 +142,12 @@ def 문제만들기_샘플(경로_통합파일명):
         for i in 리스트_원래:
             정답 += list(new_df["label"][new_df["new"] == i])[0] + ""
 
-        for i in range(4):
+        for i in range(3):
             문제 += f"{new_df['label'][i]}. {리스트_문제[i]} \n"
         문제 = 문제[0:-2]
         정답 = 정답
         해설 = ""
-        for i in range(4):
+        for i in range(3):
             해설 += f"{정답[i]}. {리스트_연도_해설용[i]} - {리스트_원래_해설용[i]}\n"
         엑셀용_리스트_문제 += [문제]
         엑셀용_리스트_정답 += [정답]
@@ -168,7 +168,7 @@ for file in file_list:
     try:
         문제만들기_샘플(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
     except:
-        pass
+        print("Error!")
     try:
         연도_객관식(data_direct, file) # 객관식 문제 만든다
     except:
