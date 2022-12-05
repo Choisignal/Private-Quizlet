@@ -275,8 +275,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                             enter_in_text(
                                 f"정답! {ask.split('=')[0]} 은(는)'{ask.split('=')[1][:-1]}' 이(가) 아니라 '{exp}' 입니다.\n")
                     elif lang == "연표":
-                        enter_in_text(
-                            f"정답! {answer}년:")
+                        try:
+                            enter_in_text(
+                                f"정답! {int(answer)}년:")
+                        except:
+                            enter_in_text(
+                                f"정답! {answer}:")
                         era = ask.count("\n")+1
                     elif lang == "단답형":
                         enter_in_text(
@@ -404,8 +408,9 @@ def click_stop_btn():
 
 def click_open_btn():
     name = label.cget("text")
-    name = name.replace("/객관식+단답형_","/")
-    name = name.replace("/객관식_","/")
+    name = name.replace("/객관식+단답형_", "/")
+    name = name.replace("/객관식_", "/")
+    name = name.replace("_연도별모음", "")
     if isfile(name):
         df = read_excel(name)
         lang = button8.cget("text")
@@ -675,10 +680,13 @@ def click_memo_btn():
 
     top.mainloop()
 
+
 def _from_rgb(rgb):
     """translates an rgb tuple of int to a tkinter friendly color code
     """
-    return "#%02x%02x%02x" % rgb 
+    return "#%02x%02x%02x" % rgb
+
+
 ##############################################################################################################
 window = Tk()
 
@@ -706,7 +714,7 @@ button.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
                  activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", highlightthickness=0)
 
 label = Label(
-    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20), width=40, height=3, wraplength=500)
+    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20), width=80, height=3, wraplength=1000)
 label.grid(column=1, row=0, rowspan=3, columnspan=7)
 label.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
                 highlightthickness=0)
@@ -774,7 +782,8 @@ button3.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
 button7 = Button(window, relief="flat", width=12, height=1, text="줄바꿈 0", font=(
     'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_line_btn)
 button7.grid(column=2, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button7.configure(bg=_from_rgb((11, 58, 19)), foreground="white", highlightthickness=0)
+button7.configure(bg=_from_rgb((11, 58, 19)),
+                  foreground="white", highlightthickness=0)
 
 button4 = Button(window, relief="flat", width=10, height=1, text="오답노트", font=('Courier', 18),
                  command=click_wrong_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
@@ -811,7 +820,8 @@ button9.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
 button10 = Button(window, relief="flat", width=12, height=1, text="프로그램 종료", font=(
     'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_close_btn)
 button10.grid(column=8, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button10.configure(bg=_from_rgb((11, 58, 19)), foreground="white", highlightthickness=0)
+button10.configure(bg=_from_rgb((11, 58, 19)),
+                   foreground="white", highlightthickness=0)
 
 window.attributes('-fullscreen', True)
 window.mainloop()
