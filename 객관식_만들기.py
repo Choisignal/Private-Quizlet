@@ -79,17 +79,18 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_복습"
+filename = "복합어1"
 if filename == "국어_기출의지혜":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_기출의지혜_속담", data_direct, 단답형=False)
+    객관식_만들기("국어_기출의지혜_복합어", data_direct, 단답형=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
-
-if filename == "영어_유의어":
+elif filename == "영어_유의어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     for filename in return_list1:
         객관식_만들기(filename, data_direct, 단답형=True)
-
-if filename == "영어_복습":
+elif filename == "영어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("영어_복습_암기표현", data_direct, 단답형=False)
+else:
+    객관식_만들기(filename, data_direct, 단답형=False)

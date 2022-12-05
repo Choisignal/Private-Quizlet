@@ -279,7 +279,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                         era = ask.count("\n")+1
                     elif lang == "단답형":
                         enter_in_text(
-                            f"정답! '{answer2}':")
+                            f"정답! '{right_answer2}':")
                         era = ask.count("\n")+1
                     else:
                         enter_in_text(
