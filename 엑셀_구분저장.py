@@ -30,8 +30,6 @@ def 엑셀파일구분하기(data_direct, filename):
 
 
 if __name__ == "__main__":
-    data_direct = "./학습자료/연표/"
-    filename = "삼국시대_왕(연도)"
-    엑셀파일구분하기(data_direct, filename)
-    filename = "삼국시대_연도(왕)"
+    data_direct = "./학습자료/단답형/"
+    filename = "국어_기출의지혜"
     엑셀파일구분하기(data_direct, filename)

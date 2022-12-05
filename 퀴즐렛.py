@@ -78,7 +78,8 @@ def tkinter_eng_word_test(data_direct, filename):
                     ask = df["질문"][i]
                     right_answer = df["대답"][i]
                     try:
-                        ask = ask.replace(right_answer, "[   ]")
+                        if ask != right_answer:
+                            ask = ask.replace(right_answer, "[   ]")
                     except:
                         pass
                 else:
