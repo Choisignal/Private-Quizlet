@@ -31,6 +31,38 @@ def 엑셀파일구분하기(data_direct, filename):
         print("구분 없음!")
     return return_list
 
+def 연도_객관식(data_direct, filename):
+    data = pd.read_excel(f"{data_direct}{filename}.xlsx")
+    data["질문"] = data["사건"]
+    data["대답"] = data["연도"]
+    data_direct=data_direct.replace('연표', '단답형')
+    new_file = f"{data_direct}{filename}.xlsx"
+    data.to_excel(new_file)
+    data = pd.read_excel(new_file)
+
+    출력_질문목록 = []
+    출력_대답목록 = []
+    for i in range(data["대답"].size):
+        대답목록 = list(set(data["대답"]))
+        질문 = data["질문"][i]
+        대답 = data["대답"][i]
+        대답목록.remove(대답)
+        선지번호 = [1, 2, 3]
+        random.shuffle(선지번호)
+        random.shuffle(대답목록)
+        선지목록 = [1, 2, 3]
+        선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {대답}"
+        for j in [1, 2]:
+            선지목록[선지번호[j] - 1] = f"{선지번호[j]}. {대답목록[j]}"
+        출력_질문 = f"{질문}\n{선지목록[0]}\n{선지목록[1]}\n{선지목록[2]}"
+        출력_질문목록 += [출력_질문]
+        출력_대답목록 += [f"{선지번호[0]}, {대답}"]
+
+    save_data = pd.DataFrame({"질문": 출력_질문목록, "대답": 출력_대답목록})
+    save_filename = data_direct + "객관식_" + filename + ".xlsx"
+    print(save_filename)
+    save_data.to_excel(save_filename, index=False)
+    return
 
 def 연표_통합(data_direct, filename):
     파일명 = data_direct + filename
@@ -40,7 +72,10 @@ def 연표_통합(data_direct, filename):
     사건 = np.array(df["사건"])
     새연표 = {}
     for i in range(연도.size):
-        해 = int(연도[i])
+        try:
+            해 = int(연도[i])
+        except:
+            해 = str(연도[i])
         if 해 not in 새연표.keys():
             새연표[해] = []
         새연표[해] = 새연표[해] + [사건[i]]
@@ -126,9 +161,15 @@ def 문제만들기_샘플(경로_통합파일명):
 
 
 data_direct = "./학습자료/연표/"
-filename = "연표_한국사_일제강점기"
-
+filename = "삼국시대_연도(왕)"
 file_list = 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
-    문제만들기_샘플(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+    try:
+        문제만들기_샘플(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+    except:
+        pass
+    try:
+        연도_객관식(data_direct, file) # 객관식 문제 만든다
+    except:
+        pass

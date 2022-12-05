@@ -18,6 +18,7 @@ def 엑셀파일구분하기(data_direct, filename):
     try:
         구분목록 = list(set(data["구분"]))
         for 구분 in 구분목록:
+            print(구분)
             save_filename2 = f"{data_direct}{filename}_{구분}.xlsx"
             data2 = data[data["구분"] == 구분]
             data2.to_excel(save_filename2, index=False)
@@ -29,6 +30,8 @@ def 엑셀파일구분하기(data_direct, filename):
 
 
 if __name__ == "__main__":
-    data_direct = "./학습자료/단답형/"
-    filename = "단답형_영어_유의어"
+    data_direct = "./학습자료/연표/"
+    filename = "삼국시대_왕(연도)"
+    엑셀파일구분하기(data_direct, filename)
+    filename = "삼국시대_연도(왕)"
     엑셀파일구분하기(data_direct, filename)
