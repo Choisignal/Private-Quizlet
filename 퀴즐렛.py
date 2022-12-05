@@ -312,14 +312,26 @@ def tkinter_eng_word_roof(data_direct, filename):
                             text.insert("1.0", f" 은(는) ")
                             text.insert("1.0", "\n"+f"오답~,{ask.split('=')[0]}")
                     elif lang == "연표":
-                        text.insert("1.0", f"년 입니다.\n")
-                        text.insert("1.0", right_answer2, "emphasis")
-                        if answer != '':
-                            text.insert("1.0", f"{answer}년이 아니고 ")
-                            text.insert("1.0", "\n")
-                        else:
-                            text.insert("1.0", "\n"+f"정답은 ")
-                        era = ask.count("\n")+1
+                        try:
+                            int(answer)
+                            int(right_answer2)
+                            text.insert("1.0", f"년 입니다.\n")
+                            text.insert("1.0", right_answer2, "emphasis")
+                            if answer != '':
+                                text.insert("1.0", f"{answer}년이 아니고 ")
+                                text.insert("1.0", "\n")
+                            else:
+                                text.insert("1.0", "\n"+f"정답은 ")
+                            era = ask.count("\n")+1
+                        except:
+                            text.insert("1.0", f" 입니다.\n")
+                            text.insert("1.0", right_answer2, "emphasis")
+                            if answer != '':
+                                text.insert("1.0", f"{answer}이(가) 아니고 ")
+                                text.insert("1.0", "\n")
+                            else:
+                                text.insert("1.0", "\n"+f"정답은 ")
+                            era = ask.count("\n")+1
                     elif lang == "단답형":
                         text.insert("1.0", f" 입니다.\n")
                         text.insert("1.0", right_answer2, "emphasis")
