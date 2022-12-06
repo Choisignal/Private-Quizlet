@@ -79,11 +79,10 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_유의어"
+filename = "국어_기출의지혜"
 if filename == "국어_기출의지혜":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_기출의지혜_속담", data_direct, 단답형=False)
-    객관식_만들기("국어_기출의지혜_복합어", data_direct, 단답형=False)
     객관식_만들기("국어_기출의지혜_사자성어", data_direct, 단답형=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
 elif filename == "영어_유의어":
