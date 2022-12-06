@@ -1,7 +1,7 @@
 import pandas as pd
 
-direct = "./학습자료/단답형_한자/"
-filename = "단답형_한자의지혜"
+direct = "./학습자료/단답형/"
+filename = "한자의지혜"
 
 file = f"{direct}{filename}.xlsx"
 savefile = f"{direct}{filename}_중복제거.xlsx"
