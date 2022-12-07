@@ -419,6 +419,7 @@ def click_open_btn():
             content_to_print = df["Text 2"].tolist()
         elif lang == "연표" or lang == "순서배열":
             df = df.drop_duplicates()
+            df = df.drop_duplicates(["사건"])
             key_word = df["연도"].tolist()
             content_to_print = df["사건"].tolist()
         elif lang == "단답형":

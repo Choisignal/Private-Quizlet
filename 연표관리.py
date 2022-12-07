@@ -91,6 +91,7 @@ def 연표_통합(data_direct, filename):
 
     새연표 = {"연도": 연도, "사건": 사건목록}
     새연표 = pd.DataFrame(새연표)
+    새연표 = 새연표.drop_duplicates(["사건"])
     새연표.to_excel(f"{파일명}_연도별모음.xlsx", index=False)
     print(파일명+"_연도별모음.xlsx")
     return f"{파일명}_연도별모음"
@@ -161,15 +162,15 @@ def 문제만들기_샘플(경로_통합파일명):
 
 
 data_direct = "./학습자료/연표/"
-filename = "삼국시대_연도(왕)"
-file_list = 엑셀파일구분하기(data_direct, filename)
+filename = "삼국시대"
+file_list = [filename]#엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
     try:
         문제만들기_샘플(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
     except:
-        print("Error!")
+        print(f"Error! 문제만들기 {파일명}")
     try:
         연도_객관식(data_direct, file) # 객관식 문제 만든다
     except:
-        pass
+        print(f"Error! 객관식 {파일명}")
