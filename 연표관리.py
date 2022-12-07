@@ -31,11 +31,12 @@ def 엑셀파일구분하기(data_direct, filename):
         print("구분 없음!")
     return return_list
 
+
 def 연도_객관식(data_direct, filename):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     data["질문"] = data["사건"]
     data["대답"] = data["연도"]
-    data_direct=data_direct.replace('연표', '단답형')
+    data_direct = data_direct.replace('연표', '단답형')
     new_file = f"{data_direct}{filename}.xlsx"
     data.to_excel(new_file)
     data = pd.read_excel(new_file)
@@ -63,6 +64,7 @@ def 연도_객관식(data_direct, filename):
     print(save_filename)
     save_data.to_excel(save_filename, index=False)
     return
+
 
 def 연표_통합(data_direct, filename):
     파일명 = data_direct + filename
@@ -162,8 +164,8 @@ def 문제만들기_샘플(경로_통합파일명):
 
 
 data_direct = "./학습자료/연표/"
-filename = "삼국시대"
-file_list = [filename]#엑셀파일구분하기(data_direct, filename)
+filename = "삼국시대_연도(왕)"
+file_list = [filename]  # 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
     try:
@@ -171,6 +173,6 @@ for file in file_list:
     except:
         print(f"Error! 문제만들기 {파일명}")
     try:
-        연도_객관식(data_direct, file) # 객관식 문제 만든다
+        연도_객관식(data_direct, file)  # 객관식 문제 만든다
     except:
         print(f"Error! 객관식 {파일명}")
