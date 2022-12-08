@@ -101,13 +101,13 @@ def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
         선지목록 = [1, 2, 3]
         if 설명 == True:
             선지목록[선지번호[0]-1] = f"{선지번호[0]}. {대답}"
-            for j in [1, 2]:
-                선지목록[선지번호[j]-1] = f"{선지번호[j]}. {대답목록[j]}"
+            선지목록[선지번호[1]-1] = f"{선지번호[1]}. {대답목록[0]}"
+            선지목록[선지번호[2]-1] = f"{선지번호[2]}. {대답목록[1]}"
             출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
         else:
             선지목록[선지번호[0]-1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
-            for j in [1, 2]:
-                선지목록[선지번호[j]-1] = f"{선지번호[j]}. {str(대답목록[j]).split(',')[0]}"
+            선지목록[선지번호[1]-1] = f"{선지번호[1]}. {str(대답목록[0]).split(',')[0]}"
+            선지목록[선지번호[2]-1] = f"{선지번호[2]}. {str(대답목록[1]).split(',')[0]}"
             출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
 
         출력_질문목록 += [출력_질문]
@@ -141,7 +141,7 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_유의어"
+filename = "영어_복습"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
@@ -158,6 +158,9 @@ elif filename == "영어_유의어":
         객관식_만들기(filename, data_direct, 단답형=False,설명=True)
 elif filename == "영어_복습":
     엑셀파일구분하기(data_direct, filename)
-    객관식_만들기("영어_복습_암기표현", data_direct, 단답형=False)
+    객관식_만들기("영어_복습_뜻", data_direct, 단답형=False,설명=True)
+    객관식_만들기("영어_복습_목적어 유형", data_direct, 단답형=False,설명=True)
+    객관식_만들기("영어_복습_전치사 구분", data_direct, 단답형=False,설명=True)
+    객관식_만들기("영어_복습_부정사 전치사 구분", data_direct, 단답형=False,설명=True)
 else:
     객관식_만들기(filename, data_direct, 단답형=False,설명=False)

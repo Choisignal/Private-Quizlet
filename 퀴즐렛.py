@@ -5,6 +5,7 @@ from tkinter import END, Tk, Button, Label, Radiobutton, Text, StringVar, Entry,
 from os.path import exists, isfile, basename
 from os import makedirs
 import random
+import re
 try:
     import winsound as sd
 
@@ -17,6 +18,7 @@ except:
 
 
 def make_list(right_answer):
+    right_answer = re.sub('\([^)]+\)','',right_answer)
     try:
         right_answer_list = right_answer.split(",")
     except:
