@@ -409,8 +409,9 @@ def click_open_btn():
     name = name.replace("_연도별모음","")
     name = name.replace("_문제","")
     name = name.replace("순서배열","연표")
+    name = name.replace("_번역","")
     for i in [1,2,3,4]:
-        name = name.replace(f"{i}.",".")
+        name = name.replace(f"{i}글자.",".")
     if isfile(name):
         df = read_excel(name)
         lang = button8.cget("text")
