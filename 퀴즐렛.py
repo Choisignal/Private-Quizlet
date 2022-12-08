@@ -199,7 +199,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer = df["Text 2"][i]
                 exp = df["Text 3"][i]
             text.insert(
-                "1.0", " ( {0}/{1} )\n\n\n\n".format(count, num_total))
+                "1.0", " ( {0}/{1} )\n\n\n".format(count, num_total))
             if lang != "순서배열":
                 try:
                     text.insert("1.0", ask.replace(
@@ -409,6 +409,8 @@ def click_open_btn():
     name = name.replace("_연도별모음","")
     name = name.replace("_문제","")
     name = name.replace("순서배열","연표")
+    for i in [1,2,3,4]:
+        name = name.replace(f"{i}.",".")
     if isfile(name):
         df = read_excel(name)
         lang = button8.cget("text")

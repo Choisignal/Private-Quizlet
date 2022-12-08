@@ -31,5 +31,5 @@ def 엑셀파일구분하기(data_direct, filename):
 
 if __name__ == "__main__":
     data_direct = "./학습자료/단답형/"
-    filename = "국어_기출의지혜"
+    filename = "국어_"
     엑셀파일구분하기(data_direct, filename)

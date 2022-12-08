@@ -1,7 +1,7 @@
 import pandas as pd
 import random
-
-
+import googletrans
+from tqdm import tqdm
 def 엑셀파일구분하기(data_direct, filename):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     return_list1 = []
@@ -29,8 +29,58 @@ def 엑셀파일구분하기(data_direct, filename):
         print("구분 없음!")
     return return_list1, return_list2
 
+def 객관식_만들기_한자어(파일명, data_direct, 단답형=True,설명=True):
+    translator = googletrans.Translator()
+    for k in [1,2,3,4]:
+        data = pd.read_excel(data_direct+파일명+".xlsx")
+        한자 = []
+        한글 = []
+        for i in tqdm(range(data["대답"].size)):
+            질문 = data["질문"][i]
+            대답 = data["대답"][i]
+            if len(질문.split('/')[0]) == k:
+                if k == 2:
+                    번역 = translator.translate(질문, dest='en')
+                    번역 = 번역.text
+                    if len(번역.split(" ")) == 1:
+                        질문 = f"{질문}[{번역}]"
+                한자 += [질문]
+                한글 += [대답]
+        data = pd.DataFrame({"질문":한자,"대답":한글})
 
-def 객관식_만들기(파일명, data_direct, 단답형=True):
+        출력_질문목록 = []
+        출력_대답목록 = []
+        for i in range(data["대답"].size):
+            대답목록 = list(set(data["대답"]))
+            질문 = data["질문"][i]
+            대답 = data["대답"][i]
+            질문 = 질문.replace(대답, "[   ]")
+
+            대답목록.remove(대답)
+            선지번호 = [1, 2, 3]
+            random.shuffle(선지번호)
+            random.shuffle(대답목록)
+            선지목록 = [1, 2, 3]
+            if 설명 == True:
+                선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {대답}"
+                for j in [1, 2]:
+                    선지목록[선지번호[j] - 1] = f"{선지번호[j]}. {대답목록[j]}"
+                출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+            else:
+                선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
+                for j in [1, 2]:
+                    선지목록[선지번호[j] - 1] = f"{선지번호[j]}. {str(대답목록[j]).split(',')[0]}"
+                출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+
+            출력_질문목록 += [출력_질문]
+            출력_대답목록 += [f"{선지번호[0]}, {대답}"]
+
+        save_data = pd.DataFrame({"질문": 출력_질문목록, "대답": 출력_대답목록})
+        save_filename = data_direct + "객관식_" + 파일명 + f"{k}.xlsx"
+        print(save_filename)
+        save_data.to_excel(save_filename, index=False)
+
+def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
     data = pd.read_excel(data_direct+파일명+".xlsx")
 
     출력_질문목록 = []
@@ -39,15 +89,24 @@ def 객관식_만들기(파일명, data_direct, 단답형=True):
         대답목록 = list(set(data["대답"]))
         질문 = data["질문"][i]
         대답 = data["대답"][i]
+        질문 = 질문.replace(대답,"[   ]")
+
         대답목록.remove(대답)
         선지번호 = [1, 2, 3]
         random.shuffle(선지번호)
         random.shuffle(대답목록)
         선지목록 = [1, 2, 3]
-        선지목록[선지번호[0]-1] = f"{선지번호[0]}. {대답}"
-        for j in [1, 2]:
-            선지목록[선지번호[j]-1] = f"{선지번호[j]}. {대답목록[j]}"
-        출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+        if 설명 == True:
+            선지목록[선지번호[0]-1] = f"{선지번호[0]}. {대답}"
+            for j in [1, 2]:
+                선지목록[선지번호[j]-1] = f"{선지번호[j]}. {대답목록[j]}"
+            출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+        else:
+            선지목록[선지번호[0]-1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
+            for j in [1, 2]:
+                선지목록[선지번호[j]-1] = f"{선지번호[j]}. {str(대답목록[j]).split(',')[0]}"
+            출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+
         출력_질문목록 += [출력_질문]
         출력_대답목록 += [f"{선지번호[0]}, {대답}"]
 
@@ -79,11 +138,12 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_유의어"
+filename = "국어_복습"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
-    객관식_만들기("국어_복습_사자성어", data_direct, 단답형=False)
+    객관식_만들기("국어_복습_사자성어", data_direct, 단답형=False,설명=False)
+    객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
 elif filename == "영어_유의어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
