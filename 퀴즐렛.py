@@ -6,6 +6,7 @@ from os.path import exists, isfile, basename
 from os import makedirs
 import random
 import re
+import shutil
 try:
     import winsound as sd
 
@@ -166,8 +167,8 @@ def tkinter_eng_word_test(data_direct, filename):
 
 
 def tkinter_eng_word_roof(data_direct, filename):
-    text.delete("1.0", "end")
     entry.delete(0, END)
+    text.delete("1.0", "end")
     from time import sleep
     df = read_excel("{0}{1}.xlsx".format(data_direct, filename))
     df = df.drop_duplicates()
@@ -370,6 +371,13 @@ def get_file_direct():
                                             title="파일을 선택 해 주세요",
                                             filetypes=(("*.xlsx", "*xlsx"), ("*.xls", "*xls")))
         file = files[0]
+        try:
+            filename = file.split("/")[-1]
+            오답노트 = file.replace(filename,"")+"오답노트"
+            shutil.rmtree(오답노트)
+        except:
+            print(오답노트)
+            pass
         label.config(text=file)
     except:
         pass
@@ -406,12 +414,14 @@ def click_stop_btn():
 
 def click_open_btn():
     name = label.cget("text")
+    lang = button8.cget("text")
     name = name.replace("/객관식+단답형_","/")
     name = name.replace("/객관식_","/")
     name = name.replace("_연도별모음","")
     name = name.replace("_문제","")
     name = name.replace("순서배열","연표")
     name = name.replace("_번역","")
+    name = name.replace("_구분통합","")
     for i in [1,2,3,4]:
         name = name.replace(f"{i}글자.",".")
     if isfile(name):
@@ -429,6 +439,7 @@ def click_open_btn():
             content_to_print = df["사건"].tolist()
         elif lang == "단답형":
             df = df.drop_duplicates()
+            #df = df.sort_values(by="대답", ascending=True)
             key_word = df["대답"].tolist()
             content_to_print = df["질문"].tolist()
         line = button7.cget("text")

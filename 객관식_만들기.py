@@ -2,6 +2,7 @@ import pandas as pd
 import random
 import googletrans
 from tqdm import tqdm
+import os
 def 엑셀파일구분하기(data_direct, filename):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     return_list1 = []
@@ -92,8 +93,10 @@ def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
         대답목록 = list(set(data["대답"]))
         질문 = data["질문"][i]
         대답 = data["대답"][i]
-        질문 = 질문.replace(대답,"[   ]")
-
+        try:
+            질문 = 질문.replace(대답,"[   ]")
+        except:
+            pass
         대답목록.remove(대답)
         선지번호 = [1, 2, 3]
         random.shuffle(선지번호)
@@ -128,6 +131,68 @@ def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
         print(save_filename)
         save_data.to_excel(save_filename, index=False)
 
+def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설명=True):
+    최종저장파일명 = data_direct + "객관식_" + filename + "_구분통합.xlsx"
+    return_list1, 파일명_목록 = 엑셀파일구분하기(data_direct, filename)
+    for filename in return_list1:
+        객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+    저장파일명목록 = []
+    for 파일명 in 파일명_목록:
+        data = pd.read_excel(data_direct+파일명+".xlsx")
+        #os.remove(data_direct+파일명+".xlsx")
+        출력_질문목록 = []
+        출력_대답목록 = []
+        for i in range(data["대답"].size):
+            대답목록 = list(set(data["대답"]))
+            질문 = data["질문"][i]
+            대답 = data["대답"][i]
+            try:
+                질문 = 질문.replace(대답,"[   ]")
+            except:
+                pass
+            대답목록.remove(대답)
+            선지번호 = [1, 2, 3]
+            random.shuffle(선지번호)
+            random.shuffle(대답목록)
+            선지목록 = [1, 2, 3]
+            if 설명 == True:
+                선지목록[선지번호[0]-1] = f"{선지번호[0]}. {대답}"
+                선지목록[선지번호[1]-1] = f"{선지번호[1]}. {대답목록[0]}"
+                선지목록[선지번호[2]-1] = f"{선지번호[2]}. {대답목록[1]}"
+                출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+            else:
+                선지목록[선지번호[0]-1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
+                선지목록[선지번호[1]-1] = f"{선지번호[1]}. {str(대답목록[0]).split(',')[0]}"
+                선지목록[선지번호[2]-1] = f"{선지번호[2]}. {str(대답목록[1]).split(',')[0]}"
+                출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+
+            출력_질문목록 += [출력_질문]
+            출력_대답목록 += [f"{선지번호[0]}, {대답}"]
+
+        save_data = pd.DataFrame({"질문": 출력_질문목록, "대답": 출력_대답목록})
+        save_filename = data_direct+"객관식_"+파일명+".xlsx"
+
+        # 여기 아래는 단답형
+        if 단답형 == True:
+            출력_질문목록 = list(data["질문"]) + 출력_질문목록
+            출력_대답목록 = list(data["대답"]) + 출력_대답목록
+
+            save_data = pd.DataFrame({"질문": 출력_질문목록, "대답": 출력_대답목록})
+            save_filename = data_direct+"객관식+단답형_"+파일명+".xlsx"
+            print(save_filename)
+            save_data.to_excel(save_filename, index=False)
+        else:
+            print(save_filename)
+            save_data.to_excel(save_filename, index=False)
+        저장파일명목록 += [save_filename]
+    save_df = pd.read_excel(저장파일명목록[0])
+    os.remove(저장파일명목록[0])
+    for 저장파일명 in 저장파일명목록[1:]:
+        df = pd.read_excel(저장파일명)
+        save_df = pd.concat([save_df,df])
+        #os.remove(저장파일명)
+    print(최종저장파일명)
+    save_df.to_excel(최종저장파일명)
 
 def 특정구분제거(data_direct, filename, 구분목록):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
@@ -141,16 +206,20 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_복습"
+filename = "국어_암기자료"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
     객관식_만들기("국어_복습_사자성어", data_direct, 단답형=False,설명=False)
+    '''
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역=False)
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
+    '''
     특정구분제거(data_direct, filename, 구분목록=["속담"])
+elif filename == "국어_암기자료":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "영어_유의어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
@@ -162,5 +231,9 @@ elif filename == "영어_복습":
     객관식_만들기("영어_복습_목적어 유형", data_direct, 단답형=False,설명=True)
     객관식_만들기("영어_복습_전치사 구분", data_direct, 단답형=False,설명=True)
     객관식_만들기("영어_복습_부정사 전치사 구분", data_direct, 단답형=False,설명=True)
+elif filename == "삼국통합":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+elif filename == "불교":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 else:
-    객관식_만들기(filename, data_direct, 단답형=False,설명=False)
+    객관식_만들기(filename, data_direct, 단답형=False,설명=True)
