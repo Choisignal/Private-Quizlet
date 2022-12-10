@@ -324,7 +324,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                         text.insert("1.0", right_answer2, "emphasis")
                         if answer != '':
                             text.insert("1.0", f"'{answer2}'이(가) 아니고 ")
-                            text.insert("1.0", "\n")
+                            #text.insert("1.0", "\n")
                         else:
                             text.insert("1.0", "\n"+f"정답은 ")
                         era = ask.count("\n")+1
