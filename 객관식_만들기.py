@@ -186,7 +186,7 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
             save_data.to_excel(save_filename, index=False)
         저장파일명목록 += [save_filename]
     save_df = pd.read_excel(저장파일명목록[0])
-    os.remove(저장파일명목록[0])
+    #os.remove(저장파일명목록[0])
     for 저장파일명 in 저장파일명목록[1:]:
         df = pd.read_excel(저장파일명)
         save_df = pd.concat([save_df,df])
@@ -206,7 +206,7 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "국어_암기자료"
+filename = "한국사_대조"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
@@ -234,6 +234,8 @@ elif filename == "영어_복습":
 elif filename == "삼국통합":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "불교":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+elif filename == "한국사_대조":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 else:
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
