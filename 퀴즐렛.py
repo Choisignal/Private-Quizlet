@@ -19,7 +19,7 @@ except:
 
 
 def make_list(right_answer):
-    right_answer = re.sub('\([^)]+\)','',right_answer)
+    right_answer = re.sub('\([^)]+\)', '', right_answer)
     try:
         right_answer_list = right_answer.split(",")
     except:
@@ -107,6 +107,15 @@ def tkinter_eng_word_test(data_direct, filename):
                         answer = "ㄴ."
                     elif answer == "d.":
                         answer = "ㅇ."
+                    if lang == "순서배열":
+                        answer = answer.replace("r", "ㄱ")
+                        answer = answer.replace("s", "ㄴ")
+                        answer = answer.replace("e", "ㄷ")
+                        answer = answer.replace("f", "ㄹ")
+                        answer = answer.replace("1", "ㄱ")
+                        answer = answer.replace("2", "ㄴ")
+                        answer = answer.replace("3", "ㄷ")
+                        answer = answer.replace("4", "ㄹ")
                     if len(answer) != 0 and answer[-1] == ".":
                         answer = answer[0:-1]
                         break
@@ -170,8 +179,11 @@ def tkinter_eng_word_roof(data_direct, filename):
     entry.delete(0, END)
     text.delete("1.0", "end")
     from time import sleep
-    df = read_excel("{0}{1}.xlsx".format(data_direct, filename))
+    original_filename = "{0}{1}.xlsx".format(data_direct, filename)
+    df = read_excel(original_filename)
     df = df.drop_duplicates()
+    if '오답가산점' not in list(df.keys()):
+        df['오답가산점'] = [0 for i in range(len(df))]
     lang = button8.cget("text")
     filename = lang.replace(" ", "_")+"_"+filename
     df = df.sample(frac=1).reset_index(drop=True)  # 데이터 프레임의 행을 랜덤으로 뒤섞는다.
@@ -184,8 +196,17 @@ def tkinter_eng_word_roof(data_direct, filename):
     count = 0
     stop_check = False
     while stop_check == False:
-        range_list = list(range(0, num_total-1))
-        random.shuffle(range_list)
+        sum_check = df['오답가산점'].sum()
+        if sum_check == 0:
+            range_list = list(range(0, num_total-1))
+            random.shuffle(range_list)
+        else:
+            newdf = df.sort_values('오답가산점', ascending=False)
+            틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
+            틀릭적없는목록 = list(df[df["오답가산점"] <= 0].index)
+            틀린목록.sort(reverse=True)  # 많이 틀린것 먼저
+            random.shuffle(틀릭적없는목록)
+            range_list = 틀린목록 + 틀릭적없는목록
         for i in range_list:
             if stop_check != False:
                 break
@@ -222,13 +243,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                 sleep(0.05)
                 window.update()
                 answer = entry.get()
-                if len(answer) != 0 and answer[-1] == "+":
+                if len(answer) != 0 and (answer[-1] in ["+", "=", "`"]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
-                    if lang != "순서배열":
+                    if lang == "단답형":
                         try:
                             text.insert("1.0", ask.replace(
                                 right_answer, "[   ]"), "emphasis")
@@ -236,10 +257,20 @@ def tkinter_eng_word_roof(data_direct, filename):
                             text.insert("1.0", ask, "emphasis")
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
-                if answer == "s.":
-                    answer = "ㄴ."
-                elif answer == "d.":
-                    answer = "ㅇ."
+                if lang == "O X 퀴즈":
+                    if answer == "s":
+                        answer = "ㄴ"
+                    elif answer == "d":
+                        answer = "ㅇ"
+                if lang == "순서배열":
+                    answer = answer.replace("r", "ㄱ")
+                    answer = answer.replace("s", "ㄴ")
+                    answer = answer.replace("e", "ㄷ")
+                    answer = answer.replace("f", "ㄹ")
+                    answer = answer.replace("1", "ㄱ")
+                    answer = answer.replace("2", "ㄴ")
+                    answer = answer.replace("3", "ㄷ")
+                    answer = answer.replace("4", "ㄹ")
                 if len(answer) != 0 and answer[-1] == ".":
                     answer = answer[0:-1]
                     check_ans = True
@@ -251,15 +282,6 @@ def tkinter_eng_word_roof(data_direct, filename):
                 ############################
                 ############################
                 ############################
-                if lang == "순서배열":
-                    answer = answer.replace("r", "ㄱ")
-                    answer = answer.replace("s", "ㄴ")
-                    answer = answer.replace("e", "ㄷ")
-                    answer = answer.replace("f", "ㄹ")
-                    answer = answer.replace("1", "ㄱ")
-                    answer = answer.replace("2", "ㄴ")
-                    answer = answer.replace("3", "ㄷ")
-                    answer = answer.replace("4", "ㄹ")
                 right_answer2 = str(right_answer)
                 right_answer = str(right_answer).replace(" ", "")
                 answer2 = str(answer)
@@ -270,6 +292,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer_list = make_list(right_answer)
 
                 if answer != "" and answer in right_answer_list:
+                    df["오답가산점"][i] = df["오답가산점"][i] - 1
+                    df.to_excel(original_filename)
                     if lang == "O X 퀴즈":
                         if answer == "ㅇ":
                             enter_in_text(
@@ -291,6 +315,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                     count_right += 1
 
                 else:
+                    df["오답가산점"][i] = df["오답가산점"][i] + 2
+                    df.to_excel(original_filename)
                     try:
                         beep_check = button5.cget("text")
                         if beep_check == "소리ON" and answer != "":
@@ -373,7 +399,7 @@ def get_file_direct():
         file = files[0]
         try:
             filename = file.split("/")[-1]
-            오답노트 = file.replace(filename,"")+"오답노트"
+            오답노트 = file.replace(filename, "")+"오답노트"
             shutil.rmtree(오답노트)
         except:
             print(오답노트)
@@ -415,15 +441,15 @@ def click_stop_btn():
 def click_open_btn():
     name = label.cget("text")
     lang = button8.cget("text")
-    name = name.replace("/객관식+단답형_","/")
-    name = name.replace("/객관식_","/")
-    name = name.replace("_연도별모음","")
-    name = name.replace("_문제","")
-    name = name.replace("순서배열","연표")
-    name = name.replace("_번역","")
-    name = name.replace("_구분통합","")
-    for i in [1,2,3,4]:
-        name = name.replace(f"{i}글자.",".")
+    name = name.replace("/객관식+단답형_", "/")
+    name = name.replace("/객관식_", "/")
+    name = name.replace("_연도별모음", "")
+    name = name.replace("_문제", "")
+    name = name.replace("순서배열", "연표")
+    name = name.replace("_번역", "")
+    name = name.replace("_구분통합", "")
+    for i in [1, 2, 3, 4]:
+        name = name.replace(f"{i}글자.", ".")
     if isfile(name):
         df = read_excel(name)
         lang = button8.cget("text")
@@ -695,10 +721,13 @@ def click_memo_btn():
 
     top.mainloop()
 
+
 def _from_rgb(rgb):
     """translates an rgb tuple of int to a tkinter friendly color code
     """
-    return "#%02x%02x%02x" % rgb 
+    return "#%02x%02x%02x" % rgb
+
+
 ##############################################################################################################
 window = Tk()
 
@@ -794,7 +823,8 @@ button3.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
 button7 = Button(window, relief="flat", width=12, height=1, text="줄바꿈 0", font=(
     'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_line_btn)
 button7.grid(column=2, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button7.configure(bg=_from_rgb((11, 58, 19)), foreground="white", highlightthickness=0)
+button7.configure(bg=_from_rgb((11, 58, 19)),
+                  foreground="white", highlightthickness=0)
 
 button4 = Button(window, relief="flat", width=10, height=1, text="오답노트", font=('Courier', 18),
                  command=click_wrong_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
@@ -831,7 +861,8 @@ button9.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
 button10 = Button(window, relief="flat", width=12, height=1, text="프로그램 종료", font=(
     'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_close_btn)
 button10.grid(column=8, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button10.configure(bg=_from_rgb((11, 58, 19)), foreground="white", highlightthickness=0)
+button10.configure(bg=_from_rgb((11, 58, 19)),
+                   foreground="white", highlightthickness=0)
 
 window.attributes('-fullscreen', True)
 window.mainloop()
