@@ -204,7 +204,6 @@ def tkinter_eng_word_roof(data_direct, filename):
             newdf = df.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
             틀릭적없는목록 = list(df[df["오답가산점"] <= 0].index)
-            틀린목록.sort(reverse=True)  # 많이 틀린것 먼저
             random.shuffle(틀릭적없는목록)
             range_list = 틀린목록 + 틀릭적없는목록
         for i in range_list:
@@ -293,7 +292,11 @@ def tkinter_eng_word_roof(data_direct, filename):
 
                 if answer != "" and answer in right_answer_list:
                     df["오답가산점"][i] = df["오답가산점"][i] - 1
-                    df.to_excel(original_filename)
+                    keys = list(df.keys())
+                    for key in keys:
+                        if 'Unnamed' in key:
+                            df = df.drop(columns=key)
+                    df.to_excel(original_filename, index=False)
                     if lang == "O X 퀴즈":
                         if answer == "ㅇ":
                             enter_in_text(
@@ -316,6 +319,10 @@ def tkinter_eng_word_roof(data_direct, filename):
 
                 else:
                     df["오답가산점"][i] = df["오답가산점"][i] + 2
+                    keys = list(df.keys())
+                    for key in keys:
+                        if 'Unnamed' in key:
+                            df = df.drop(columns=key)
                     df.to_excel(original_filename)
                     try:
                         beep_check = button5.cget("text")
