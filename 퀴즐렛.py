@@ -184,6 +184,8 @@ def tkinter_eng_word_roof(data_direct, filename):
     df = df.drop_duplicates()
     if '오답가산점' not in list(df.keys()):
         df['오답가산점'] = [0 for i in range(len(df))]
+    df['오답가산점'] = df['오답가산점'].fillna(0)
+    df.to_excel(original_filename, index=False)
     lang = button8.cget("text")
     filename = lang.replace(" ", "_")+"_"+filename
     df = df.sample(frac=1).reset_index(drop=True)  # 데이터 프레임의 행을 랜덤으로 뒤섞는다.
