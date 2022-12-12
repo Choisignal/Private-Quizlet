@@ -56,8 +56,8 @@ def 연도_객관식(data_direct, filename):
     return
 
 
-def 연표_통합(data_direct, filename):
-    파일명 = data_direct + filename
+def 연표_통합(data_direct, file):
+    파일명 = data_direct + file
     df = read_excel(f"{파일명}.xlsx")
     df = df.dropna()
     연도 = np.array(df["연도"])
@@ -84,13 +84,14 @@ def 연표_통합(data_direct, filename):
     새연표 = {"연도": 연도, "사건": 사건목록}
     새연표 = pd.DataFrame(새연표)
     새연표 = 새연표.drop_duplicates(["사건"])
-    새연표.to_excel(f"{파일명}_연도별모음.xlsx", index=False)
-    print(파일명+"_연도별모음.xlsx")
-    return f"{파일명}_연도별모음"
+    저장파일명=f"{data_direct + file}_연도별모음.xlsx"
+    새연표.to_excel(저장파일명, index=False)
+    print(저장파일명)
+    return filename+"_연도별모음"
 
 
-def 순서배열(경로_통합파일명):
-    df = read_excel(f"{경로_통합파일명}.xlsx")
+def 순서배열(data_direct, 파일명):
+    df = read_excel(f"{data_direct+파일명}.xlsx")
 
     엑셀용_리스트_문제 = []
     엑셀용_리스트_정답 = []
@@ -148,7 +149,7 @@ def 순서배열(경로_통합파일명):
 
     저장용 = {'Text 1': 엑셀용_리스트_문제, 'Text 2': 엑셀용_리스트_정답, 'Text 3': 엑셀용_리스트_해설}
     저장용 = pd.DataFrame(저장용)
-    final_filename = f"{경로_통합파일명}_문제.xlsx".replace("연표", "순서배열")
+    final_filename = f"{data_direct+파일명}_문제.xlsx".replace("연표", "순서배열")
     print(final_filename)
     저장용.to_excel(final_filename, index=False)
     
@@ -158,9 +159,10 @@ def 순서배열_구분통합(data_direct, filename):
     file_list = 엑셀파일구분하기(data_direct, filename)
     경로_통합파일명목록 = []
     for file in file_list:
+        연도_객관식(data_direct, file)
         파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
-        print(파일명)
-        경로_통합파일명목록 += [파일명]
+        print(data_direct+파일명)
+        경로_통합파일명목록 += [data_direct+파일명]
     for 경로_통합파일명 in 경로_통합파일명목록:
         df = read_excel(f"{경로_통합파일명}.xlsx")
     
@@ -238,15 +240,14 @@ filename = "고려_연도(왕)"
 file_list = [filename]  # 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
+    print(파일명)
+    연도_객관식(data_direct, file)  # 객관식 문제 만든다
+    순서배열_구분통합(data_direct, filename)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
     try:
-        순서배열(파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+        순서배열(data_direct, 파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
     except:
         print(f"Error! 문제만들기 {파일명}")
     try:
-        연도_객관식(data_direct, file)  # 객관식 문제 만든다
+        연도_객관식(data_direct, 파일명)  # 객관식 문제 만든다
     except:
         print(f"Error! 객관식 {파일명}")
-    try:
-        순서배열_구분통합(data_direct, filename)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
-    except:
-        print(f"Error! 순서배열_구분통합 {파일명}")

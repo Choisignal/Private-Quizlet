@@ -231,6 +231,8 @@ elif filename == "영어_복습":
     객관식_만들기("영어_복습_부정사 전치사 구분", data_direct, 단답형=False,설명=True)
 elif filename == "삼국통합":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+elif filename == "삼국통합":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "불교":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "한국사_대조":
