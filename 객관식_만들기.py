@@ -2,6 +2,7 @@ import pandas as pd
 import random
 import googletrans
 from tqdm import tqdm
+import numpy as np
 import os
 def 엑셀파일구분하기(data_direct, filename):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
@@ -204,18 +205,117 @@ def 특정구분제거(data_direct, filename, 구분목록):
     data.to_excel(save_filename, index=False)
     print(save_filename)
 
+def 한글_동음어(data_direct, filename):
+    translator = googletrans.Translator()
+    text1 = []
+    text2 = []
+    text3 = []
+
+    df = pd.read_excel(f"{data_direct}{filename}.xlsx")
+    df = df.drop_duplicates(['질문'])
+    df = df.reset_index()
+    kor = df["대답"]
+    chi = df["질문"]
+    pri = df["구분"]
+    two_list = []
+    for i in range(len(chi)):
+        if len(chi[i]) == 2:
+            two_list += [i]
+
+    kor = kor[two_list]
+    chi = chi[two_list]
+    pri = pri[two_list]
+    kor = np.array(kor)
+    chi = np.array(chi)
+    pri = np.array(pri)
+    딕셔너리 = {}
+    for i in range(kor.size):
+        단어 = str(kor[i])
+        if 단어 not in 딕셔너리.keys():
+            딕셔너리[단어] = ""
+        if chi[i] not in 딕셔너리[단어]:
+            딕셔너리[단어] = 딕셔너리[단어] + chi[i] + ", "
+
+    print_list = []
+    for i in range(kor.size):
+        pri1 = str(pri[i])
+        if pri1 == "한자어":
+            kor1 = str(kor[i])
+            chi1 = str(chi[i])
+            trans = translator.translate(chi1, dest='en')
+            trans = trans.text
+            if len(trans.split(" ")) == 1:
+                trans = f"({trans})".lower()
+            else:
+                trans = ""
+            for j in range(kor.size):
+                kor2 = str(kor[j])
+                chi2 = str(chi[j])
+                if kor1 == kor2 and chi1 == chi2:
+                    print_word = f"'{kor1}{trans}' = {chi2}?/o , ㅇ , {chi2}"
+                    if print_word not in print_list:
+                        print(print_word)
+                        text1 += [f"'{kor1}{trans}' = {chi2}?"]
+                        text2 += [f"ㅇ"]
+                        text3 += [f"{chi2}"]
+                    print_list += [print_word]
+                elif kor1[0] == kor2[0] and chi1[0] != chi2[0]:
+                    chi3 = chi2[0]+chi1[1]
+                    print_word = f"'{kor1}{trans}' = {chi3}?/x , ㄴ, {chi1}"
+                    if print_word not in print_list:
+                        print(print_word)
+                        text1 += [f"'{kor1}{trans}' = {chi3}?"]
+                        text2 += [f"ㄴ"]
+                        text3 += [f"{chi1}"]
+                    print_list += [print_word]
+
+    print_list = []
+    for i in range(kor.size):
+        pri1 = str(pri[i])
+        if pri1 == "o":
+            kor1 = str(kor[i])
+            chi1 = str(chi[i])
+            trans = translator.translate(chi1, dest='en')
+            trans = trans.text
+            if len(trans.split(" ")) == 1:
+                trans = f"({trans})".lower()
+            else:
+                trans = ""
+            for j in range(kor.size):
+                kor2 = str(kor[j])
+                chi2 = str(chi[j])
+                if kor1 == kor2 and chi1 == chi2:
+                    pass
+                elif kor1[1] == kor2[1] and chi1[1] != chi2[1]:
+                    chi3 = chi1[0]+chi2[1]
+                    print_word = f"'{kor1}{trans}' = {chi3}?/x , ㄴ, {chi1}"
+                    if print_word not in print_list:
+                        print(print_word)
+                        text1 += [f"'{kor1}{trans}' = {chi3}?"]
+                        text2 += [f"ㄴ"]
+                        text3 += [f"{chi1}"]
+                    print_list += [print_word]
+
+    data = {"Text 1": text1, "Text 2": text2, "Text 3": text3}
+    data = pd.DataFrame(data)
+    data.to_excel(
+        f"{data_direct}{filename}.xlsx".replace("단답형","O X 퀴즈"))
 
 data_direct = "./학습자료/단답형/"
-filename = "한자의지혜"
+filename = "국어_복습"
 if filename == "국어_복습":
+    '''
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
     객관식_만들기("국어_복습_사자성어", data_direct, 단답형=False,설명=False)
     객관식_만들기("국어_복습_고유어", data_direct, 단답형=False,설명=False)
     #객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역=False)
     #객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
-    #객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
+    #객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=False)
+    #객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
+    '''
+    한글_동음어(data_direct, "국어_복습_한자어")
 elif filename == "국어_암기자료":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "영어_유의어":
@@ -243,6 +343,7 @@ elif filename == "한자의지혜":
     #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
     객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=2,번역=True)
     #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
+    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=4,번역=False)
 else:
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
