@@ -234,7 +234,7 @@ def 순서배열_구분통합(data_direct, filename):
     save_df.to_excel(최종저장파일명)
 
 data_direct = "./학습자료/연표/"
-filename = "사건 순서"
+filename = "고려_연도(왕)"
 file_list = [filename]  # 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
