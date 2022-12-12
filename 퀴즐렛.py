@@ -202,13 +202,14 @@ def tkinter_eng_word_roof(data_direct, filename):
         sum_check = df['오답가산점'].sum()
         if sum_check == 0:
             range_list = list(range(0, num_total-1))
-            random.shuffle(range_list)
+            range_list.sort(reverse=True)
         else:
             newdf = df.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
-            틀릭적없는목록 = list(df[df["오답가산점"] <= 0].index)
-            random.shuffle(틀릭적없는목록)
-            range_list = 틀린목록 + 틀릭적없는목록
+            틀릭적없는목록 = list(df[df["오답가산점"] == 0].index)
+            틀릭적없는목록.sort(reverse=True)
+            맞은목록 = list(df[df["오답가산점"] < 0].index)
+            range_list = 틀린목록 + 틀릭적없는목록+맞은목록
             text.insert("1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
         for i in range_list:
             if stop_check != False:
@@ -229,12 +230,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                 "1.0", " ( {0}/{1} )\n\n\n".format(count, num_total))
             count2 += 1
             if count2 == num_total:
-                count2 = 0
+                count2 = -1
             if sum_check != 0 and count2 == len(틀린목록)+1:
                 text.insert("1.0","\n\n오답 체크 완료!")
                 try:
                     beep_check = button5.cget("text")
                     if beep_check == "소리ON" and answer != "":
+                        beepsound()
                         beepsound()
                 except:
                     print("Beep!")
@@ -272,10 +274,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
                 if lang == "O X 퀴즈":
-                    if answer == "s":
-                        answer = "ㄴ"
-                    elif answer == "d":
-                        answer = "ㅇ"
+                    if answer in ["s.","1."]:
+                        answer = "ㄴ."
+                    elif answer in ["d.","2."]:
+                        answer = "ㅇ."
                 if lang == "순서배열":
                     answer = answer.replace("r", "ㄱ")
                     answer = answer.replace("s", "ㄴ")
