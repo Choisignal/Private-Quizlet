@@ -335,7 +335,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     count_right += 1
 
                 else:
-                    df["오답가산점"][i] = df["오답가산점"][i] + 1.5
+                    df["오답가산점"][i] = df["오답가산점"][i] + 1
                     keys = list(df.keys())
                     for key in keys:
                         if 'Unnamed' in key:
