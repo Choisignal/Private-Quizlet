@@ -196,6 +196,7 @@ def tkinter_eng_word_roof(data_direct, filename):
     num_total = df.shape[0]
     count_right = 0
     count = 0
+    count2 = 0
     stop_check = False
     while stop_check == False:
         sum_check = df['오답가산점'].sum()
@@ -208,6 +209,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             틀릭적없는목록 = list(df[df["오답가산점"] <= 0].index)
             random.shuffle(틀릭적없는목록)
             range_list = 틀린목록 + 틀릭적없는목록
+            text.insert("1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
         for i in range_list:
             if stop_check != False:
                 break
@@ -225,6 +227,17 @@ def tkinter_eng_word_roof(data_direct, filename):
                 exp = df["Text 3"][i]
             text.insert(
                 "1.0", " ( {0}/{1} )\n\n\n".format(count, num_total))
+            count2 += 1
+            if count2 == num_total:
+                count2 = 0
+            if sum_check != 0 and count2 == len(틀린목록)+1:
+                text.insert("1.0","\n\n오답 체크 완료!")
+                try:
+                    beep_check = button5.cget("text")
+                    if beep_check == "소리ON" and answer != "":
+                        beepsound()
+                except:
+                    print("Beep!")
             if lang != "순서배열":
                 try:
                     text.insert("1.0", ask.replace(
@@ -320,7 +333,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     count_right += 1
 
                 else:
-                    df["오답가산점"][i] = df["오답가산점"][i] + 2
+                    df["오답가산점"][i] = df["오답가산점"][i] + 1.5
                     keys = list(df.keys())
                     for key in keys:
                         if 'Unnamed' in key:

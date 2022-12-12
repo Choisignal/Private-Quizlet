@@ -206,7 +206,7 @@ def 특정구분제거(data_direct, filename, 구분목록):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_유의어"
+filename = "한자의지혜"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
@@ -221,8 +221,10 @@ elif filename == "국어_암기자료":
 elif filename == "영어_유의어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
-    for filename in return_list1:
-        객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+    day_list = []
+    for day in return_list1:
+        day_list += [int(day.split("Day")[-1])]
+    객관식_만들기(f"영어_유의어_Day{str(max(day_list)).zfill(2)}", data_direct, 단답형=False,설명=True)
 elif filename == "영어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("영어_복습_뜻", data_direct, 단답형=False,설명=True)
@@ -237,5 +239,10 @@ elif filename == "불교":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "한국사_대조":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+elif filename == "한자의지혜":
+    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=2,번역=True)
+    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
 else:
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
