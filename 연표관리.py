@@ -37,6 +37,7 @@ def 연도_객관식(data_direct, filename):
         대답목록 = list(set(data["대답"]))
         질문 = data["질문"][i]
         대답 = data["대답"][i]
+        질문 = 질문.replace(대답,"[   ]")
         대답목록.remove(대답)
         선지번호 = [1, 2, 3]
         random.shuffle(선지번호)

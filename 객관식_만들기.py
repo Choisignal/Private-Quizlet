@@ -302,7 +302,7 @@ def OX퀴즈만들기(data_direct, filename):
         f"{data_direct}{filename}.xlsx".replace("단답형","O X 퀴즈"))
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_복습"
+filename = "영어_단어"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
@@ -316,13 +316,28 @@ if filename == "국어_복습":
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
 elif filename == "국어_암기자료":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
-elif filename == "영어_유의어":
+elif filename == "영어_단어":
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+    '''
+    for filename in return_list1:
+        객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
+    for filename in return_list2:
+        객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
+    '''
     day_list = []
     for day in return_list1:
         day_list += [int(day.split("Day")[-1])]
-    객관식_만들기(f"영어_유의어_Day{str(max(day_list)).zfill(2)}", data_direct, 단답형=False,설명=True)
+    filename = f"영어_단어_Day{str(max(day_list)).zfill(2)}"
+    객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+    try:
+        객관식_만들기(filename+"_유의어", data_direct, 단답형=False,설명=True)
+    except:
+        print("유의어")
+    try:
+        객관식_만들기(filename+"_관용어", data_direct, 단답형=False,설명=True)
+    except:
+        print("관용어")
 elif filename == "영어_복습":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
     객관식_만들기_구분통합(filename+"_오늘", data_direct, 단답형=False,설명=True)
