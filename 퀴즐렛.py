@@ -210,7 +210,8 @@ def tkinter_eng_word_roof(data_direct, filename):
             틀릭적없는목록.sort(reverse=True)
             맞은목록 = list(df[df["오답가산점"] < 0].index)
             range_list = 틀린목록 + 틀릭적없는목록+맞은목록
-            text.insert("1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
+            text.insert(
+                "1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
         for i in range_list:
             if stop_check != False:
                 break
@@ -232,7 +233,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             if count2 == num_total:
                 count2 = -1
             if sum_check != 0 and count2 == len(틀린목록)+1:
-                text.insert("1.0","\n\n오답 체크 완료!")
+                text.insert("1.0", "\n\n오답 체크 완료!")
                 try:
                     beep_check = button5.cget("text")
                     if beep_check == "소리ON" and answer != "":
@@ -274,9 +275,9 @@ def tkinter_eng_word_roof(data_direct, filename):
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
                 if lang == "O X 퀴즈":
-                    if answer in ["s.","1."]:
+                    if answer in ["s.", "1."]:
                         answer = "ㄴ."
-                    elif answer in ["d.","2."]:
+                    elif answer in ["d.", "2."]:
                         answer = "ㅇ."
                 if lang == "순서배열":
                     answer = answer.replace("r", "ㄱ")
@@ -317,10 +318,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     if lang == "O X 퀴즈":
                         if answer == "ㅇ":
                             enter_in_text(
-                                f"정답! {ask.split('=')[0]} 은(는) '{exp}' 입니다.\n")
+                                f"정답! {ask.split('=')[0]}은(는) '{exp}' 입니다.\n")
                         else:
                             enter_in_text(
-                                f"정답! {ask.split('=')[0]} 은(는)'{ask.split('=')[1][:-1]}' 이(가) 아니라 '{exp}' 입니다.\n")
+                                f"정답! {ask.split('=')[0]}은(는) '{str(ask.split('=')[1][:-1]).strip()}' 이(가) 아니라 '{exp}' 입니다.\n")
                     elif lang == "연표":
                         enter_in_text(
                             f"정답! {answer}년:")
@@ -353,7 +354,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                             text.insert("1.0", f" 입니다.\n")
                             text.insert("1.0", exp, "emphasis")
                             text.insert(
-                                "1.0", f" 은(는)  '{ask.split('=')[1][1:-1]}' 이(가) 아니라 ")
+                                "1.0", f" 은(는)  '{str(ask.split('=')[1][1:-1]).strip()}' 이(가) 아니라 ")
                             text.insert("1.0", "\n"+f"오답~,{ask.split('=')[0]}")
                         else:
                             text.insert("1.0", f"이(가) 맞습니다.\n")
