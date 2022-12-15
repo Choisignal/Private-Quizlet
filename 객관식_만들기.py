@@ -302,11 +302,10 @@ def OX퀴즈만들기(data_direct, filename):
         f"{data_direct}{filename}.xlsx".replace("단답형","O X 퀴즈"))
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_단어"
+filename = "국어_복습"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
-    객관식_만들기("국어_복습_사자성어", data_direct, 단답형=False,설명=False)
     객관식_만들기("국어_복습_고유어", data_direct, 단답형=False,설명=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
