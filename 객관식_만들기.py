@@ -140,7 +140,7 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
     저장파일명목록 = []
     for 파일명 in 파일명_목록:
         data = pd.read_excel(data_direct+파일명+".xlsx")
-        #os.remove(data_direct+파일명+".xlsx")
+        os.remove(data_direct+파일명+".xlsx")
         출력_질문목록 = []
         출력_대답목록 = []
         for i in range(data["대답"].size):
@@ -187,11 +187,11 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
             save_data.to_excel(save_filename, index=False)
         저장파일명목록 += [save_filename]
     save_df = pd.read_excel(저장파일명목록[0])
-    #os.remove(저장파일명목록[0])
+    os.remove(저장파일명목록[0])
     for 저장파일명 in 저장파일명목록[1:]:
         df = pd.read_excel(저장파일명)
         save_df = pd.concat([save_df,df])
-        #os.remove(저장파일명)
+        os.remove(저장파일명)
     print(최종저장파일명)
     save_df.to_excel(최종저장파일명)
 
@@ -302,7 +302,7 @@ def OX퀴즈만들기(data_direct, filename):
         f"{data_direct}{filename}.xlsx".replace("단답형","O X 퀴즈"))
 
 data_direct = "./학습자료/단답형/"
-filename = "고려_연도(왕)"
+filename = "영어_단어"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
@@ -317,14 +317,14 @@ if filename == "국어_복습":
 elif filename == "국어_암기자료":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "영어_단어":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    '''
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
-    '''
     for filename in return_list1:
         객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
     for filename in return_list2:
         객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
-    '''
     day_list = []
     for day in return_list1:
         day_list += [int(day.split("Day")[-1])]
@@ -338,9 +338,9 @@ elif filename == "영어_단어":
         객관식_만들기(filename+"_관용어", data_direct, 단답형=False,설명=True)
     except:
         print("관용어")
+    '''
 elif filename == "영어_복습":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
-    객관식_만들기_구분통합(filename+"_오늘", data_direct, 단답형=False,설명=True)
 elif filename == "삼국통합":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
 elif filename == "삼국통합":

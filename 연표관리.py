@@ -37,7 +37,6 @@ def 연도_객관식(data_direct, filename):
         대답목록 = list(set(data["대답"]))
         질문 = data["질문"][i]
         대답 = data["대답"][i]
-        질문 = 질문.replace(대답,"[   ]")
         대답목록.remove(대답)
         선지번호 = [1, 2, 3]
         random.shuffle(선지번호)
@@ -237,7 +236,7 @@ def 순서배열_구분통합(data_direct, filename):
     save_df.to_excel(최종저장파일명)
 
 data_direct = "./학습자료/연표/"
-filename = "고려_연도(왕)"
+filename = "사건 순서"
 file_list = [filename]  # 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
