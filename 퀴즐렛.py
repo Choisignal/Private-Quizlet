@@ -120,7 +120,7 @@ def tkinter_eng_word_test(data_direct, filename):
                         if answer[-1] == ".":
                             answer = answer[0:-1]
                             break
-                        elif (lang == "객관식" and answer in ["1","2","3"]):
+                        elif (lang == "객관식" and answer in ["1", "2", "3"]):
                             break
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝" or answer == "중지"):
                     entry.delete(0, END)
@@ -295,7 +295,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     if answer[-1] == ".":
                         answer = answer[0:-1]
                         check_ans = True
-                    elif (lang == "객관식" and answer in ["1","2","3"]):
+                    elif (lang == "객관식" and answer in ["1", "2", "3"]):
                         check_ans = True
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝"):
                     stop_check = True
@@ -332,9 +332,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                         enter_in_text(
                             f"정답! {answer}년:")
                         era = ask.count("\n")+1
-                    elif lang == "단답형" or lang == "객관식":
+                    elif lang == "단답형":
                         enter_in_text(
                             f"정답! '{right_answer2}':")
+                        era = ask.count("\n")+1
+                    elif lang == "객관식":
+                        enter_in_text(
+                            f"정답! '{right_answer2[3:]}':")
                         era = ask.count("\n")+1
                     else:
                         enter_in_text(
@@ -376,11 +380,20 @@ def tkinter_eng_word_roof(data_direct, filename):
                         else:
                             text.insert("1.0", "\n"+f"정답은 ")
                         era = ask.count("\n")+1
-                    elif lang == "단답형" or lang == "객관식":
+                    elif lang == "단답형":
                         text.insert("1.0", f" 입니다.\n")
                         text.insert("1.0", right_answer2, "emphasis")
                         if answer != '':
                             text.insert("1.0", f"'{answer2}'이(가) 아니고 ")
+                            #text.insert("1.0", "\n")
+                        else:
+                            text.insert("1.0", "\n"+f"정답은 ")
+                        era = ask.count("\n")+1
+                    elif lang == "객관식":
+                        text.insert("1.0", f" 입니다.\n")
+                        text.insert("1.0", right_answer2[3:], "emphasis")
+                        if answer != '':
+                            pass
                             #text.insert("1.0", "\n")
                         else:
                             text.insert("1.0", "\n"+f"정답은 ")

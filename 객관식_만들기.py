@@ -4,6 +4,8 @@ import googletrans
 from tqdm import tqdm
 import numpy as np
 import os
+
+
 def 엑셀파일구분하기(data_direct, filename):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     return_list1 = []
@@ -31,7 +33,8 @@ def 엑셀파일구분하기(data_direct, filename):
         print("구분 없음!")
     return return_list1, return_list2
 
-def 객관식_만들기_한자어(파일명, data_direct, 단답형=True,설명=True,글자수=2,번역=False):
+
+def 객관식_만들기_한자어(파일명, data_direct, 단답형=True, 설명=True, 글자수=2, 번역=False):
     translator = googletrans.Translator()
     data = pd.read_excel(data_direct+파일명+".xlsx")
     한자 = []
@@ -40,14 +43,14 @@ def 객관식_만들기_한자어(파일명, data_direct, 단답형=True,설명=
         질문 = data["질문"][i]
         대답 = data["대답"][i]
         if len(질문.split('/')[0]) == 글자수:
-            if 번역 ==True:
+            if 번역 == True:
                 한자번역 = translator.translate(질문, dest='en')
                 한자번역 = 한자번역.text
                 if len(한자번역.split(" ")) == 1 and 한자번역 != "no":
                     대답 = f"{대답}({한자번역})"
             한자 += [질문]
             한글 += [대답]
-    data = pd.DataFrame({"질문":한자,"대답":한글})
+    data = pd.DataFrame({"질문": 한자, "대답": 한글})
 
     출력_질문목록 = []
     출력_대답목록 = []
@@ -77,15 +80,16 @@ def 객관식_만들기_한자어(파일명, data_direct, 단답형=True,설명=
         출력_대답목록 += [f"{선지번호[0]}, {대답}"]
 
     save_data = pd.DataFrame({"질문": 출력_질문목록, "대답": 출력_대답목록})
-    if 번역==True:
-        번역="_번역"
+    if 번역 == True:
+        번역 = "_번역"
     else:
-        번역 =""
+        번역 = ""
     save_filename = data_direct + "객관식_" + 파일명 + f"{글자수}글자{번역}.xlsx"
     print(save_filename)
     save_data.to_excel(save_filename, index=False)
 
-def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
+
+def 객관식_만들기(파일명, data_direct, 단답형=True, 설명=True):
     data = pd.read_excel(data_direct+파일명+".xlsx")
 
     출력_질문목록 = []
@@ -95,7 +99,7 @@ def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
         질문 = data["질문"][i]
         대답 = data["대답"][i]
         try:
-            질문 = 질문.replace(대답,"[   ]")
+            질문 = 질문.replace(대답, "[   ]")
         except:
             pass
         대답목록.remove(대답)
@@ -132,11 +136,12 @@ def 객관식_만들기(파일명, data_direct, 단답형=True,설명=True):
         print(save_filename)
         save_data.to_excel(save_filename, index=False)
 
-def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설명=True):
+
+def 객관식_만들기_구분통합(filename, data_direct, 단답형=True, 설명=True):
     최종저장파일명 = data_direct + "객관식_" + filename + "_구분통합.xlsx"
     return_list1, 파일명_목록 = 엑셀파일구분하기(data_direct, filename)
     for filename in return_list1:
-        객관식_만들기(filename, data_direct, 단답형=False,설명=True)
+        객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
     저장파일명목록 = []
     for 파일명 in 파일명_목록:
         data = pd.read_excel(data_direct+파일명+".xlsx")
@@ -148,7 +153,7 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
             질문 = data["질문"][i]
             대답 = data["대답"][i]
             try:
-                질문 = 질문.replace(대답,"[   ]")
+                질문 = 질문.replace(대답, "[   ]")
             except:
                 pass
 
@@ -165,9 +170,12 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
                     선지목록[선지번호[2]-1] = f"{선지번호[2]}. {대답목록[2]}"
                     출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
                 else:
-                    선지목록[선지번호[0]-1] = f"{선지번호[0]}. {str(대답목록[0]).split(',')[0]}"
-                    선지목록[선지번호[1]-1] = f"{선지번호[1]}. {str(대답목록[1]).split(',')[0]}"
-                    선지목록[선지번호[2]-1] = f"{선지번호[2]}. {str(대답목록[2]).split(',')[0]}"
+                    선지목록[선지번호[0] -
+                         1] = f"{선지번호[0]}. {str(대답목록[0]).split(',')[0]}"
+                    선지목록[선지번호[1] -
+                         1] = f"{선지번호[1]}. {str(대답목록[1]).split(',')[0]}"
+                    선지목록[선지번호[2] -
+                         1] = f"{선지번호[2]}. {str(대답목록[2]).split(',')[0]}"
                     출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
 
                 출력_질문목록 += [출력_질문]
@@ -182,7 +190,8 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
                     출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}"
                 else:
                     선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
-                    선지목록[선지번호[1] - 1] = f"{선지번호[1]}. {str(대답목록[0]).split(',')[0]}"
+                    선지목록[선지번호[1] -
+                         1] = f"{선지번호[1]}. {str(대답목록[0]).split(',')[0]}"
                     출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}"
 
                 출력_질문목록 += [출력_질문]
@@ -208,10 +217,11 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True,설�
     os.remove(저장파일명목록[0])
     for 저장파일명 in 저장파일명목록[1:]:
         df = pd.read_excel(저장파일명)
-        save_df = pd.concat([save_df,df])
+        save_df = pd.concat([save_df, df])
         os.remove(저장파일명)
     print(최종저장파일명)
     save_df.to_excel(최종저장파일명)
+
 
 def 특정구분제거(data_direct, filename, 구분목록):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
@@ -222,6 +232,7 @@ def 특정구분제거(data_direct, filename, 구분목록):
     save_filename = f"{data_direct}{filename}_{제거요소[:-1]}제거.xlsx"
     data.to_excel(save_filename, index=False)
     print(save_filename)
+
 
 def OX퀴즈만들기(data_direct, filename):
     translator = googletrans.Translator()
@@ -317,14 +328,15 @@ def OX퀴즈만들기(data_direct, filename):
     data = {"Text 1": text1, "Text 2": text2, "Text 3": text3}
     data = pd.DataFrame(data)
     data.to_excel(
-        f"{data_direct}{filename}.xlsx".replace("단답형","O X 퀴즈"))
+        f"{data_direct}{filename}.xlsx".replace("단답형", "O X 퀴즈"))
+
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_단어"
+filename = "한국사_대조"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
-    객관식_만들기("국어_복습_의미", data_direct, 단답형=False,설명=False)
+    객관식_만들기("국어_복습_의미", data_direct, 단답형=False, 설명=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
     '''
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
@@ -334,9 +346,9 @@ if filename == "국어_복습":
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
     '''
 elif filename == "국어_암기자료":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "영어_단어":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
     '''
     return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
@@ -359,20 +371,20 @@ elif filename == "영어_단어":
         print("관용어")
     '''
 elif filename == "영어_복습":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "삼국통합":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "삼국통합":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "불교":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "한국사_대조":
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "한자의지혜":
     #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
-    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=2,번역=True)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=2, 번역=True)
     #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
     #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=4,번역=False)
 else:
-    객관식_만들기(filename, data_direct, 단답형=False,설명=True)
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False,설명=True)
+    객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)

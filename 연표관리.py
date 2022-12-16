@@ -3,6 +3,7 @@ import numpy as np
 from pandas import read_excel
 import pandas as pd
 import random
+import os
 
 
 def 엑셀파일구분하기(data_direct, filename):
@@ -84,10 +85,10 @@ def 연표_통합(data_direct, file):
     새연표 = {"연도": 연도, "사건": 사건목록}
     새연표 = pd.DataFrame(새연표)
     새연표 = 새연표.drop_duplicates(["사건"])
-    저장파일명=f"{data_direct + file}_연도별모음.xlsx"
-    새연표.to_excel(저장파일명, index=False)
+    저장파일명 = f"{file}_연도별모음"
+    새연표.to_excel(f"{data_direct+저장파일명}.xlsx", index=False)
     print(저장파일명)
-    return filename+"_연도별모음"
+    return 저장파일명  # filename+"_연도별모음"
 
 
 def 순서배열(data_direct, 파일명):
@@ -152,24 +153,26 @@ def 순서배열(data_direct, 파일명):
     final_filename = f"{data_direct+파일명}_문제.xlsx".replace("연표", "순서배열")
     print(final_filename)
     저장용.to_excel(final_filename, index=False)
-    
+
+
 def 순서배열_구분통합(data_direct, filename):
     최종_통합파일명목록 = []
     최종저장파일명 = f"{data_direct}{filename}_문제_구분통합.xlsx".replace("연표", "순서배열")
     file_list = 엑셀파일구분하기(data_direct, filename)
     경로_통합파일명목록 = []
     for file in file_list:
-        연도_객관식(data_direct, file)
+        #연도_객관식(data_direct, file)
         파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
         print(data_direct+파일명)
         경로_통합파일명목록 += [data_direct+파일명]
+    print(경로_통합파일명목록)
     for 경로_통합파일명 in 경로_통합파일명목록:
         df = read_excel(f"{경로_통합파일명}.xlsx")
-    
+
         엑셀용_리스트_문제 = []
         엑셀용_리스트_정답 = []
         엑셀용_리스트_해설 = []
-    
+
         for i in range(5):
             리스트_문제 = []
             리스트_원래 = []
@@ -185,7 +188,7 @@ def 순서배열_구분통합(data_direct, filename):
                 리스트_원래_연도용 += [content]
                 year = df["연도"][i]
                 리스트_연도 += [year]
-    
+
             random.shuffle(리스트_문제)
             리스트_문제 = 리스트_문제[0:3]
             #리스트_원래 = [x for i in 리스트_원래 for x in 리스트_문제 if i in x]
@@ -194,21 +197,21 @@ def 순서배열_구분통합(data_direct, filename):
                 if x in 리스트_문제:
                     리스트_원래2 += [x]
             리스트_원래 = 리스트_원래2
-    
+
             for i in range(len(리스트_원래_연도용)):
                 if 리스트_원래_연도용[i] in 리스트_원래:
                     리스트_원래_해설용 += [리스트_원래_연도용[i]]
                     리스트_연도_해설용 += [리스트_연도[i]]
-    
+
             dic = {'label': ['ㄱ', 'ㄴ', 'ㄷ'],
                    'original': 리스트_원래, 'new': 리스트_문제}
             new_df = pd.DataFrame(dic)
-    
+
             정답 = ""
             문제 = ""
             for i in 리스트_원래:
                 정답 += list(new_df["label"][new_df["new"] == i])[0] + ""
-    
+
             for i in range(3):
                 문제 += f"{new_df['label'][i]}. {리스트_문제[i]} \n"
             문제 = 문제[0:-2]
@@ -219,30 +222,31 @@ def 순서배열_구분통합(data_direct, filename):
             엑셀용_리스트_문제 += [문제]
             엑셀용_리스트_정답 += [정답]
             엑셀용_리스트_해설 += [해설]
-    
+
         저장용 = {'Text 1': 엑셀용_리스트_문제, 'Text 2': 엑셀용_리스트_정답, 'Text 3': 엑셀용_리스트_해설}
         저장용 = pd.DataFrame(저장용)
         final_filename = f"{경로_통합파일명}_문제.xlsx".replace("연표", "순서배열")
-        print(final_filename)
+        print(final_filename, "***************")
         저장용.to_excel(final_filename, index=False)
         최종_통합파일명목록 += [final_filename]
     save_df = pd.read_excel(최종_통합파일명목록[0])
-    # os.remove(저장파일명목록[0])
+    os.remove(최종_통합파일명목록[0])
     for 저장파일명 in 최종_통합파일명목록[1:]:
         df = pd.read_excel(저장파일명)
         save_df = pd.concat([save_df, df])
-        # os.remove(저장파일명)
+        os.remove(저장파일명)
     print(최종저장파일명)
     save_df.to_excel(최종저장파일명)
+
 
 data_direct = "./학습자료/연표/"
 filename = "사건 순서"
 file_list = [filename]  # 엑셀파일구분하기(data_direct, filename)
 for file in file_list:
     파일명 = 연표_통합(data_direct, file)  # 사건을 연도별로 모아준다
-    print(파일명)
-    연도_객관식(data_direct, file)  # 객관식 문제 만든다
     순서배열_구분통합(data_direct, filename)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+    '''
+    연도_객관식(data_direct, file)  # 객관식 문제 만든다
     try:
         순서배열(data_direct, 파일명)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
     except:
@@ -251,3 +255,4 @@ for file in file_list:
         연도_객관식(data_direct, 파일명)  # 객관식 문제 만든다
     except:
         print(f"Error! 객관식 {파일명}")
+    '''
