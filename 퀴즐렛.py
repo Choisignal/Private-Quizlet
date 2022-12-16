@@ -77,7 +77,7 @@ def tkinter_eng_word_test(data_direct, filename):
                 if lang == "연표":
                     ask = df["사건"][i]
                     right_answer = df["연도"][i]
-                elif lang == "단답형":
+                elif lang == "단답형" or lang == "객관식":
                     ask = df["질문"][i]
                     right_answer = df["대답"][i]
                     try:
@@ -116,9 +116,12 @@ def tkinter_eng_word_test(data_direct, filename):
                         answer = answer.replace("2", "ㄴ")
                         answer = answer.replace("3", "ㄷ")
                         answer = answer.replace("4", "ㄹ")
-                    if len(answer) != 0 and answer[-1] == ".":
-                        answer = answer[0:-1]
-                        break
+                    if len(answer) != 0:
+                        if answer[-1] == ".":
+                            answer = answer[0:-1]
+                            break
+                        elif (lang == "객관식" and answer in ["1","2","3"]):
+                            break
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝" or answer == "중지"):
                     entry.delete(0, END)
                     stop_check = True
@@ -220,7 +223,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             if lang == "연표":
                 ask = df["사건"][i]
                 right_answer = df["연도"][i]
-            elif lang == "단답형":
+            elif lang == "단답형" or lang == "객관식":
                 ask = df["질문"][i]
                 right_answer = df["대답"][i]
             else:
@@ -266,7 +269,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
-                    if lang == "단답형":
+                    if lang == "단답형" or lang == "객관식":
                         try:
                             text.insert("1.0", ask.replace(
                                 right_answer, "[   ]"), "emphasis")
@@ -288,9 +291,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer = answer.replace("2", "ㄴ")
                     answer = answer.replace("3", "ㄷ")
                     answer = answer.replace("4", "ㄹ")
-                if len(answer) != 0 and answer[-1] == ".":
-                    answer = answer[0:-1]
-                    check_ans = True
+                if len(answer) != 0:
+                    if answer[-1] == ".":
+                        answer = answer[0:-1]
+                        check_ans = True
+                    elif (lang == "객관식" and answer in ["1","2","3"]):
+                        check_ans = True
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝"):
                     stop_check = True
             if stop_check != True:
@@ -326,7 +332,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                         enter_in_text(
                             f"정답! {answer}년:")
                         era = ask.count("\n")+1
-                    elif lang == "단답형":
+                    elif lang == "단답형" or lang == "객관식":
                         enter_in_text(
                             f"정답! '{right_answer2}':")
                         era = ask.count("\n")+1
@@ -370,7 +376,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                         else:
                             text.insert("1.0", "\n"+f"정답은 ")
                         era = ask.count("\n")+1
-                    elif lang == "단답형":
+                    elif lang == "단답형" or lang == "객관식":
                         text.insert("1.0", f" 입니다.\n")
                         text.insert("1.0", right_answer2, "emphasis")
                         if answer != '':
@@ -488,7 +494,7 @@ def click_open_btn():
             df = df.drop_duplicates(["사건"])
             key_word = df["연도"].tolist()
             content_to_print = df["사건"].tolist()
-        elif lang == "단답형":
+        elif lang == "단답형" or lang == "객관식":
             df = df.drop_duplicates()
             #df = df.sort_values(by="대답", ascending=True)
             key_word = df["대답"].tolist()
@@ -641,6 +647,8 @@ def click_kor_eng_btn():
     elif lang == "연표":
         button8.config(text="단답형")
     elif lang == "단답형":
+        button8.config(text="객관식")
+    elif lang == "객관식":
         button8.config(text="순서배열")
 
 
