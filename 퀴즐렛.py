@@ -103,10 +103,6 @@ def tkinter_eng_word_test(data_direct, filename):
                     text.delete("1.0", END)
                     #text.delete("1.0", "2.0")
                     answer = entry.get()
-                    if answer == "s.":
-                        answer = "ㄴ."
-                    elif answer == "d.":
-                        answer = "ㅇ."
                     if lang == "순서배열":
                         answer = answer.replace("r", "ㄱ")
                         answer = answer.replace("s", "ㄴ")
@@ -121,6 +117,12 @@ def tkinter_eng_word_test(data_direct, filename):
                             answer = answer[0:-1]
                             break
                         elif (lang == "객관식" and answer in ["1", "2", "3"]):
+                            break
+                        elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1","ㅇ","d","2"]):
+                            if answer in ["s", "1"]:
+                                answer = "ㄴ"
+                            elif answer in ["d", "2"]:
+                                answer = "ㅇ"
                             break
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝" or answer == "중지"):
                     entry.delete(0, END)
@@ -277,11 +279,6 @@ def tkinter_eng_word_roof(data_direct, filename):
                             text.insert("1.0", ask, "emphasis")
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
-                if lang == "O X 퀴즈":
-                    if answer in ["s.", "1."]:
-                        answer = "ㄴ."
-                    elif answer in ["d.", "2."]:
-                        answer = "ㅇ."
                 if lang == "순서배열":
                     answer = answer.replace("r", "ㄱ")
                     answer = answer.replace("s", "ㄴ")
@@ -297,6 +294,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                         check_ans = True
                     elif (lang == "객관식" and answer in ["1", "2", "3"]):
                         check_ans = True
+                    elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1","ㅇ","d","2"]):
+                        check_ans = True
+                        if answer in ["s", "1"]:
+                            answer = "ㄴ"
+                        elif answer in ["d", "2"]:
+                            answer = "ㅇ"
                 if len(answer) != 0 and (answer.lower() == "stop" or answer == "종료" or answer == "끝"):
                     stop_check = True
             if stop_check != True:
@@ -364,12 +367,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                             text.insert("1.0", f" 입니다.\n")
                             text.insert("1.0", exp, "emphasis")
                             text.insert(
-                                "1.0", f" 은(는)  '{str(ask.split('=')[1][1:-1]).strip()}' 이(가) 아니라 ")
+                                "1.0", f"은(는) '{str(ask.split('=')[1][1:-1]).strip()}' 이(가) 아니라 ")
                             text.insert("1.0", "\n"+f"오답~,{ask.split('=')[0]}")
                         else:
                             text.insert("1.0", f"이(가) 맞습니다.\n")
                             text.insert("1.0", f"'{exp}'", "emphasis")
-                            text.insert("1.0", f" 은(는) ")
+                            text.insert("1.0", f"은(는) ")
                             text.insert("1.0", "\n"+f"오답~,{ask.split('=')[0]}")
                     elif lang == "연표":
                         text.insert("1.0", f"년 입니다.\n")
@@ -487,6 +490,7 @@ def click_open_btn():
     lang = button8.cget("text")
     name = name.replace("/객관식+단답형_", "/")
     name = name.replace("/객관식_", "/")
+    name = name.replace("객관식/", "/")
     name = name.replace("_연도별모음", "")
     name = name.replace("_문제", "")
     name = name.replace("순서배열", "연표")
@@ -658,10 +662,10 @@ def click_kor_eng_btn():
     elif lang == "O X 퀴즈":
         button8.config(text="연표")
     elif lang == "연표":
-        button8.config(text="단답형")
-    elif lang == "단답형":
         button8.config(text="객관식")
     elif lang == "객관식":
+        button8.config(text="단답형")
+    elif lang == "단답형":
         button8.config(text="순서배열")
 
 
@@ -892,7 +896,7 @@ button6.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
                   highlightthickness=0)
 
 
-button8 = Button(window, relief="flat", width=10, height=1, text="단답형", font=('Courier', 18),
+button8 = Button(window, relief="flat", width=10, height=1, text="객관식", font=('Courier', 18),
                  command=click_kor_eng_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
 button8.grid(column=6, row=6, rowspan=1, ipadx=0, ipady=7, stick=W)
 button8.configure(bg=_from_rgb((11, 58, 19)), foreground="white",

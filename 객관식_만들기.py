@@ -187,12 +187,12 @@ def 객관식_만들기_구분통합(filename, data_direct, 단답형=True, 설�
                 if 설명 == True:
                     선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {대답}"
                     선지목록[선지번호[1] - 1] = f"{선지번호[1]}. {대답목록[0]}"
-                    출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}"
+                    출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
                 else:
                     선지목록[선지번호[0] - 1] = f"{선지번호[0]}. {str(대답).split(',')[0]}"
                     선지목록[선지번호[1] -
                          1] = f"{선지번호[1]}. {str(대답목록[0]).split(',')[0]}"
-                    출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}"
+                    출력_질문 = f"{질문}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
 
                 출력_질문목록 += [출력_질문]
                 출력_대답목록 += [f"{선지번호[0]}, {대답}"]
@@ -332,12 +332,13 @@ def OX퀴즈만들기(data_direct, filename):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "한국사_대조"
+filename = "국어_57항"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
     객관식_만들기("국어_복습_의미", data_direct, 단답형=False, 설명=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
+    객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
     '''
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역=False)
@@ -346,6 +347,8 @@ if filename == "국어_복습":
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
     '''
 elif filename == "국어_암기자료":
+    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
+elif filename == "국어_57항":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "영어_단어":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
@@ -381,10 +384,11 @@ elif filename == "불교":
 elif filename == "한국사_대조":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "한자의지혜":
-    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
+    #OX퀴즈만들기(data_direct, "한자의지혜")
+    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
     객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=2, 번역=True)
-    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
-    #객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=4,번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=4,번역=False)
 else:
     객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
