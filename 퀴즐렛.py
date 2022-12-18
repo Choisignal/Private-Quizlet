@@ -7,6 +7,7 @@ from os import makedirs
 import random
 import re
 import shutil
+from copy import copy
 try:
     import winsound as sd
 
@@ -279,10 +280,13 @@ def tkinter_eng_word_roof(data_direct, filename):
     if '구분' not in list(df.keys()):
         df['구분'] = ['기본' for i in range(len(df))]
     df['구분'] = df['구분'].fillna('기본')
+    for key in list(df.keys()):
+        if 'Unnamed' in key:
+            df = df.drop(columns=key)
     df.to_excel(original_filename, index=False)
     lang = button8.cget("text")
     filename = lang.replace(" ", "_")+"_"+filename
-    df = df.sample(frac=1).reset_index(drop=True)  # 데이터 프레임의 행을 랜덤으로 뒤섞는다.
+    # df = df.sample(frac=1).reset_index(drop=True)  # 데이터 프레임의 행을 랜덤으로 뒤섞는다.
     wrong_log = "{0}오답노트/오답노트_무한반복_{1}.xlsx".format(
         data_direct, filename)
     wrong_log_direct = "{0}오답노트/".format(data_direct)
@@ -298,11 +302,12 @@ def tkinter_eng_word_roof(data_direct, filename):
             range_list = list(range(0, num_total-1))
             range_list.sort(reverse=True)
         else:
-            newdf = df.sort_values('오답가산점', ascending=False)
+            newdf = copy(df)
+            newdf = newdf.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
-            틀릭적없는목록 = list(df[df["오답가산점"] == 0].index)
+            틀릭적없는목록 = list(newdf[newdf["오답가산점"] == 0].index)
             틀릭적없는목록.sort(reverse=True)
-            맞은목록 = list(df[df["오답가산점"] < 0].index)
+            맞은목록 = list(newdf[newdf["오답가산점"] < 0].index)
             range_list = 틀린목록 + 틀릭적없는목록+맞은목록
             text.insert(
                 "1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
@@ -429,7 +434,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    now = f"현재시각 : {str(now.month).zfill(2)}년 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
+                    now = f"현재시각 : {str(now.month).zfill(2)}원 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
                     text.insert("1.0", now)
                 sleep(0.05)
                 window.update()
@@ -532,7 +537,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     for key in keys:
                         if 'Unnamed' in key:
                             df = df.drop(columns=key)
-                    df.to_excel(original_filename)
+                    df.to_excel(original_filename, index=False)
                     try:
                         beep_check = button5.cget("text")
                         if beep_check == "소리ON" and answer != "":
@@ -586,12 +591,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                     now = datetime.now()
                     day = now.strftime("%Y%m%d")
                     hour = now.strftime("%H")
+                    minute = now.strftime("%M")
                     if isfile(wrong_log):
                         df_wrong = read_excel(wrong_log)
                     else:
                         df_wrong = DataFrame(
                             {'질문': [], '대답': [], '정답': [], '날짜': [], '시간': []})
-                    df_wrong.loc[-1] = [ask, answer2, right_answer2, day, hour]
+                    df_wrong.loc[-1] = [ask, answer2,
+                                        right_answer2, day, f"{hour}시 {minute}분"]
                     df_wrong.to_excel(wrong_log, index=False)
                 entry.delete(0, END)
                 if lang == "O X 퀴즈":
@@ -622,7 +629,7 @@ def get_file_direct():
         try:
             filename = file.split("/")[-1]
             오답노트 = file.replace(filename, "")+"오답노트"
-            shutil.rmtree(오답노트)
+            # shutil.rmtree(오답노트)
         except:
             print(오답노트)
             pass
@@ -798,7 +805,7 @@ def click_wrong_btn():
         df = read_excel(wrong_log)
         now = datetime.now()
         date = now.strftime("%Y%m%d")
-        df = df[df['날짜'] == int(date)]
+        #df = df[df['날짜'] == int(date)]
         ask = df["질문"].tolist()
         ans = df["대답"].tolist()
         cor = df["정답"].tolist()
@@ -808,13 +815,13 @@ def click_wrong_btn():
             for i in range(len(ask)):
                 text.insert(
                     "1.0",
-                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}시). 질문 : {'%-15s' % ask[i]}\n대답 : {ans[i]}\n정답 : {cor[i]}\n\n")
+                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
             text.insert("1.0", f"{date}")
         else:
             for i in range(len(ask)):
                 text.insert(
-                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)}시)\n 질문 : {'%-15s' % ask[i]}\n대답 : {ans[i]}\n정답 : {cor[i]}\n\n")
+                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
             text.insert("1.0", f"{date}")
     else:
