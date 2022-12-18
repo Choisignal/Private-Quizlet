@@ -332,7 +332,7 @@ def OX퀴즈만들기(data_direct, filename):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "국어_57항"
+filename = "영어_단어"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
