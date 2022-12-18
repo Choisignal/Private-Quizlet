@@ -435,7 +435,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    now = f"현재시각 : {str(now.month).zfill(2)}원 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
+                    now = f"현재시각 : {str(now.month).zfill(2)}월 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
                     text.insert("1.0", now)
                 sleep(0.05)
                 window.update()
@@ -452,15 +452,27 @@ def tkinter_eng_word_roof(data_direct, filename):
                         if answer[-1] == "*":
                             button8.config(text="객관식")
                             text.insert("1.0", print_ask, "emphasis")
+                        elif answer[-1] == "-":
+                            try:
+                                text.insert("1.0", print_ask, "emphasis")
+                            except:
+                                try:
+                                    text.insert("1.0", ask.replace(
+                                        right_answer, "[   ]"), "emphasis")
+                                except:
+                                    text.insert("1.0", ask, "emphasis")
                         else:
                             try:
                                 text.insert("1.0", ask.replace(
                                     right_answer, "[   ]"), "emphasis")
                             except:
                                 text.insert("1.0", ask, "emphasis")
-                    elif lang == "객관식" and answer[-1] == "*":
-                        button8.config(text="단답형")
-                        text.insert("1.0", print_ask, "emphasis")
+                    elif lang == "객관식":
+                        if answer[-1] == "*":
+                            button8.config(text="단답형")
+                            text.insert("1.0", print_ask, "emphasis")
+                        elif answer[-1] == "-":
+                            text.insert("1.0", print_ask, "emphasis")
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
                 if lang == "순서배열":
