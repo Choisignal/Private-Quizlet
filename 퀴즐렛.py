@@ -19,6 +19,7 @@ except:
 
 
 def make_list(right_answer):
+    right_answer_original = right_answer
     right_answer = re.sub('\([^)]+\)', '', right_answer)
     try:
         right_answer_list = right_answer.split(",")
@@ -28,6 +29,7 @@ def make_list(right_answer):
     lang = button8.cget("text")
     if lang == "연표":
         right_answer_list += [str(right_answer)[2:]]
+    right_answer_list += [right_answer_original]
     return right_answer_list
 
 
@@ -77,7 +79,7 @@ def tkinter_eng_word_test(data_direct, filename):
                 if lang == "연표":
                     ask = df["사건"][i]
                     right_answer = df["연도"][i]
-                elif lang == "단답형" or lang == "객관식":
+                elif lang == "단답형":
                     ask = df["질문"][i]
                     right_answer = df["대답"][i]
                     try:
@@ -85,6 +87,80 @@ def tkinter_eng_word_test(data_direct, filename):
                             ask = ask.replace(right_answer, "[   ]")
                     except:
                         pass
+                elif lang == "객관식":
+                    ask = df["질문"][i]
+                    right_answer = df["대답"][i]
+                    category = df["구분"][i]
+                    category_list = list(set(df["구분"]))
+                    df2 = df[df["구분"] == category]
+                    answer_list = list(set(df2["대답"]))
+                    print_ask = df["질문"][i]
+                    try:
+                        print_ask = print_ask.replace(right_answer, "[   ]")
+                    except:
+                        pass
+                    if len(answer_list) > 2:
+                        len_answer_list = 3
+                        선지번호 = [1, 2, 3]
+                        선지목록 = [1, 2, 3]
+                        선지목록_체크용 = [1, 2, 3]
+                        random.shuffle(선지번호)
+
+                        answer_list.remove(right_answer)
+                        random.shuffle(answer_list)
+                        answer_list = [right_answer] + answer_list
+
+                        선지목록_체크용[선지번호[0] -
+                                 1] = f"{str(answer_list[0]).split(',')[0]}"
+                        선지목록_체크용[선지번호[1] -
+                                 1] = f"{str(answer_list[1]).split(',')[0]}"
+                        선지목록_체크용[선지번호[2] -
+                                 1] = f"{str(answer_list[2]).split(',')[0]}"
+
+                        선지목록[선지번호[0] -
+                             1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+                        선지목록[선지번호[1] -
+                             1] = f"{선지번호[1]}. {str(answer_list[1]).split(',')[0]}"
+                        선지목록[선지번호[2] -
+                             1] = f"{선지번호[2]}. {str(answer_list[2]).split(',')[0]}"
+                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                    elif len(answer_list) == 2:
+                        len_answer_list = 2
+                        선지번호 = [1, 2]
+                        선지목록 = [1, 2]
+                        선지목록_체크용 = [1, 2]
+                        random.shuffle(선지번호)
+
+                        answer_list.remove(right_answer)
+                        random.shuffle(answer_list)
+                        answer_list = [right_answer] + answer_list
+
+                        선지목록_체크용[선지번호[0] -
+                                 1] = f"{str(answer_list[0]).split(',')[0]}"
+                        선지목록_체크용[선지번호[1] -
+                                 1] = f"{str(answer_list[1]).split(',')[0]}"
+
+                        선지목록[선지번호[0] -
+                             1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+                        선지목록[선지번호[1] -
+                             1] = f"{선지번호[1]}. {str(answer_list[1]).split(',')[0]}"
+
+                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
+                    else:
+                        len_answer_list = 1
+                        선지번호 = [1]
+                        선지목록 = [1]
+                        선지목록_체크용 = [1]
+
+                        answer_list = [right_answer]
+
+                        선지목록_체크용[선지번호[0] -
+                                 1] = f"{str(answer_list[0]).split(',')[0]}"
+
+                        선지목록[선지번호[0] -
+                             1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+
+                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n\n"
                 else:
                     ask = df["Text 1"][i]
                     right_answer = df["Text 2"][i]
@@ -97,11 +173,15 @@ def tkinter_eng_word_test(data_direct, filename):
                 for i in range(400):
                     text.insert(
                         "1.0", " ( {0}/{1} : {2})\n".format(count, qusetion_num, int(0.05*(399-i))))
-                    text.insert("1.0", ask, "emphasis")
+                    if lang == "객관식":
+                        text.insert("1.0", print_ask, "emphasis")
+                    else:
+                        text.insert("1.0", ask, "emphasis")
+
                     window.update()
                     sleep(0.05)
                     text.delete("1.0", END)
-                    #text.delete("1.0", "2.0")
+                    # text.delete("1.0", "2.0")
                     answer = entry.get()
                     if lang == "순서배열":
                         answer = answer.replace("r", "ㄱ")
@@ -116,9 +196,15 @@ def tkinter_eng_word_test(data_direct, filename):
                         if answer[-1] == ".":
                             answer = answer[0:-1]
                             break
-                        elif (lang == "객관식" and answer in ["1", "2", "3"]):
-                            break
-                        elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1","ㅇ","d","2"]):
+                        elif (lang == "객관식"):
+                            try:
+                                if int(answer) in list(range(1, len_answer_list+1)):
+                                    answer = 선지목록_체크용[int(
+                                        answer)-1].split(",")[0]
+                                    break
+                            except:
+                                pass
+                        elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1", "ㅇ", "d", "2"]):
                             if answer in ["s", "1"]:
                                 answer = "ㄴ"
                             elif answer in ["d", "2"]:
@@ -225,9 +311,83 @@ def tkinter_eng_word_roof(data_direct, filename):
             if lang == "연표":
                 ask = df["사건"][i]
                 right_answer = df["연도"][i]
-            elif lang == "단답형" or lang == "객관식":
+            elif lang == "단답형":
                 ask = df["질문"][i]
                 right_answer = df["대답"][i]
+            elif lang == "객관식":
+                ask = df["질문"][i]
+                right_answer = df["대답"][i]
+                category = df["구분"][i]
+                category_list = list(set(df["구분"]))
+                df2 = df[df["구분"] == category]
+                answer_list = list(set(df2["대답"]))
+                print_ask = df["질문"][i]
+                try:
+                    print_ask = print_ask.replace(right_answer, "[   ]")
+                except:
+                    pass
+                if len(answer_list) > 2:
+                    len_answer_list = 3
+                    선지번호 = [1, 2, 3]
+                    선지목록 = [1, 2, 3]
+                    선지목록_체크용 = [1, 2, 3]
+                    random.shuffle(선지번호)
+
+                    answer_list.remove(right_answer)
+                    random.shuffle(answer_list)
+                    answer_list = [right_answer] + answer_list
+
+                    선지목록_체크용[선지번호[0] -
+                             1] = f"{str(answer_list[0]).split(',')[0]}"
+                    선지목록_체크용[선지번호[1] -
+                             1] = f"{str(answer_list[1]).split(',')[0]}"
+                    선지목록_체크용[선지번호[2] -
+                             1] = f"{str(answer_list[2]).split(',')[0]}"
+
+                    선지목록[선지번호[0] -
+                         1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+                    선지목록[선지번호[1] -
+                         1] = f"{선지번호[1]}. {str(answer_list[1]).split(',')[0]}"
+                    선지목록[선지번호[2] -
+                         1] = f"{선지번호[2]}. {str(answer_list[2]).split(',')[0]}"
+                    print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                elif len(answer_list) == 2:
+                    len_answer_list = 2
+                    선지번호 = [1, 2]
+                    선지목록 = [1, 2]
+                    선지목록_체크용 = [1, 2]
+                    random.shuffle(선지번호)
+
+                    answer_list.remove(right_answer)
+                    random.shuffle(answer_list)
+                    answer_list = [right_answer] + answer_list
+
+                    선지목록_체크용[선지번호[0] -
+                             1] = f"{str(answer_list[0]).split(',')[0]}"
+                    선지목록_체크용[선지번호[1] -
+                             1] = f"{str(answer_list[1]).split(',')[0]}"
+
+                    선지목록[선지번호[0] -
+                         1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+                    선지목록[선지번호[1] -
+                         1] = f"{선지번호[1]}. {str(answer_list[1]).split(',')[0]}"
+
+                    print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
+                else:
+                    len_answer_list = 1
+                    선지번호 = [1]
+                    선지목록 = [1]
+                    선지목록_체크용 = [1]
+
+                    answer_list = [right_answer]
+
+                    선지목록_체크용[선지번호[0] -
+                             1] = f"{str(answer_list[0]).split(',')[0]}"
+
+                    선지목록[선지번호[0] -
+                         1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
+
+                    print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n\n"
             else:
                 ask = df["Text 1"][i]
                 right_answer = df["Text 2"][i]
@@ -246,7 +406,9 @@ def tkinter_eng_word_roof(data_direct, filename):
                         beepsound()
                 except:
                     print("Beep!")
-            if lang != "순서배열":
+            if lang == "객관식":
+                text.insert("1.0", f"{print_ask}\n", "emphasis")
+            elif lang != "순서배열":
                 try:
                     text.insert("1.0", ask.replace(
                         right_answer, "[   ]"), "emphasis")
@@ -257,7 +419,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             ############################
             ############################
             ############################
-            #answer = sh.typing_yourself()
+            # answer = sh.typing_yourself()
             window.update()
             answer = ""
             check_ans = False
@@ -271,12 +433,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
-                    if lang == "단답형" or lang == "객관식":
+                    if lang == "단답형":
                         try:
                             text.insert("1.0", ask.replace(
                                 right_answer, "[   ]"), "emphasis")
                         except:
                             text.insert("1.0", ask, "emphasis")
+                    elif lang == "객관식":
+                        text.insert("1.0", print_ask, "emphasis")
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
                 if lang == "순서배열":
@@ -292,9 +456,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                     if answer[-1] == ".":
                         answer = answer[0:-1]
                         check_ans = True
-                    elif (lang == "객관식" and answer in ["1", "2", "3"]):
-                        check_ans = True
-                    elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1","ㅇ","d","2"]):
+                    elif (lang == "객관식"):
+                        try:
+                            if int(answer) in list(range(1, len_answer_list+1)):
+                                answer = 선지목록_체크용[int(answer)-1].split(",")[0]
+                                check_ans = True
+                        except:
+                            pass
+                    elif (lang == "O X 퀴즈" and answer in ["ㄴ", "s", "1", "ㅇ", "d", "2"]):
                         check_ans = True
                         if answer in ["s", "1"]:
                             answer = "ㄴ"
@@ -341,7 +510,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                         era = ask.count("\n")+1
                     elif lang == "객관식":
                         enter_in_text(
-                            f"정답! '{right_answer2[3:]}':")
+                            f"정답! '{right_answer2}':")
                         era = ask.count("\n")+1
                     else:
                         enter_in_text(
@@ -388,18 +557,15 @@ def tkinter_eng_word_roof(data_direct, filename):
                         text.insert("1.0", right_answer2, "emphasis")
                         if answer != '':
                             text.insert("1.0", f"'{answer2}'이(가) 아니고 ")
-                            #text.insert("1.0", "\n")
+                            # text.insert("1.0", "\n")
                         else:
                             text.insert("1.0", "\n"+f"정답은 ")
                         era = ask.count("\n")+1
                     elif lang == "객관식":
                         text.insert("1.0", f" 입니다.\n")
-                        text.insert("1.0", right_answer2[3:], "emphasis")
-                        if answer != '':
-                            pass
-                            #text.insert("1.0", "\n")
-                        else:
-                            text.insert("1.0", "\n"+f"정답은 ")
+                        text.insert("1.0", right_answer2, "emphasis")
+                        print(right_answer2)
+                        text.insert("1.0", "\n"+f"정답은 ")
                         era = ask.count("\n")+1
                     else:
                         text.insert("1.0", f"{exp}\n\n")
@@ -478,7 +644,7 @@ def check():
 
 def enter_in_entry(event):
     entry.insert(END, ".")
-    #entry.delete(0, END)
+    # entry.delete(0, END)
 
 
 def click_stop_btn():
@@ -512,7 +678,7 @@ def click_open_btn():
             content_to_print = df["사건"].tolist()
         elif lang == "단답형" or lang == "객관식":
             df = df.drop_duplicates()
-            #df = df.sort_values(by="대답", ascending=True)
+            # df = df.sort_values(by="대답", ascending=True)
             key_word = df["대답"].tolist()
             content_to_print = df["질문"].tolist()
         line = button7.cget("text")
@@ -583,7 +749,7 @@ def click_open_btn():
                         search_check = True
                     else:
                         print_check = False
-                ##print(search, print_check)
+                # print(search, print_check)
                 if print_check == True:
                     if search_check == True:
                         text.insert(
@@ -633,7 +799,7 @@ def click_wrong_btn():
             for i in range(len(ask)):
                 text.insert(
                     "1.0",
-                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}시)   {'%-15s' % ask[i]}      {ans[i]} / {cor[i]}\n")
+                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}시)   {'%-15s' % ask[i]}\n{ans[i]}\n{cor[i]}\n\n")
 
             text.insert(
                 "1.0", f"\n(시험 본 시각)     {'%-3s' % '질문'}          대답 / 정답\n")
@@ -641,7 +807,7 @@ def click_wrong_btn():
         else:
             for i in range(len(ask)):
                 text.insert(
-                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)}시)   \n{'%-15s' % ask[i]}      \n{ans[i]} / {cor[i]}\n\n")
+                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)}시)\n{'%-15s' % ask[i]}\n{ans[i]}\n{cor[i]}\n\n")
 
             text.insert(
                 "1.0", f"\n(시험 본 시각)     {'%-3s' % '질문'}          대답 / 정답\n")
@@ -758,7 +924,7 @@ def click_memo_btn():
     top.config(menu=mb)
 
     file = "idea.txt"
-    ##print(file, type(file))
+    # print(file, type(file))
     top.title(basename(file) + " - 메모장")
     ta.delete(1.0, END)
     try:
@@ -785,7 +951,7 @@ width, height = window.winfo_screenwidth(), window.winfo_screenheight()
 window.columnconfigure(7, weight=1)
 window.rowconfigure(4, weight=1)
 
-#window.geometry('%dx%d+0+0' % (width,height))
+# window.geometry('%dx%d+0+0' % (width,height))
 window.geometry("1245x770+400+100")
 window.resizable(True, True)
 window.configure(bg=_from_rgb((11, 58, 19)))
@@ -842,7 +1008,7 @@ text.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
 textEntry = StringVar()
 textEntry.set("여기 입력하세요!")
 
-#text.tag_config("emphasis", foreground="yellow")
+# text.tag_config("emphasis", foreground="yellow")
 text.tag_config("emphasis", foreground="yellow")
 
 entry = Entry(window, font=('Courier', 25),
