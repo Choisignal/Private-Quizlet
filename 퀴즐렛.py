@@ -490,7 +490,6 @@ def click_open_btn():
     lang = button8.cget("text")
     name = name.replace("/객관식+단답형_", "/")
     name = name.replace("/객관식_", "/")
-    name = name.replace("객관식/", "/")
     name = name.replace("_연도별모음", "")
     name = name.replace("_문제", "")
     name = name.replace("순서배열", "연표")
