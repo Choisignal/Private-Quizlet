@@ -442,19 +442,21 @@ def tkinter_eng_word_roof(data_direct, filename):
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
                 answer = entry.get()
-                if len(answer) != 0 and (answer[-1] in ["+", "=", "`"]):
+                if len(answer) != 0 and (answer[-1] in ["+", "-", "*"]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
-                    if lang == "단답형":
+                    if lang == "단답형" and answer[-1] == "*":
+                        button8.config(text="객관식")
                         try:
                             text.insert("1.0", ask.replace(
                                 right_answer, "[   ]"), "emphasis")
                         except:
                             text.insert("1.0", ask, "emphasis")
-                    elif lang == "객관식":
+                    elif lang == "객관식" and answer[-1] == "*":
+                        button8.config(text="단답형")
                         text.insert("1.0", print_ask, "emphasis")
                     else:
                         text.insert("1.0", f"{ask}\n", "emphasis")
