@@ -448,13 +448,16 @@ def tkinter_eng_word_roof(data_direct, filename):
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
-                    if lang == "단답형" and answer[-1] == "*":
-                        button8.config(text="객관식")
-                        try:
-                            text.insert("1.0", ask.replace(
-                                right_answer, "[   ]"), "emphasis")
-                        except:
-                            text.insert("1.0", ask, "emphasis")
+                    if lang == "단답형":
+                        if answer[-1] == "*":
+                            button8.config(text="객관식")
+                            text.insert("1.0", print_ask, "emphasis")
+                        else:
+                            try:
+                                text.insert("1.0", ask.replace(
+                                    right_answer, "[   ]"), "emphasis")
+                            except:
+                                text.insert("1.0", ask, "emphasis")
                     elif lang == "객관식" and answer[-1] == "*":
                         button8.config(text="단답형")
                         text.insert("1.0", print_ask, "emphasis")
