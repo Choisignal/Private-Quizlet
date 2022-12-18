@@ -332,13 +332,13 @@ def OX퀴즈만들기(data_direct, filename):
 
 
 data_direct = "./학습자료/단답형/"
-filename = "영어_단어"
+filename = "조선"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
     객관식_만들기("국어_복습_의미", data_direct, 단답형=False, 설명=False)
     특정구분제거(data_direct, filename, 구분목록=["속담"])
-    객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
+    객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False, 설명=False, 글자수=4, 번역=False)
     '''
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
     객관식_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역=False)
@@ -385,10 +385,11 @@ elif filename == "한국사_대조":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "한자의지혜":
     #OX퀴즈만들기(data_direct, "한자의지혜")
-    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=1, 번역=False)
     객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=2, 번역=True)
-    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=3,번역=False)
-    객관식_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=4,번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=3, 번역=False)
+    객관식_만들기_한자어(filename, data_direct, 단답형=False, 설명=False, 글자수=4, 번역=False)
 else:
-    객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
-    객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
+    #객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
+    #객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
+    엑셀파일구분하기(data_direct, filename)
