@@ -431,6 +431,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             answer = ""
             check_ans = False
             while check_ans == False:
+                lang = button8.cget("text")
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
