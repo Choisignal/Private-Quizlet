@@ -276,6 +276,9 @@ def tkinter_eng_word_roof(data_direct, filename):
     if '오답가산점' not in list(df.keys()):
         df['오답가산점'] = [0 for i in range(len(df))]
     df['오답가산점'] = df['오답가산점'].fillna(0)
+    if '구분' not in list(df.keys()):
+        df['구분'] = ['기본' for i in range(len(df))]
+    df['구분'] = df['구분'].fillna('기본')
     df.to_excel(original_filename, index=False)
     lang = button8.cget("text")
     filename = lang.replace(" ", "_")+"_"+filename
@@ -318,7 +321,6 @@ def tkinter_eng_word_roof(data_direct, filename):
                 ask = df["질문"][i]
                 right_answer = df["대답"][i]
                 category = df["구분"][i]
-                category_list = list(set(df["구분"]))
                 df2 = df[df["구분"] == category]
                 answer_list = list(set(df2["대답"]))
                 print_ask = df["질문"][i]
@@ -387,13 +389,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지목록[선지번호[0] -
                          1] = f"{선지번호[0]}. {str(answer_list[0]).split(',')[0]}"
 
-                    print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n\n"
+                    print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n"
             else:
                 ask = df["Text 1"][i]
                 right_answer = df["Text 2"][i]
                 exp = df["Text 3"][i]
             text.insert(
-                "1.0", " ( {0}/{1} )\n\n\n".format(count, num_total))
+                "1.0", "( {0}/{1} )\n".format(count, num_total))
             count2 += 1
             if count2 == num_total:
                 count2 = -1
@@ -424,8 +426,15 @@ def tkinter_eng_word_roof(data_direct, filename):
             answer = ""
             check_ans = False
             while check_ans == False:
+                clock_check = button_test.cget("text")
+                if clock_check == "시계ON":
+                    now = datetime.now()
+                    now = f"현재시각 : {str(now.month).zfill(2)}년 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
+                    text.insert("1.0", now)
                 sleep(0.05)
                 window.update()
+                if clock_check == "시계ON":
+                    text.delete("1.0", f"3.0")
                 answer = entry.get()
                 if len(answer) != 0 and (answer[-1] in ["+", "=", "`"]):
                     text.delete("1.0", "end")
@@ -799,18 +808,14 @@ def click_wrong_btn():
             for i in range(len(ask)):
                 text.insert(
                     "1.0",
-                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}시)   {'%-15s' % ask[i]}\n{ans[i]}\n{cor[i]}\n\n")
+                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}시). 질문 : {'%-15s' % ask[i]}\n대답 : {ans[i]}\n정답 : {cor[i]}\n\n")
 
-            text.insert(
-                "1.0", f"\n(시험 본 시각)     {'%-3s' % '질문'}          대답 / 정답\n")
             text.insert("1.0", f"{date}")
         else:
             for i in range(len(ask)):
                 text.insert(
-                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)}시)\n{'%-15s' % ask[i]}\n{ans[i]}\n{cor[i]}\n\n")
+                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)}시)\n 질문 : {'%-15s' % ask[i]}\n대답 : {ans[i]}\n정답 : {cor[i]}\n\n")
 
-            text.insert(
-                "1.0", f"\n(시험 본 시각)     {'%-3s' % '질문'}          대답 / 정답\n")
             text.insert("1.0", f"{date}")
     else:
         enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
@@ -836,18 +841,29 @@ def click_kor_eng_btn():
 
 def click_test_number_btn():
     num_test = button_test.cget("text")
-    if num_test == "5문항":
-        button_test.config(text="10문항")
-    elif num_test == "10문항":
-        button_test.config(text="15문항")
-    elif num_test == "15문항":
-        button_test.config(text="20문항")
-    elif num_test == "20문항":
-        button_test.config(text="25문항")
-    elif num_test == "25문항":
-        button_test.config(text="30문항")
-    elif num_test == "30문항":
-        button_test.config(text="5문항")
+
+    if RadioVariety_1.get() == 2:
+        if num_test == "5문항":
+            button_test.config(text="10문항")
+        elif num_test == "10문항":
+            button_test.config(text="15문항")
+        elif num_test == "15문항":
+            button_test.config(text="20문항")
+        elif num_test == "20문항":
+            button_test.config(text="25문항")
+        elif num_test == "25문항":
+            button_test.config(text="30문항")
+        elif num_test == "30문항":
+            button_test.config(text="5문항")
+        else:
+            button_test.config(text="5문항")
+    if RadioVariety_1.get() == 1:
+        if num_test == "시계ON":
+            button_test.config(text="시계OFF")
+        elif num_test == "시계OFF":
+            button_test.config(text="시계ON")
+        else:
+            button_test.config(text="시계ON")
 
 
 def click_line_btn():
