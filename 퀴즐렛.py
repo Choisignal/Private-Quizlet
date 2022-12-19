@@ -303,12 +303,14 @@ def tkinter_eng_word_roof(data_direct, filename):
             range_list.sort(reverse=True)
         else:
             newdf = copy(df)
+            newdf = newdf.sample(frac=1).reset_index(drop=True)
             newdf = newdf.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
             틀릭적없는목록 = list(newdf[newdf["오답가산점"] == 0].index)
-            틀릭적없는목록.sort(reverse=True)
+            random.shuffle(틀릭적없는목록)
             맞은목록 = list(newdf[newdf["오답가산점"] < 0].index)
-            range_list = 틀린목록 + 틀릭적없는목록+맞은목록
+            random.shuffle(맞은목록)
+            range_list = 틀린목록 + 틀릭적없는목록 + 맞은목록
             text.insert(
                 "1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
         for i in range_list:
