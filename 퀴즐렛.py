@@ -236,12 +236,14 @@ def tkinter_eng_word_test(data_direct, filename):
                     now = datetime.now()
                     day = now.strftime("%Y%m%d")
                     hour = now.strftime("%H")
+                    minute = now.strftime("%M")
                     if isfile(wrong_log):
                         df_wrong = read_excel(wrong_log)
                     else:
                         df_wrong = DataFrame(
                             {'질문': [], '대답': [], '정답': [], '날짜': [], '시간': []})
-                    df_wrong.loc[-1] = [ask, answer2, right_answer2, day, hour]
+                    df_wrong.loc[-1] = [ask, answer2,
+                                        right_answer2, day, f"{hour}시 {minute}분"]
                     df_wrong.to_excel(wrong_log, index=False)
                 stop_check = True
                 entry.delete(0, END)
@@ -444,7 +446,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
                 answer = entry.get()
-                if len(answer) != 0 and (answer[-1] in ["+", "-", "*"]):
+                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "="]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
@@ -734,6 +736,8 @@ def click_open_btn():
         search = entry.get()
         search = search.replace(".", "")
         search = search.replace("+", "")
+        search = search.replace("=", "")
+        search = search.replace("-", "!@")
         search = search.replace("종료", "")
         if lang == "O X 퀴즈":
             k = 1
@@ -835,15 +839,15 @@ def click_wrong_btn():
             for i in range(len(ask)):
                 text.insert(
                     "1.0",
-                    f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                    f"{str(len(ask) - i).zfill(2)}   ({datr} {str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
-            text.insert("1.0", f"\n\n{date}")
+            text.insert("1.0", f"\n\n")
         else:
             for i in range(len(ask)):
                 text.insert(
-                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({datr} {str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
-            text.insert("1.0", f"\n\n{date}")
+            text.insert("1.0", f"\n\n")
     else:
         enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
 
