@@ -303,7 +303,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             range_list.sort(reverse=True)
         else:
             newdf = copy(df)
-            newdf = newdf.sample(frac=1).reset_index(drop=True)
+            #newdf = newdf.sample(frac=1).reset_index(drop=True)
             newdf = newdf.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
             틀릭적없는목록 = list(newdf[newdf["오답가산점"] == 0].index)
@@ -437,7 +437,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    now = f"현재시각 : {str(now.month).zfill(2)}월 {str(now.day).zfill(2)}일 {str(now.hour).zfill(2)}시 {str(now.minute).zfill(2)}분\n\n"
+                    now = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
                     text.insert("1.0", now)
                 sleep(0.05)
                 window.update()
