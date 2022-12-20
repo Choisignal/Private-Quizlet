@@ -962,15 +962,15 @@ def click_memo_btn():
     top.geometry("400x750+0+100")
 
     ta = Text(top)
-    ta.configure(bg=_from_rgb((11, 58, 19)), foreground="white", highlightthickness=0, insertbackground="yellow", selectbackground="yellow", selectforeground=_from_rgb((11, 58, 19)),
+    ta.configure(bg=background_color, foreground="white", highlightthickness=0, insertbackground="yellow", selectbackground="yellow", selectforeground=background_color,
                  font=('Courier', 15))
     top.grid_rowconfigure(0, weight=1)
     top.grid_columnconfigure(0, weight=1)
     ta.grid(sticky=N + E + S + W)
     top.bind_all('<Control-Key-s>', saveFile)
 
-    mb = Menu(top, background=_from_rgb((11, 58, 19)),
-              foreground="yellow", activebackground="yellow", activeforeground=_from_rgb((11, 58, 19)), font=('Courier', 10))
+    mb = Menu(top, background=background_color,
+              foreground="yellow", activebackground="yellow", activeforeground=background_color, font=('Courier', 10))
 
     top.config(menu=mb)
 
@@ -995,6 +995,12 @@ def _from_rgb(rgb):
 
 
 ##############################################################################################################
+# 글자 크기 조절 변수. Dell xps 13 (9370) = -3
+text_size = -3
+# 배경색
+background_color = _from_rgb((11, 58, 19)) # 칠판 초록색
+#background_color = _from_rgb((0,0,0)) # 검은색
+
 window = Tk()
 
 window.title("나만의 퀴즐렛")
@@ -1002,10 +1008,10 @@ width, height = window.winfo_screenwidth(), window.winfo_screenheight()
 window.columnconfigure(7, weight=1)
 window.rowconfigure(4, weight=1)
 
-# window.geometry('%dx%d+0+0' % (width,height))
-window.geometry("1245x770+400+100")
+window.geometry('%dx%d+0+0' % (width,height))
+#window.geometry("1245x770+400+100")
 window.resizable(True, True)
-window.configure(bg=_from_rgb((11, 58, 19)))
+window.configure(bg=background_color)
 
 window.bind_all('<Return>', enter_in_entry)
 window.bind_all('<F11>', click_f11_btn)
@@ -1014,47 +1020,47 @@ window.bind_all('<Double-Escape>', click_double_esc_btn)
 ##############################################################################################################
 
 
-button = Button(window, relief="flat", overrelief="flat", width=8, height=2, text="파일 선택", font=('Courier', 20),
+button = Button(window, relief="flat", overrelief="flat", width=8, height=2, text="파일 선택", font=('Courier', 20+text_size),
                 command=get_file_direct)
 button.grid(column=0, row=0, rowspan=3, ipadx=2, ipady=2)
-button.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
-                 activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", highlightthickness=0)
+button.configure(bg=background_color, foreground="white",
+                 activebackground=background_color, activeforeground="yellow", highlightthickness=0)
 
 label = Label(
-    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20), width=80, height=3, wraplength=1000)
+    window, text="<- 버튼을 눌러 파일을 선택하세요 :)", font=('Courier', 20+text_size), width=80, height=3, wraplength=800)
 label.grid(column=1, row=0, rowspan=3, columnspan=7)
-label.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+label.configure(bg=background_color, foreground="white",
                 highlightthickness=0)
 
 RadioVariety_1 = IntVar()
 
 radio1 = Radiobutton(
-    window, text="무한반복", value=1, variable=RadioVariety_1, command=check, width=8, font=('Courier', 20), anchor="w")
+    window, text="무한반복", value=1, variable=RadioVariety_1, command=check, width=8, font=('Courier', 20+text_size), anchor="w")
 radio1.grid(column=8, row=0)
 radio1.select()
-radio1.configure(bg=_from_rgb((11, 58, 19)), foreground="white", selectcolor=_from_rgb((11, 58, 19)),
-                 activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", relief="flat", highlightthickness=0)
+radio1.configure(bg=background_color, foreground="white", selectcolor=background_color,
+                 activebackground=background_color, activeforeground="yellow", relief="flat", highlightthickness=0)
 
 radio2 = Radiobutton(
-    window, text="테스트", value=2, variable=RadioVariety_1, command=check, width=8, font=('Courier', 20), anchor="w")
+    window, text="테스트", value=2, variable=RadioVariety_1, command=check, width=8, font=('Courier', 20+text_size), anchor="w")
 radio2.grid(column=8, row=1)
-radio2.configure(bg=_from_rgb((11, 58, 19)), foreground="white", selectcolor=_from_rgb((11, 58, 19)),
-                 activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", highlightthickness=0)
+radio2.configure(bg=background_color, foreground="white", selectcolor=background_color,
+                 activebackground=background_color, activeforeground="yellow", highlightthickness=0)
 
-button_test = Button(window, relief="flat", overrelief="flat", width=8, height=1, text="5문항", font=('Courier', 20),
+button_test = Button(window, relief="flat", overrelief="flat", width=8, height=1, text="5문항", font=('Courier', 20+text_size),
                      command=click_test_number_btn)
 button_test.grid(column=8, row=2)
-button_test.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
-                      activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", highlightthickness=0)
+button_test.configure(bg=background_color, foreground="white",
+                      activebackground=background_color, activeforeground="yellow", highlightthickness=0)
 ##############################################################################################################
 
 
-text = Text(window, font=('Courier', int(round(width*0.02))),
+text = Text(window, font=('Courier', int(round(width*0.02))+text_size),
             relief="raised",  borderwidth=0)
 text.grid(column=0, row=4, columnspan=9, rowspan=1,
           ipadx=20, ipady=0, sticky=W+E+N+S)
-text.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
-               highlightthickness=0, insertbackground="yellow", selectbackground=_from_rgb((11, 58, 19)), selectforeground="yellow")
+text.configure(bg=background_color, foreground="white",
+               highlightthickness=0, insertbackground="yellow", selectbackground=background_color, selectforeground="yellow")
 
 textEntry = StringVar()
 textEntry.set("여기 입력하세요!")
@@ -1062,72 +1068,72 @@ textEntry.set("여기 입력하세요!")
 # text.tag_config("emphasis", foreground="yellow")
 text.tag_config("emphasis", foreground="yellow")
 
-entry = Entry(window, font=('Courier', 25),
+entry = Entry(window, font=('Courier', 25+text_size),
               relief="flat", justify="center", textvariable=textEntry)
 
 entry.bind("<Button-1>", on_click)
 entry.grid(column=0, row=5, columnspan=9,
            rowspan=1, ipadx=20, ipady=2, sticky=W+E)
-entry.configure(bg=_from_rgb((11, 58, 19)), foreground="white", insertbackground="yellow", borderwidth=0,
+entry.configure(bg=background_color, foreground="white", insertbackground="yellow", borderwidth=0,
                 highlightthickness=1, highlightcolor="yellow")
 
 ##############################################################################################################
 
-button2 = Button(window, relief="flat", width=10, height=1, text="시작", font=('Courier', 18),
-                 command=click_start_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button2 = Button(window, relief="flat", width=10, height=1, text="시작", font=('Courier', 18+text_size),
+                 command=click_start_btn, activebackground=background_color, activeforeground="yellow")
 button2.grid(column=0, row=6, rowspan=1, ipadx=2, ipady=7)
-button2.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button2.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
-button3 = Button(window, relief="flat", width=10, height=1, text="파일 열기", font=('Courier', 18),
-                 command=click_open_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button3 = Button(window, relief="flat", width=10, height=1, text="파일 열기", font=('Courier', 18+text_size),
+                 command=click_open_btn, activebackground=background_color, activeforeground="yellow")
 button3.grid(column=1, row=6, rowspan=1, ipadx=0, ipady=7)
-button3.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button3.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
 
 button7 = Button(window, relief="flat", width=12, height=1, text="줄바꿈 0", font=(
-    'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_line_btn)
+    'Courier', 18+text_size), activebackground=background_color, activeforeground="yellow", command=click_line_btn)
 button7.grid(column=2, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button7.configure(bg=_from_rgb((11, 58, 19)),
+button7.configure(bg=background_color,
                   foreground="white", highlightthickness=0)
 
-button4 = Button(window, relief="flat", width=10, height=1, text="오답노트", font=('Courier', 18),
-                 command=click_wrong_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button4 = Button(window, relief="flat", width=10, height=1, text="오답노트", font=('Courier', 18+text_size),
+                 command=click_wrong_btn, activebackground=background_color, activeforeground="yellow")
 button4.grid(column=3, row=6, rowspan=1, ipadx=0, ipady=7)
-button4.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button4.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
-button5 = Button(window, relief="flat", width=10, height=1, text="소리ON", font=('Courier', 18),
-                 command=click_beep_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button5 = Button(window, relief="flat", width=10, height=1, text="소리ON", font=('Courier', 18+text_size),
+                 command=click_beep_btn, activebackground=background_color, activeforeground="yellow")
 button5.grid(column=4, row=6, rowspan=1, ipadx=0, ipady=7)
-button5.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button5.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
 
-button6 = Button(window, relief="flat", width=10, height=1, text="지우기", font=('Courier', 18),
-                 command=click_erase_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button6 = Button(window, relief="flat", width=8, height=1, text="지우기", font=('Courier', 18+text_size),
+                 command=click_erase_btn, activebackground=background_color, activeforeground="yellow")
 button6.grid(column=5, row=6, rowspan=1, ipadx=0, ipady=7)
-button6.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button6.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
 
-button8 = Button(window, relief="flat", width=10, height=1, text="객관식", font=('Courier', 18),
-                 command=click_kor_eng_btn, activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow")
+button8 = Button(window, relief="flat", width=8, height=1, text="객관식", font=('Courier', 18+text_size),
+                 command=click_kor_eng_btn, activebackground=background_color, activeforeground="yellow")
 button8.grid(column=6, row=6, rowspan=1, ipadx=0, ipady=7, stick=W)
-button8.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button8.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
-button9 = Button(window, relief="flat", width=10, height=1, text="중지", font=(
-    'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_stop_btn)
+button9 = Button(window, relief="flat", width=8, height=1, text="중지", font=(
+    'Courier', 18+text_size), activebackground=background_color, activeforeground="yellow", command=click_stop_btn)
 button9.grid(column=7, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button9.configure(bg=_from_rgb((11, 58, 19)), foreground="white",
+button9.configure(bg=background_color, foreground="white",
                   highlightthickness=0)
 
-button10 = Button(window, relief="flat", width=12, height=1, text="프로그램 종료", font=(
-    'Courier', 18), activebackground=_from_rgb((11, 58, 19)), activeforeground="yellow", command=click_close_btn)
+button10 = Button(window, relief="flat", width=11, height=1, text="프로그램 종료", font=(
+    'Courier', 18+text_size), activebackground=background_color, activeforeground="yellow", command=click_close_btn)
 button10.grid(column=8, row=6, rowspan=1, ipadx=0, ipady=7, stick=E)
-button10.configure(bg=_from_rgb((11, 58, 19)),
+button10.configure(bg=background_color,
                    foreground="white", highlightthickness=0)
 
 window.attributes('-fullscreen', True)
