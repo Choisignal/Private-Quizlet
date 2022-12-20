@@ -278,7 +278,7 @@ def tkinter_eng_word_roof(data_direct, filename):
     df = df.drop_duplicates()
     if '오답가산점' not in list(df.keys()):
         df['오답가산점'] = [0 for i in range(len(df))]
-    df['오답가산점'] = df['오답가산점'].fillna(0)
+    df['오답가산점'] = df['오답가산점'].fillna(1)
     if '구분' not in list(df.keys()):
         df['구분'] = ['기본' for i in range(len(df))]
     df['구분'] = df['구분'].fillna('기본')
@@ -308,6 +308,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             #newdf = newdf.sample(frac=1).reset_index(drop=True)
             newdf = newdf.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
+            random.shuffle(틀린목록)
             틀릭적없는목록 = list(newdf[newdf["오답가산점"] == 0].index)
             random.shuffle(틀릭적없는목록)
             맞은목록 = list(newdf[newdf["오답가산점"] < 0].index)
@@ -699,6 +700,9 @@ def click_open_btn():
     name = name.replace("순서배열", "연표")
     name = name.replace("_번역", "")
     name = name.replace("_구분통합", "")
+    name = name.replace("_전기", "")
+    name = name.replace("_중기", "")
+    name = name.replace("_후기", "")
     for i in [1, 2, 3, 4]:
         name = name.replace(f"{i}글자.", ".")
     if isfile(name):
@@ -839,13 +843,13 @@ def click_wrong_btn():
             for i in range(len(ask)):
                 text.insert(
                     "1.0",
-                    f"{str(len(ask) - i).zfill(2)}   ({datr} {str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                    f"{str(len(ask) - i).zfill(2)}   ({date} {str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
             text.insert("1.0", f"\n\n")
         else:
             for i in range(len(ask)):
                 text.insert(
-                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({datr} {str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                    "1.0", f"{str(len(ask)-i).zfill(2)}   ({date} {str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
             text.insert("1.0", f"\n\n")
     else:

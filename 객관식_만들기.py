@@ -5,7 +5,7 @@ from tqdm import tqdm
 import numpy as np
 import os
 from os.path import exists, isfile, basename
-
+import re
 def 엑셀파일구분하기(data_direct, filename,보존 = False,구분_나누기=True,날짜_나누기=True):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     return_list1 = []
@@ -113,6 +113,38 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
     for i in tqdm(range(data["대답"].size)):
         질문 = data["질문"][i]
         대답 = data["대답"][i]
+        대답 = re.sub('\([^)]+\)', '', 대답)
+        대답 = 대답.replace("\n","")
+        대답 = 대답.replace("1.","\n1)")
+        대답 = 대답.replace("2.","\n2)")
+        대답 = 대답.replace("3.","\n3)")
+        대답 = 대답.replace(".","")
+        대답 = 대답.replace("  "," ")
+        if "1)" not in 대답:
+            대답 = 대답.replace("「","\n「")
+            if len(대답) > len("「사마귀가 넓적한 앞다리를 쳐드는 모습이 마치 도끼를 휘두르는 것 같다」"):
+                대답 = 대답.replace("이라는 뜻으로,","\n")
+                대답 = 대답.replace("라는 뜻으로,","\n")
+                대답 = 대답.replace("는 뜻으로,","\n")
+                대답 = 대답.replace("는 뜻","\n")
+                대답 = 대답.replace("」라","」\n")
+            else:
+                대답 = 대답.replace("이라는 뜻으로,",",")
+                대답 = 대답.replace("라는 뜻으로,",",")
+                대답 = 대답.replace("는 뜻으로,",",")
+                대답 = 대답.replace("는 뜻",",")
+        else:
+            대답 = 대답.replace("또는","")
+            if len(대답) > len("「사마귀가 넓적한 앞다리를 쳐드는 모습이 마치 도끼를 휘두르는 것 같다」"):
+                대답 = 대답.replace("이라는 뜻으로,","\n")
+                대답 = 대답.replace("라는 뜻으로,","\n")
+                대답 = 대답.replace("는 뜻으로,","\n")
+                대답 = 대답.replace("는 뜻","\n")
+            else:
+                대답 = 대답.replace("이라는 뜻으로,",",")
+                대답 = 대답.replace("라는 뜻으로,",",")
+                대답 = 대답.replace("는 뜻으로,",",")
+                대답 = 대답.replace("는 뜻",",")
         if len(질문.split('/')[0]) == 글자수:
             if 번역 == True:
                 한자번역 = translator.translate(질문, dest='en')
@@ -122,8 +154,10 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
             한자 += [질문]
             한글 += [대답]
     data = pd.DataFrame({"질문": 한자, "대답": 한글})
-
-    save_filename = data_direct +  파일명 + f"{글자수}글자{번역}.xlsx"
+    if 번역 == True:
+        save_filename = data_direct +  파일명 + f"{글자수}글자_번역.xlsx"
+    else:
+        save_filename = data_direct +  파일명 + f"{글자수}글자.xlsx"
     print(save_filename)
     data.to_excel(save_filename, index=False)
 
@@ -415,12 +449,12 @@ def 구분_생성(data_direct, filename):
         df['구분'][i] = 대답[-1]
     df.to_excel(f"{data_direct}{filename}.xlsx",index=False)
 data_direct = "./학습자료/단답형/"
-filename = "국어_암기자료"
+filename = "영어_단어"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
-    단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
-    단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
+    #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
+    #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
     '''
     객관식_만들기("국어_복습_속담", data_direct, 단답형=False)
