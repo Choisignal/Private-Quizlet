@@ -270,6 +270,7 @@ def tkinter_eng_word_test(data_direct, filename):
 
 
 def tkinter_eng_word_roof(data_direct, filename):
+    start_time = datetime.now()
     entry.delete(0, END)
     text.delete("1.0", "end")
     from time import sleep
@@ -441,7 +442,16 @@ def tkinter_eng_word_roof(data_direct, filename):
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
+                    study_time = int((now - start_time).total_seconds()/60)
+                    if study_time == 0:
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
+                    elif study_time > 0 and study_time < 60:
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time})\n\n"
+                    else:
+                        study_hour = study_time // 60
+                        study_minute = study_time % 60
+                        study_time = f"{study_hour}:{study_minute}"
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time})\n\n"
                     if now != new:
                         now = copy(new)
                         text.insert("1.0", now)
@@ -1005,8 +1015,11 @@ def _from_rgb(rgb):
 # 글자 크기 조절 변수. Dell xps 13 (9370) = -3
 text_size = -3
 # 배경색
-background_color = _from_rgb((11, 58, 19)) # 칠판 초록색
-#background_color = _from_rgb((0,0,0)) # 검은색
+now_hour = datetime.now().hour
+if now_hour > 18 or now_hour <= 7:
+    background_color = _from_rgb((0,0,0)) # 검은색
+else:
+    background_color = _from_rgb((11, 58, 19)) # 칠판 초록색
 
 window = Tk()
 
