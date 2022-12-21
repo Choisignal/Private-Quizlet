@@ -435,26 +435,30 @@ def tkinter_eng_word_roof(data_direct, filename):
             window.update()
             answer = ""
             check_ans = False
+            now = ""
             while check_ans == False:
                 lang = button8.cget("text")
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    now = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
-                    text.insert("1.0", now)
+                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
+                    if now != new:
+                        now = copy(new)
+                        text.insert("1.0", now)
+
                 sleep(0.05)
                 window.update()
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
                 answer = entry.get()
-                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "="]):
+                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=","0"]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
                     if lang == "단답형":
-                        if answer[-1] == "*":
+                        if answer[-1] in ["*","0"]:
                             button8.config(text="객관식")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -473,7 +477,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                             except:
                                 text.insert("1.0", ask, "emphasis")
                     elif lang == "객관식":
-                        if answer[-1] == "*":
+                        if answer[-1] in ["*","0"]:
                             button8.config(text="단답형")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -743,6 +747,9 @@ def click_open_btn():
         search = search.replace("=", "")
         search = search.replace("-", "!@")
         search = search.replace("종료", "")
+        if search=="0":
+            search = search.replace("0", "!@")
+
         if lang == "O X 퀴즈":
             k = 1
             for i in range(len(key_word)):
