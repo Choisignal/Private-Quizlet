@@ -273,6 +273,7 @@ def tkinter_eng_word_roof(data_direct, filename):
     entry.delete(0, END)
     text.delete("1.0", "end")
     from time import sleep
+    start_time = datetime.now()
     original_filename = "{0}{1}.xlsx".format(data_direct, filename)
     df = read_excel(original_filename)
     df = df.drop_duplicates()
@@ -440,7 +441,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                 clock_check = button_test.cget("text")
                 if clock_check == "시계ON":
                     now = datetime.now()
-                    now = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
+                    timedelta = now - start_time
+                    timedelta = int(timedelta.total_seconds() / 60)
+                    if timedelta != 0:
+                        now = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({timedelta})\n\n"
+                    else:
+                        now = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
                     text.insert("1.0", now)
                 sleep(0.05)
                 window.update()
