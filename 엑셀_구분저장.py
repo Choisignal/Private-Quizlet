@@ -36,10 +36,26 @@ if __name__ == "__main__":
     객관식_목록 = []
     #엑셀파일구분하기(data_direct, filename)
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
+    체언 = ["명사","대명사","수사","의존명사"]
+    수식언 = ["관형사","부사"]
+    관계언 = ["조사","격조사","접속조사","보조사"]
+    독립언 = ["독립어"]
+    용언 = ["동사","형용사"]
+    # 품사 구분하기
+    index_list = list(data[data["구분"]=="품사"]["구분"].index)
+    for i in index_list:
+        if data["대답"][i] in 체언+관계언+독립언:
+            data.loc[i, '구분'] = "품사_체언_관계언_독립언"
+        elif data["대답"][i] in 수식언+용언:
+            data.loc[i, '구분'] = "품사_수식언_용언"
+        else:
+            data.loc[i, '구분'] = "품사_품사없음"
+
     구분목록 = list(set(data["구분"]))
     for 구분 in 구분목록:
         if 구분 not in 단답형_목록:
-            객관식_목록 += [구분]
+            if 구분 != "한자어":
+                객관식_목록 += [구분]
     # 단답형 추출
     if len(단답형_목록) > 0:
         data_단답형1 = data[data["구분"] == 단답형_목록[0]]
@@ -50,6 +66,7 @@ if __name__ == "__main__":
         data_단답형1.to_excel(f"{data_direct}{filename}_단답형.xlsx")
 
     if len(객관식_목록) > 0:
+
         # 객관식 추출
         data_객관식1 = data[data["구분"] == 객관식_목록[0]]
         if len(객관식_목록) > 1:
