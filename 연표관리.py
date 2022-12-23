@@ -173,7 +173,7 @@ def 순서배열_구분통합(data_direct, filename,객관식 = False):
         엑셀용_리스트_정답 = []
         엑셀용_리스트_해설 = []
 
-        for i in range(5):
+        for i in range(20):
             리스트_문제 = []
             리스트_원래 = []
             리스트_연도 = []
@@ -240,7 +240,7 @@ def 순서배열_구분통합(data_direct, filename,객관식 = False):
 
 
 data_direct = "./학습자료/연표/"
-filename = "조선"
+filename = "사건 순서"
 if filename == "사건 순서":
     파일명 = 연표_통합(data_direct, filename)  # 사건을 연도별로 모아준다
     순서배열_구분통합(data_direct, filename,객관식 = False)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다

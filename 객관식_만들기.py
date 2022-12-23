@@ -8,8 +8,8 @@ from os.path import exists, isfile, basename
 import re
 def 엑셀파일구분하기(data_direct, filename,보존 = False,구분_나누기=True,날짜_나누기=True):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
-    return_list1 = []
-    return_list2 = []
+    날짜_목록 = []
+    구분_목록 = []
     if 날짜_나누기 == True:
         try:
             날짜목록 = list(set(data["날짜"]))
@@ -25,7 +25,7 @@ def 엑셀파일구분하기(data_direct, filename,보존 = False,구분_나누�
                 else:
                     data1.to_excel(save_filename1, index=False)
                     print(save_filename1)
-            return_list1 += [f"{filename}_{날짜}"]
+            날짜_목록 += [f"{filename}_{날짜}"]
         except:
             print("날짜 없음!")
 
@@ -44,11 +44,11 @@ def 엑셀파일구분하기(data_direct, filename,보존 = False,구분_나누�
                 else:
                     data2.to_excel(save_filename2, index=False)
                     print(save_filename2)
-                return_list2 += [f"{filename}_{구분}"]
+                구분_목록 += [f"{filename}_{구분}"]
                 print(save_filename2)
         except:
             print("구분 없음!")
-    return return_list1, return_list2
+    return 날짜_목록, 구분_목록
 
 
 def 객관식_만들기_한자어(파일명, data_direct, 단답형=True, 설명=True, 글자수=2, 번역=False):
@@ -113,6 +113,12 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
     for i in tqdm(range(data["대답"].size)):
         질문 = data["질문"][i]
         대답 = data["대답"][i]
+        if 글자수 == 4 and ',' in [대답[0:6]]:
+            대답_위치 = 대답.find(',')
+            대답 = list(대답)
+            대답[대답_위치]="|"
+            대답 = ''.join(대답)
+
         대답 = re.sub('\([^)]+\)', '', 대답)
         대답 = 대답.replace("\n","")
         대답 = 대답.replace("1.","\n1)")
@@ -211,8 +217,8 @@ def 객관식_만들기(파일명, data_direct, 단답형=True, 설명=True):
 
 def 객관식_만들기_구분통합(filename, data_direct, 단답형=True, 설명=True):
     최종저장파일명 = data_direct + "객관식_" + filename + "_구분통합.xlsx"
-    return_list1, 파일명_목록 = 엑셀파일구분하기(data_direct, filename)
-    for filename in return_list1:
+    날짜_목록, 파일명_목록 = 엑셀파일구분하기(data_direct, filename)
+    for filename in 날짜_목록:
         객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
     저장파일명목록 = []
     for 파일명 in 파일명_목록:
@@ -448,8 +454,19 @@ def 구분_생성(data_direct, filename):
         '''
         df['구분'][i] = 대답[-1]
     df.to_excel(f"{data_direct}{filename}.xlsx",index=False)
+
+
+
+
+
+
+
+
+
+
+    
 data_direct = "./학습자료/단답형/"
-filename = "한자의지혜"
+filename = "국어_복습"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
@@ -476,14 +493,14 @@ elif filename == "영어_단어":
     엑셀파일구분하기(data_direct, filename,보존=True,구분_나누기=False,날짜_나누기=True)
     '''
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
-    return_list1, return_list2 = 엑셀파일구분하기(data_direct, filename)
+    날짜_목록, 구분_목록 = 엑셀파일구분하기(data_direct, filename)
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
-    for filename in return_list1:
+    for filename in 날짜_목록:
         객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
-    for filename in return_list2:
+    for filename in 구분_목록:
         객관식_만들기(filename, data_direct, 단답형=False, 설명=True)
     day_list = []
-    for day in return_list1:
+    for day in 날짜_목록:
         day_list += [int(day.split("Day")[-1])]
     filename = f"영어_단어_Day{str(max(day_list)).zfill(2)}"
     객관식_만들기(filename, data_direct, 단답형=False,설명=True)
@@ -506,6 +523,7 @@ elif filename == "불교":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "한국사_대조":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
+    엑셀파일구분하기(data_direct, filename,보존=False,구분_나누기=False,날짜_나누기=True)
 elif filename == "한자의지혜":
     #OX퀴즈만들기(data_direct, "한자의지혜")
     단답형_만들기_한자어(filename, data_direct, 단답형=False,설명=False,글자수=1,번역= False)
