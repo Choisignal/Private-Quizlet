@@ -28,7 +28,7 @@ def make_list(right_answer):
         right_answer_list = [str(right_answer)]
 
     try:
-        right_answer_list = right_answer.split("|")
+        right_answer_list = right_answer.split(",")
     except:
         pass
     lang = button8.cget("text")
@@ -205,7 +205,7 @@ def tkinter_eng_word_test(data_direct, filename):
                             try:
                                 if int(answer) in list(range(1, len_answer_list+1)):
                                     answer = 선지목록_체크용[int(
-                                        answer)-1].split("|")[0]
+                                        answer)-1].split(",")[0]
                                     break
                             except:
                                 pass
@@ -373,10 +373,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
-                    #random.shuffle(선지번호)
+                    # random.shuffle(선지번호)
 
                     answer_list.remove(right_answer)
-                    #random.shuffle(answer_list)
+                    # random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
 
                     선지목록_체크용[선지번호[0] -
@@ -398,10 +398,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2]
                     선지목록 = [1, 2]
                     선지목록_체크용 = [1, 2]
-                    #random.shuffle(선지번호)
+                    # random.shuffle(선지번호)
 
                     answer_list.remove(right_answer)
-                    #random.shuffle(answer_list)
+                    # random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
 
                     선지목록_체크용[선지번호[0] -
@@ -490,14 +490,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
                 answer = entry.get()
-                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=","0"]):
+                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "0"]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
                     if lang == "단답형":
-                        if answer[-1] in ["*","0"]:
+                        if answer[-1] in ["*", "0"]:
                             button8.config(text="객관식")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -516,7 +516,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                             except:
                                 text.insert("1.0", ask, "emphasis")
                     elif lang == "객관식":
-                        if answer[-1] in ["*","0"]:
+                        if answer[-1] in ["*", "0"]:
                             button8.config(text="단답형")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -539,7 +539,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     elif (lang == "객관식"):
                         try:
                             if int(answer) in list(range(1, len_answer_list+1)):
-                                answer = 선지목록_체크용[int(answer)-1].split("|")[0]
+                                answer = 선지목록_체크용[int(answer)-1].split(",")[0]
                                 check_ans = True
                         except:
                             pass
@@ -786,7 +786,7 @@ def click_open_btn():
         search = search.replace("=", "")
         search = search.replace("-", "!@")
         search = search.replace("종료", "")
-        if search=="0":
+        if search == "0":
             search = search.replace("0", "!@")
 
         if lang == "O X 퀴즈":
@@ -1046,9 +1046,9 @@ text_size = -3
 # 배경색
 now_hour = datetime.now().hour
 if now_hour > 18 or now_hour <= 7:
-    background_color = _from_rgb((0,0,0)) # 검은색
+    background_color = _from_rgb((0, 0, 0))  # 검은색
 else:
-    background_color = _from_rgb((11, 58, 19)) # 칠판 초록색
+    background_color = _from_rgb((11, 58, 19))  # 칠판 초록색
 
 window = Tk()
 
@@ -1057,8 +1057,8 @@ width, height = window.winfo_screenwidth(), window.winfo_screenheight()
 window.columnconfigure(7, weight=1)
 window.rowconfigure(4, weight=1)
 
-window.geometry('%dx%d+0+0' % (width,height))
-#window.geometry("1245x770+400+100")
+window.geometry('%dx%d+0+0' % (width, height))
+# window.geometry("1245x770+400+100")
 window.resizable(True, True)
 window.configure(bg=background_color)
 
