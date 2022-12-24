@@ -9,6 +9,7 @@ import re
 import shutil
 from copy import copy
 from pathlib import Path
+import pandas as pd
 
 
 def 학습시간(모드, study_hour=0):
@@ -17,26 +18,25 @@ def 학습시간(모드, study_hour=0):
     my_file = Path("학습시간.xlsx")
     if my_file.is_file():
         df = read_excel("학습시간.xlsx")
+        날짜목록 = list(df['날짜'])
+        if int(day) not in 날짜목록:
+            new_df = DataFrame({'날짜': [day], '학습시간': [0]})
+            df = pd.concat([df, new_df])
+            df.to_excel("학습시간.xlsx", index=False)
     else:
         df = DataFrame({'날짜': [day], '학습시간': [0]})
         df.to_excel("학습시간.xlsx", index=False)
 
     if 모드 == '읽기':
         날짜목록 = list(df['날짜'])
-        if int(day) in 날짜목록:
+        try:
             study_hour = int(df[df['날짜'] == int(day)]['학습시간'])
-        else:
-            df['날짜'][-1] = day
-            df['학습시간'][-1] = 0
+        except:
             study_hour = 0
     elif 모드 == '쓰기':
         날짜목록 = list(df['날짜'])
         last_study_time = int(df[df['날짜'] == int(day)]['학습시간'])
-        if int(day) in 날짜목록:
-            df.loc[df['날짜'] == int(day), '학습시간'] = last_study_time + study_hour
-        else:
-            df['날짜'][-1] = day
-            df['학습시간'][-1] = study_hour
+        df.loc[df['날짜'] == int(day), '학습시간'] = last_study_time + study_hour
         df.to_excel("학습시간.xlsx", index=False)
         study_hour = int(df[df['날짜'] == int(day)]['학습시간'])
     return study_hour
@@ -309,6 +309,7 @@ def tkinter_eng_word_test(data_direct, filename):
 
 def tkinter_eng_word_roof(data_direct, filename):
     total_study_hour = 학습시간(모드="읽기")
+    print(total_study_hour)
     start_time = datetime.now()
     entry.delete(0, END)
     text.delete("1.0", "end")
@@ -501,7 +502,8 @@ def tkinter_eng_word_roof(data_direct, filename):
             answer = ""
             check_ans = False
             now = ""
-            study_time_pre = ""
+            study_time_pre = int(
+                (datetime.now() - start_time).total_seconds()/60)
             while check_ans == False:
                 lang = button8.cget("text")
                 clock_check = button_test.cget("text")
@@ -509,14 +511,16 @@ def tkinter_eng_word_roof(data_direct, filename):
                     now = datetime.now()
                     study_time = int((now - start_time).total_seconds()/60)
                     if study_time == 0:
-                        study_time = int((now - start_time).total_seconds())
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time}:{total_study_hour})\n\n"
+                        study_time_sec = int(
+                            (now - start_time).total_seconds())
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time_sec}:{total_study_hour})\n\n"
                     elif study_time > 0:
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time}:{total_study_hour})\n\n"
-                        if study_time_pre != study_time:
-                            학습시간(모드="쓰기", study_hour=study_time)
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({int((now - start_time).total_seconds()/60)}:{total_study_hour})\n\n"
+                        if study_time_pre != int((now - start_time).total_seconds()/60):
+                            학습시간(모드="쓰기", study_hour=1)
                             total_study_hour = 학습시간(모드="읽기")
-                            study_time_pre = study_time
+                            study_time_pre = copy(
+                                int((now - start_time).total_seconds()/60))
 
                     if now != new:
                         now = copy(new)
