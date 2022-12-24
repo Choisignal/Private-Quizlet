@@ -8,6 +8,40 @@ import random
 import re
 import shutil
 from copy import copy
+from pathlib import Path
+
+
+def 학습시간(모드, study_hour=0):
+    now = datetime.now()
+    day = now.strftime("%Y%m%d")
+    my_file = Path("학습시간.xlsx")
+    if my_file.is_file():
+        df = read_excel("학습시간.xlsx")
+    else:
+        df = DataFrame({'날짜': [day], '학습시간': [0]})
+        df.to_excel("학습시간.xlsx", index=False)
+
+    if 모드 == '읽기':
+        날짜목록 = list(df['날짜'])
+        if int(day) in 날짜목록:
+            study_hour = int(df[df['날짜'] == int(day)]['학습시간'])
+        else:
+            df['날짜'][-1] = day
+            df['학습시간'][-1] = 0
+            study_hour = 0
+    elif 모드 == '쓰기':
+        날짜목록 = list(df['날짜'])
+        last_study_time = int(df[df['날짜'] == int(day)]['학습시간'])
+        if int(day) in 날짜목록:
+            df.loc[df['날짜'] == int(day), '학습시간'] = last_study_time + study_hour
+        else:
+            df['날짜'][-1] = day
+            df['학습시간'][-1] = study_hour
+        df.to_excel("학습시간.xlsx", index=False)
+        study_hour = int(df[df['날짜'] == int(day)]['학습시간'])
+    return study_hour
+
+
 try:
     import winsound as sd
 
@@ -274,6 +308,7 @@ def tkinter_eng_word_test(data_direct, filename):
 
 
 def tkinter_eng_word_roof(data_direct, filename):
+    total_study_hour = 학습시간(모드="읽기")
     start_time = datetime.now()
     entry.delete(0, END)
     text.delete("1.0", "end")
@@ -310,7 +345,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             range_list.sort(reverse=True)
         else:
             newdf = copy(df)
-            #newdf = newdf.sample(frac=1).reset_index(drop=True)
+            # newdf = newdf.sample(frac=1).reset_index(drop=True)
             newdf = newdf.sort_values('오답가산점', ascending=False)
             틀린목록 = list(newdf[newdf["오답가산점"] > 0].index)
             random.shuffle(틀린목록)
@@ -435,7 +470,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer = df["Text 2"][i]
                 exp = df["Text 3"][i]
             text.insert(
-                "1.0", "( {0}/{1} )\n".format(count, num_total))
+                "1.0", "({0}/{1})\n".format(count, num_total))
             count2 += 1
             if count2 == num_total:
                 count2 = -1
@@ -466,6 +501,7 @@ def tkinter_eng_word_roof(data_direct, filename):
             answer = ""
             check_ans = False
             now = ""
+            study_time_pre = ""
             while check_ans == False:
                 lang = button8.cget("text")
                 clock_check = button_test.cget("text")
@@ -473,14 +509,15 @@ def tkinter_eng_word_roof(data_direct, filename):
                     now = datetime.now()
                     study_time = int((now - start_time).total_seconds()/60)
                     if study_time == 0:
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}\n\n"
-                    elif study_time > 0 and study_time < 60:
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time})\n\n"
-                    else:
-                        study_hour = study_time // 60
-                        study_minute = study_time % 60
-                        study_time = f"{study_hour}:{study_minute}"
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time})\n\n"
+                        study_time = int((now - start_time).total_seconds())
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time}:{total_study_hour})\n\n"
+                    elif study_time > 0:
+                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time}:{total_study_hour})\n\n"
+                        if study_time_pre != study_time:
+                            학습시간(모드="쓰기", study_hour=study_time)
+                            total_study_hour = 학습시간(모드="읽기")
+                            study_time_pre = study_time
+
                     if now != new:
                         now = copy(new)
                         text.insert("1.0", now)
@@ -879,7 +916,7 @@ def click_wrong_btn():
         df = read_excel(wrong_log)
         now = datetime.now()
         date = now.strftime("%Y%m%d")
-        #df = df[df['날짜'] == int(date)]
+        # df = df[df['날짜'] == int(date)]
         ask = df["질문"].tolist()
         ans = df["대답"].tolist()
         cor = df["정답"].tolist()
