@@ -507,21 +507,21 @@ def tkinter_eng_word_roof(data_direct, filename):
             while check_ans == False:
                 lang = button8.cget("text")
                 clock_check = button_test.cget("text")
-                if clock_check == "시계ON":
-                    now = datetime.now()
-                    study_time = int((now - start_time).total_seconds()/60)
-                    if study_time == 0:
-                        study_time_sec = int(
-                            (now - start_time).total_seconds())
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time_sec}:{total_study_hour})\n\n"
-                    elif study_time > 0:
-                        new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({int((now - start_time).total_seconds()/60)}:{total_study_hour})\n\n"
-                        if study_time_pre != int((now - start_time).total_seconds()/60):
-                            학습시간(모드="쓰기", study_hour=1)
-                            total_study_hour = 학습시간(모드="읽기")
-                            study_time_pre = copy(
-                                int((now - start_time).total_seconds()/60))
+                now = datetime.now()
+                study_time = int((now - start_time).total_seconds()/60)
+                if study_time == 0:
+                    study_time_sec = int(
+                        (now - start_time).total_seconds())
+                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time_sec}:{total_study_hour})\n\n"
+                elif study_time > 0:
+                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({int((now - start_time).total_seconds()/60)}:{total_study_hour})\n\n"
+                    if study_time_pre != int((now - start_time).total_seconds()/60):
+                        학습시간(모드="쓰기", study_hour=1)
+                        total_study_hour = 학습시간(모드="읽기")
+                        study_time_pre = copy(
+                            int((now - start_time).total_seconds()/60))
 
+                if clock_check == "시계ON":
                     if now != new:
                         now = copy(new)
                         text.insert("1.0", now)
