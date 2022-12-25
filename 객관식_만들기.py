@@ -113,12 +113,13 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
     for i in tqdm(range(data["대답"].size)):
         질문 = data["질문"][i]
         대답 = data["대답"][i]
+        '''
         if 글자수 == 4 and ',' in [대답[0:6]]:
             대답_위치 = 대답.find(',')
             대답 = list(대답)
             대답[대답_위치]="|"
             대답 = ''.join(대답)
-
+        '''
         대답 = re.sub('\([^)]+\)', '', 대답)
         대답 = 대답.replace("\n","")
         대답 = 대답.replace("1.","\n1)")
@@ -464,7 +465,7 @@ def 구분_생성(data_direct, filename):
 
 
 
-    
+
 data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
