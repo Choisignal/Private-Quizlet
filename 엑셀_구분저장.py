@@ -32,7 +32,7 @@ def 엑셀파일구분하기(data_direct, filename):
 if __name__ == "__main__":
     data_direct = "./학습자료/단답형/"
     filename = "국어_복습"
-    단답형_목록 = ["발음","고쳐쓰기"]
+    단답형_목록 = ["단답형"]
     객관식_목록 = []
     #엑셀파일구분하기(data_direct, filename)
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
