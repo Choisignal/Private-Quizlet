@@ -63,7 +63,7 @@ def 객관식_만들기_한자어(파일명, data_direct, 단답형=True, 설명
             if 번역 == True:
                 한자번역 = translator.translate(질문, dest='en')
                 한자번역 = 한자번역.text
-                if len(한자번역.split(" ")) == 1 and 한자번역 != "no":
+                if len(한자번역.split(" ")) <= 2 and 한자번역 != "no" and "(" not in 대답:
                     대답 = f"{대답}({한자번역})"
             한자 += [질문]
             한글 += [대답]
@@ -157,7 +157,7 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
                 try:
                     한자번역 = translator.translate(질문, dest='en')
                     한자번역 = 한자번역.text
-                    if len(한자번역.split(" ")) == 1 and 한자번역 != "no":
+                    if len(한자번역.split(" ")) >= 2 and 한자번역 != "no":
                         대답 = f"{대답}({한자번역})"
                 except:
                     print(f"번역 에러! : {질문}")
@@ -363,12 +363,13 @@ def OX퀴즈만들기(data_direct, filename):
             if len(딕셔너리1[kor1[0]].split(","))>2:
                 chi1 = str(chi[i])
                 try:
-                    trans = translator.translate(chi1, dest='en')
-                    trans = trans.text
-                    if len(trans.split(" ")) == 1:
-                        trans = f"({trans})".lower()
-                    else:
-                        trans = ""
+                    if "(" not in kor1:
+                        trans = translator.translate(chi1, dest='en')
+                        trans = trans.text
+                        if len(trans.split(" ")) <= 2:
+                            trans = f"({trans})".lower()
+                        else:
+                            trans = ""
                 except:
                     trans = ""
                 for j in range(kor.size):
@@ -401,12 +402,13 @@ def OX퀴즈만들기(data_direct, filename):
                 kor1 = str(kor[i])
                 chi1 = str(chi[i])
                 try:
-                    trans = translator.translate(chi1, dest='en')
-                    trans = trans.text
-                    if len(trans.split(" ")) == 1:
-                        trans = f"({trans})".lower()
-                    else:
-                        trans = ""
+                    if "(" not in kor1:
+                        trans = translator.translate(chi1, dest='en')
+                        trans = trans.text
+                        if len(trans.split(" ")) <= 2:
+                            trans = f"({trans})".lower()
+                        else:
+                            trans = ""
                 except:
                     trans = ""
                 for j in range(kor.size):
@@ -429,35 +431,6 @@ def OX퀴즈만들기(data_direct, filename):
     data.to_excel(
         f"{data_direct}{filename}.xlsx".replace("단답형", "O X 퀴즈"))
 
-#############################################
-# 초성 리스트. 00 ~ 18
-CHOSUNG_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
-# 중성 리스트. 00 ~ 20
-JUNGSUNG_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ',
-                 'ㅣ']
-# 종성 리스트. 00 ~ 27 + 1(1개 없음)
-JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ',
-                 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
-
-
-def korean_to_be_englished(korean_word):
-    r_lst = []
-    for w in list(korean_word.strip()):
-        ## 영어인 경우 구분해서 작성함.
-        if '가' <= w <= '힣':
-            ## 588개 마다 초성이 바뀜.
-            ch1 = (ord(w) - ord('가')) // 588
-            ## 중성은 총 28가지 종류
-            ch2 = ((ord(w) - ord('가')) - (588 * ch1)) // 28
-            ch3 = (ord(w) - ord('가')) - (588 * ch1) - 28 * ch2
-            r_lst.append([CHOSUNG_LIST[ch1], JUNGSUNG_LIST[ch2], JONGSUNG_LIST[ch3]])
-        else:
-            r_lst.append([w])
-    return r_lst
-
-
-#korean_to_be_englished("이승훈a")
-#############################################
 def 구분_생성(data_direct, filename):
     df = pd.read_excel(f"{data_direct}{filename}.xlsx")
     if '구분' not in list(df.keys()):
@@ -490,11 +463,11 @@ data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
     엑셀파일구분하기(data_direct, filename)
+    OX퀴즈만들기(data_direct, "국어_복습_한자어")
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
-    OX퀴즈만들기(data_direct, "국어_복습_한자어")
 elif filename == "국어_암기자료":
     엑셀파일구분하기(data_direct, filename,보존=True,구분_나누기=False,날짜_나누기=True)
 elif filename == "국어_57항":
