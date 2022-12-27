@@ -1095,6 +1095,19 @@ window = Tk()
 
 window.title("나만의 퀴즐렛")
 width, height = window.winfo_screenwidth(), window.winfo_screenheight()
+
+# 글자 크기 조절 변수. Dell xps 13 (9370) = -3
+if width == 1920:
+    text_size = 0
+else:
+    text_size = -3
+# 배경색
+now_hour = datetime.now().hour
+if now_hour > 18 or now_hour <= 7:
+    background_color = _from_rgb((0, 0, 0))  # 검은색
+else:
+    background_color = _from_rgb((11, 58, 19))  # 칠판 초록색
+
 window.columnconfigure(7, weight=1)
 window.rowconfigure(4, weight=1)
 
