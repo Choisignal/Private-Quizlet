@@ -58,13 +58,14 @@ except:
 def make_list(right_answer):
     right_answer_original = right_answer
     right_answer = re.sub('\([^)]+\)', '', right_answer)
+    right_answer_list = []
     try:
-        right_answer_list = right_answer.split(",")
+        right_answer_list += right_answer.split(",")
     except:
-        right_answer_list = [str(right_answer)]
+        right_answer_list += [str(right_answer)]
 
     try:
-        right_answer_list = right_answer.split(",")
+        right_answer_list += right_answer.split("|")
     except:
         pass
     lang = button8.cget("text")

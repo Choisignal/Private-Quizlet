@@ -63,11 +63,14 @@ def 국어_복습():
                 data_단답형2 = data[data["구분"] == 단답형]
                 data_단답형1 = pd.concat([data_단답형1,data_단답형2],ignore_index=True)
         try:
+            data_단답형1.replace({'대답': {',': ' |'}}, inplace = True)
             data_단답형1_original = pd.read_excel(f"{data_direct}{filename}_단답형.xlsx")
+            data_단답형1_original.replace({'대답': {',': ' |'}}, inplace = True)
             data_단답형1 = pd.concat([data_단답형1_original, data_단답형1], ignore_index=True)
             data_단답형1 = data_단답형1.drop_duplicates(['질문','대답'])
         except:
             print(f"기존 파일 없음 : {data_direct}{filename}_단답형.xlsx")
+        data_단답형1.replace({'대답': {',': ' |'}}, inplace = True)
         data_단답형1.to_excel(f"{data_direct}{filename}_단답형.xlsx")
 
     if len(객관식_목록) > 0:

@@ -478,11 +478,13 @@ data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
     엑셀_구분저장.국어_복습()
+    '''
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
+    '''
 elif filename == "국어_암기자료":
     엑셀파일구분하기(data_direct, filename,보존=True,구분_나누기=False,날짜_나누기=True)
 elif filename == "국어_57항":
@@ -514,6 +516,7 @@ elif filename == "영어_단어":
     '''
 elif filename == "영어_복습":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
+    # =IF(C500="암기문법 : 뜻","암기문법 : 뜻",IF(C500="암기문법 : 시제","암기문법 : 시제",IF(C500="암기문법 : 접속사","암기문법 : 접속사",CONCATENATE(D500," : ",C500))))
 elif filename == "삼국통합":
     객관식_만들기_구분통합(filename, data_direct, 단답형=False, 설명=True)
 elif filename == "삼국통합":
