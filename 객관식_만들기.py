@@ -6,6 +6,8 @@ import numpy as np
 import os
 from os.path import exists, isfile, basename
 import re
+import 엑셀_구분저장
+
 def 엑셀파일구분하기(data_direct, filename,보존 = False,구분_나누기=True,날짜_나누기=True):
     data = pd.read_excel(f"{data_direct}{filename}.xlsx")
     날짜_목록 = []
@@ -169,6 +171,13 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
     else:
         save_filename = data_direct +  파일명 + f"{글자수}글자.xlsx"
     print(save_filename)
+
+    try:
+        data_original = pd.read_excel(save_filename)
+        data = pd.concat([data_original, data], ignore_index=True)
+        data = data.drop_duplicates(['질문', '대답'])
+    except:
+        print(f"기존 파일 없음 : {save_filename}")
     data.to_excel(save_filename, index=False)
 
 def 객관식_만들기(파일명, data_direct, 단답형=True, 설명=True):
@@ -356,7 +365,7 @@ def OX퀴즈만들기(data_direct, filename):
             딕셔너리2[단어[1]] = 딕셔너리2[단어[1]] + chi[i] + ", "
 
     print_list = []
-    for i in range(kor.size):
+    for i in tqdm(range(kor.size)):
         pri1 = str(pri[i])
         if pri1 == "한자어":
             kor1 = str(kor[i])
@@ -387,14 +396,14 @@ def OX퀴즈만들기(data_direct, filename):
                         chi3 = chi2[0]+chi1[1]
                         print_word = f"'{kor1}{trans}' = {chi3}?/x , ㄴ, {chi1}"
                         if print_word not in print_list:
-                            print(print_word)
+                            #print(print_word)
                             text1 += [f"'{kor1}{trans}' = {chi3}?"]
                             text2 += [f"ㄴ"]
                             text3 += [f"{chi1}"]
                         print_list += [print_word]
 
     print_list = []
-    for i in range(kor.size):
+    for i in tqdm(range(kor.size)):
         pri1 = str(pri[i])
         if pri1 == "o":
             kor1 = str(kor[i])
@@ -420,7 +429,7 @@ def OX퀴즈만들기(data_direct, filename):
                         chi3 = chi1[0]+chi2[1]
                         print_word = f"'{kor1}{trans}' = {chi3}?/x , ㄴ, {chi1}"
                         if print_word not in print_list:
-                            print(print_word)
+                            #print(print_word)
                             text1 += [f"'{kor1}{trans}' = {chi3}?"]
                             text2 += [f"ㄴ"]
                             text3 += [f"{chi1}"]
@@ -428,6 +437,12 @@ def OX퀴즈만들기(data_direct, filename):
 
     data = {"Text 1": text1, "Text 2": text2, "Text 3": text3}
     data = pd.DataFrame(data)
+    try:
+        data_original = pd.read_excel(f"{data_direct}{filename}.xlsx".replace("단답형", "O X 퀴즈"))
+        data = pd.concat([data_original, data], ignore_index=True)
+        data = data.drop_duplicates(['Text 1', 'Text 2','Text 3'])
+    except:
+        print(f"기존 파일 없음 : {data_direct}{filename}.xlsx".replace("단답형", "O X 퀴즈"))
     data.to_excel(
         f"{data_direct}{filename}.xlsx".replace("단답형", "O X 퀴즈"))
 
@@ -462,7 +477,7 @@ def 구분_생성(data_direct, filename):
 data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
-    엑셀파일구분하기(data_direct, filename)
+    엑셀_구분저장.국어_복습()
     OX퀴즈만들기(data_direct, "국어_복습_한자어")
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
