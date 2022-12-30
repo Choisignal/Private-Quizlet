@@ -1088,7 +1088,7 @@ def _from_rgb(rgb):
 
 ##############################################################################################################
 # 글자 크기 조절 변수. Dell xps 13 (9370) = -3
-text_size = -3
+text_size2 = -6
 # 배경색
 now_hour = datetime.now().hour
 if now_hour > 18 or now_hour <= 7:
@@ -1164,7 +1164,7 @@ button_test.configure(bg=background_color, foreground="white",
 ##############################################################################################################
 
 
-text = Text(window, font=('Courier', int(round(width*0.02))+text_size),
+text = Text(window, font=('Courier', int(round(width*0.02))+text_size+text_size2),
             relief="raised",  borderwidth=0)
 text.grid(column=0, row=4, columnspan=9, rowspan=1,
           ipadx=20, ipady=0, sticky=W+E+N+S)
