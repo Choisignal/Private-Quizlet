@@ -536,14 +536,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
                 answer = entry.get()
-                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "0"]):
+                if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "]"]):
                     text.delete("1.0", "end")
                     click_open_btn()
                     entry.delete(0, END)
                     text.insert(
                         "1.0", " ( {0}/{1} )".format(count, num_total))
                     if lang == "단답형":
-                        if answer[-1] in ["*", "0"]:
+                        if answer[-1] in ["*", "]"]:
                             button8.config(text="객관식")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -562,7 +562,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                             except:
                                 text.insert("1.0", ask, "emphasis")
                     elif lang == "객관식":
-                        if answer[-1] in ["*", "0"]:
+                        if answer[-1] in ["*", "]"]:
                             button8.config(text="단답형")
                             text.insert("1.0", print_ask, "emphasis")
                         elif answer[-1] == "-":
@@ -734,7 +734,9 @@ def enter_in_text(enter):
 
 def get_file_direct():
     try:
-        files = filedialog.askopenfilenames(initialdir="./",
+        quizlet = os.path.abspath(__file__).split("\\")[-1]
+        file = os.path.abspath(__file__).replace(quizlet,"")
+        files = filedialog.askopenfilenames(initialdir=file,
                                             title="파일을 선택 해 주세요",
                                             filetypes=(("*.xlsx", "*xlsx"), ("*.xls", "*xls")))
         file = files[0]
@@ -832,8 +834,8 @@ def click_open_btn():
         search = search.replace("=", "")
         search = search.replace("-", "!@")
         search = search.replace("종료", "")
-        if search == "0":
-            search = search.replace("0", "!@")
+        if search == "]":
+            search = search.replace("]", "!@")
 
         if lang == "O X 퀴즈":
             k = 1
@@ -1088,7 +1090,7 @@ def _from_rgb(rgb):
 
 ##############################################################################################################
 # 글자 크기 조절 변수. Dell xps 13 (9370) = -3
-text_size2 = -6
+text_size2 = 0
 # 배경색
 now_hour = datetime.now().hour
 if now_hour > 18 or now_hour <= 7:
