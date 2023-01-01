@@ -11,6 +11,7 @@ from copy import copy
 from pathlib import Path
 import pandas as pd
 import os
+import psutil
 
 def 학습시간(모드, study_hour=0):
     now = datetime.now()
@@ -517,15 +518,21 @@ def tkinter_eng_word_roof(data_direct, filename):
                 if study_time == 0:
                     study_time_sec = int(
                         (now - start_time).total_seconds())
-                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time_sec}:{total_study_hour})\n\n"
+                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({study_time_sec}:{total_study_hour}"
                 elif study_time > 0:
-                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({int((now - start_time).total_seconds()/60)}:{total_study_hour})\n\n"
+                    new = f"{str(now.hour).zfill(2)}:{str(now.minute).zfill(2)}({int((now - start_time).total_seconds()/60)}:{total_study_hour}"
                     if study_time_pre != int((now - start_time).total_seconds()/60):
                         학습시간(모드="쓰기", study_hour=1)
                         total_study_hour = 학습시간(모드="읽기")
                         study_time_pre = copy(
                             int((now - start_time).total_seconds()/60))
 
+                battery = psutil.sensors_battery()
+                if battery.power_plugged == True:
+                    용량 = f"{battery.percent}% 충전중"
+                else:
+                    용량 = f"{battery.percent}%"
+                new = f"{new} {용량})\n\n"
                 if clock_check == "시계ON":
                     if now != new:
                         now = copy(new)
