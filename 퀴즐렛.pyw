@@ -529,11 +529,14 @@ def tkinter_eng_word_roof(data_direct, filename):
 
                 if clock_check == "시계ON":
                     battery = psutil.sensors_battery()
-                    if battery.power_plugged == True:
-                        용량 = f"{battery.percent}% 충전중"
-                    else:
-                        용량 = f"{battery.percent}%"
-                    new = f"{new} {용량})\n\n"
+                    try:
+                        if battery.power_plugged == True:
+                            용량 = f" {battery.percent}% 충전중"
+                        else:
+                            용량 = f" {battery.percent}%"
+                    except:
+                        용량 = ""
+                    new = f"{new}{용량})\n\n"
                     if now != new:
                         now = copy(new)
                         text.insert("1.0", now)

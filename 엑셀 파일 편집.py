@@ -1,6 +1,6 @@
 import pandas as pd
 
-file = "./학습자료/단답형/영어_복습.xlsx"
+file = "./학습자료/단답형/한국사 종합.xlsx"
 data = pd.read_excel(file)
 data.to_excel(file.replace(".xlsx","_백업.xlsx"))
 ask_list = list(data["질문"])
@@ -14,23 +14,25 @@ for i in range(len(ask_list)):
     ask = str(ask).strip()
     ans = str(ans).strip()
     cat = str(cat).strip()
-    ask = ask.replace("\n","")
-    ask = ask.replace(":","\n:")
     '''
-    ask = ask.replace("보빙사 파견 1883)","보빙사 파견 1883 ")
-    ask = ask.replace(" ,",",")
-    ans = ans.replace(" ,",",")
-    ans = ans.replace("갑신정변 1884","갑신정변")
-    ans = ans.replace("임오군란 1882","임오군란")
-    ans = ans.replace("  →","→ ")
-    ans = ans.replace("경작)","경작)")
-
-    if cat == "성리학 인물":
-        cat = f"{cat} {len(ans.split(','))}명"
-        print(cat)
-    ''' 
+    length = len("③ 역할 : 농민의 불만과 개혁 요구를 반영하기 위해 정치·경제·사회 등")
+    if ":" in ask:
+        print(ask)
+        ask_list2 = ask.split("\n")
+        ask = ""
+        for asks in ask_list2:
+            if len(asks) >= length:
+                asks = asks.replace(":",":\n")
+            ans += asks + "\n"
+        ask = ask[:-1]
+    '''
+    ask = ask.replace(".",",")
+    if ask[-1] == ",":
+        ask = ask[:-1]
     data.loc[i,"질문"] = ask
     data.loc[i,"대답"] = ans
     data.loc[i,"구분"] = cat
 
+    if ":" in ask:
+        print(ask)
 data.to_excel(file)
