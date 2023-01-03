@@ -415,10 +415,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
-                    # random.shuffle(선지번호)
+                    random.shuffle(선지번호)
 
                     answer_list.remove(right_answer)
-                    # random.shuffle(answer_list)
+                    random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
 
                     선지목록_체크용[선지번호[0] -
@@ -440,10 +440,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2]
                     선지목록 = [1, 2]
                     선지목록_체크용 = [1, 2]
-                    # random.shuffle(선지번호)
+                    random.shuffle(선지번호)
 
                     answer_list.remove(right_answer)
-                    # random.shuffle(answer_list)
+                    random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
 
                     선지목록_체크용[선지번호[0] -
