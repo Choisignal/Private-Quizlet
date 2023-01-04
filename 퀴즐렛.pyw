@@ -512,6 +512,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 (datetime.now() - start_time).total_seconds()/60)
             while check_ans == False:
                 lang = button8.cget("text")
+                '''
                 clock_check = button_test.cget("text")
                 now = datetime.now()
                 study_time = int((now - start_time).total_seconds()/60)
@@ -540,11 +541,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                     if now != new:
                         now = copy(new)
                         text.insert("1.0", now)
-
+                '''
                 sleep(0.05)
                 window.update()
+                '''
                 if clock_check == "시계ON":
                     text.delete("1.0", f"3.0")
+                '''
                 answer = entry.get()
                 if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "]"]):
                     text.delete("1.0", "end")
@@ -981,21 +984,22 @@ def click_kor_eng_btn():
 def click_test_number_btn():
     num_test = button_test.cget("text")
 
-    if RadioVariety_1.get() == 2:
-        if num_test == "5문항":
-            button_test.config(text="10문항")
-        elif num_test == "10문항":
-            button_test.config(text="15문항")
-        elif num_test == "15문항":
-            button_test.config(text="20문항")
-        elif num_test == "20문항":
-            button_test.config(text="25문항")
-        elif num_test == "25문항":
-            button_test.config(text="30문항")
-        elif num_test == "30문항":
-            button_test.config(text="5문항")
-        else:
-            button_test.config(text="5문항")
+    #if RadioVariety_1.get() == 2:
+    if num_test == "5문항":
+        button_test.config(text="10문항")
+    elif num_test == "10문항":
+        button_test.config(text="15문항")
+    elif num_test == "15문항":
+        button_test.config(text="20문항")
+    elif num_test == "20문항":
+        button_test.config(text="25문항")
+    elif num_test == "25문항":
+        button_test.config(text="30문항")
+    elif num_test == "30문항":
+        button_test.config(text="5문항")
+    else:
+        button_test.config(text="5문항")
+    '''
     if RadioVariety_1.get() == 1:
         if num_test == "시계ON":
             button_test.config(text="시계OFF")
@@ -1003,6 +1007,7 @@ def click_test_number_btn():
             button_test.config(text="시계ON")
         else:
             button_test.config(text="시계ON")
+    '''
 
 
 def click_line_btn():
