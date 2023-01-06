@@ -115,13 +115,11 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
     for i in tqdm(range(data["대답"].size)):
         질문 = data["질문"][i]
         대답 = data["대답"][i]
-        '''
-        if 글자수 == 4 and ',' in [대답[0:6]]:
+        if 글자수 == 4 and ',' in 대답[0:10]:
             대답_위치 = 대답.find(',')
             대답 = list(대답)
             대답[대답_위치]="|"
             대답 = ''.join(대답)
-        '''
         대답 = re.sub('\([^)]+\)', '', 대답)
         대답 = 대답.replace("\n","")
         대답 = 대답.replace("1.","\n1)")
@@ -131,6 +129,7 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
         대답 = 대답.replace("  "," ")
         if "1)" not in 대답:
             대답 = 대답.replace("「","\n「")
+            대답 = 대답.replace("」\n「","」「")
             if len(대답) > len("「사마귀가 넓적한 앞다리를 쳐드는 모습이 마치 도끼를 휘두르는 것 같다」"):
                 대답 = 대답.replace("이라는 뜻으로,","\n")
                 대답 = 대답.replace("라는 뜻으로,","\n")
@@ -478,11 +477,11 @@ data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
     엑셀_구분저장.국어_복습()
-    단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
-    단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
-    단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
+    #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
+    #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
+    #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
-    OX퀴즈만들기(data_direct, "국어_복습_한자어")
+    #OX퀴즈만들기(data_direct, "국어_복습_한자어")
 
 elif filename == "국어_암기자료":
     엑셀파일구분하기(data_direct, filename,보존=True,구분_나누기=False,날짜_나누기=True)

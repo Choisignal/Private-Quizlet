@@ -240,7 +240,7 @@ def 순서배열_구분통합(data_direct, filename,객관식 = False):
 
 
 data_direct = "./학습자료/연표/"
-filename = "국어 순서배열"
+filename = "무신정권"
 if filename == "사건 순서":
     파일명 = 연표_통합(data_direct, filename)  # 사건을 연도별로 모아준다
     순서배열_구분통합(data_direct, filename,객관식 = False)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
@@ -248,6 +248,8 @@ elif filename =="조선":
     파일명 = 연표_통합(data_direct, filename)  # 사건을 연도별로 모아준다
     순서배열_구분통합(data_direct, filename,객관식 = True)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
 elif filename =="국어 순서배열":
+    순서배열_구분통합(data_direct, filename,객관식 = False)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
+elif filename =="무신정권":
     순서배열_구분통합(data_direct, filename,객관식 = False)  # ㄱㄴㄷㄹ 순서 배열 문제 만든다
 '''
 연도_객관식(data_direct, file)  # 객관식 문제 만든다
