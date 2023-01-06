@@ -648,8 +648,17 @@ def tkinter_eng_word_roof(data_direct, filename):
                             f"정답! '{right_answer2}':")
                         era = ask.count("\n")+1
                     elif lang == "객관식":
-                        enter_in_text(
-                            f"정답! '{right_answer2}':")
+                        if len(right_answer2)>=33 and len(ask)<=5:
+                            right_answer2 = right_answer2.replace("\n \n","\n")
+                            right_answer2 = right_answer2.replace("\n\n","\n")
+                            right_answer2 = right_answer2.replace("|",",")
+                            right_answer2 = right_answer2.replace("」\n ","」\n")
+                            right_answer2 = right_answer2.replace(") ",")")
+                            enter_in_text(
+                                f"정답! {ask} : {right_answer2}")
+                        else:
+                            enter_in_text(
+                                f"정답! '{right_answer2}':")
                         era = ask.count("\n")+1
                     else:
                         enter_in_text(
