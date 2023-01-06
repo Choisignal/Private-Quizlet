@@ -32,7 +32,7 @@ cat_list2 = list(data_유의어["구분"])
 for i in range(len(ans_list2)):
     ask_list2[i] = f"{ask_list2[i]} : {ans_list2[i]}"
     ans_list2[i] = f"{dic[ans_list2[i]]}"
-    
+
 dic = {"질문":ask_list2,"대답":ans_list2,"구분":cat_list2}
 df = pd.DataFrame(dic)
 df.to_excel(file.replace(".xlsx","_유의어.xlsx"),index=False)
