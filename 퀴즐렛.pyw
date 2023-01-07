@@ -416,11 +416,11 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
                     random.shuffle(선지번호)
-
+                    '''
                     answer_list.remove(right_answer)
                     random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
-
+                    '''
                     선지목록_체크용[선지번호[0] -
                              1] = f"{str(answer_list[0]).split('|')[0]}"
                     선지목록_체크용[선지번호[1] -
@@ -441,11 +441,11 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지목록 = [1, 2]
                     선지목록_체크용 = [1, 2]
                     random.shuffle(선지번호)
-
+                    '''
                     answer_list.remove(right_answer)
                     random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
-
+                    '''
                     선지목록_체크용[선지번호[0] -
                              1] = f"{str(answer_list[0]).split('|')[0]}"
                     선지목록_체크용[선지번호[1] -
@@ -619,9 +619,12 @@ def tkinter_eng_word_roof(data_direct, filename):
                 right_answer2 = str(right_answer)
                 right_answer2 = right_answer2.replace("\n \n","\n")
                 right_answer2 = right_answer2.replace("\n\n","\n")
-                right_answer2 = right_answer2.replace("|",",")
                 right_answer2 = right_answer2.replace("」\n ","」\n")
                 right_answer2 = right_answer2.replace(") ",")")
+                if right_answer2.count("|") == 1:
+                    right_answer2 = right_answer2.replace("|",":")
+                if right_answer2.count("|") > 1:
+                    right_answer2 = right_answer2.replace("|",",")
                 right_answer = str(right_answer).replace(" ", "")
                 answer2 = str(answer)
                 answer = str(answer).replace(" ", "")

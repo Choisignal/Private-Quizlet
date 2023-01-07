@@ -9,7 +9,7 @@ for ans in ans_list:
     mask = data['대답'].isin([ans])
     data = data[~mask]
 data_기출 = data.drop_duplicates(['대답'], keep = 'first')
-data_기출.to_excel(file.replace(".xlsx","_기출.xlsx"),index=False)
+#data_기출.to_excel(file.replace(".xlsx","_기출.xlsx"),index=False)
 
 data_유의어 = data.copy()
 ans_list = list(data_기출["질문"])
@@ -30,9 +30,15 @@ ans_list2 = list(data_유의어["대답"])
 cat_list2 = list(data_유의어["구분"])
 
 for i in range(len(ans_list2)):
-    ask_list2[i] = f"{ask_list2[i]} : {ans_list2[i]}"
-    ans_list2[i] = f"{dic[ans_list2[i]]}"
+    ask_list2[i] = f"{ask_list2[i]}"
+    ans_list2[i] = f"{dic[ans_list2[i]]} | {ans_list2[i]}"
 
 dic = {"질문":ask_list2,"대답":ans_list2,"구분":cat_list2}
 df = pd.DataFrame(dic)
+try:
+    df_original = pd.read_excel(f"{file.replace('.xlsx','_유의어.xlsx')}")
+    df = pd.concat([df_original, df], ignore_index=True)
+    df = df.drop_duplicates(['질문','대답'])
+except:
+    print(f"기존 파일 없음 : {file.replace('.xlsx','_유의어.xlsx')}")
 df.to_excel(file.replace(".xlsx","_유의어.xlsx"),index=False)
