@@ -132,10 +132,9 @@ def tkinter_eng_word_test(data_direct, filename):
                         pass
                 elif lang == "객관식":
                     ask = df["질문"][i]
-                    ask = ask.replace("\n\n'|'\n")
+                    ask = ask.replace(" \n","")
                     right_answer = df["대답"][i]
                     category = df["구분"][i]
-                    category_list = list(set(df["구분"]))
                     df2 = df[df["구분"] == category]
                     answer_list = list(set(df2["대답"]))
                     print_ask = df["질문"][i]
@@ -143,7 +142,7 @@ def tkinter_eng_word_test(data_direct, filename):
                         print_ask = print_ask.replace(right_answer, "[   ]")
                     except:
                         pass
-                    if len(answer_list) > 2:
+                    if len(answer_list) > 3:
                         len_answer_list = 3
                         선지번호 = [1, 2, 3]
                         선지목록 = [1, 2, 3]
@@ -155,18 +154,43 @@ def tkinter_eng_word_test(data_direct, filename):
                         answer_list = [right_answer] + answer_list
 
                         선지목록_체크용[선지번호[0] -
-                                 1] = f"{str(answer_list[0]).split('|')[0]}"
+                                1] = f"{str(answer_list[0]).split('|')[0]}"
                         선지목록_체크용[선지번호[1] -
-                                 1] = f"{str(answer_list[1]).split('|')[0]}"
+                                1] = f"{str(answer_list[1]).split('|')[0]}"
                         선지목록_체크용[선지번호[2] -
-                                 1] = f"{str(answer_list[2]).split('|')[0]}"
+                                1] = f"{str(answer_list[2]).split('|')[0]}"
 
                         선지목록[선지번호[0] -
-                             1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                            1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
                         선지목록[선지번호[1] -
-                             1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                            1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
                         선지목록[선지번호[2] -
-                             1] = f"{선지번호[2]}. {str(answer_list[2]).split('|')[0]}"
+                            1] = f"{선지번호[2]}. {str(answer_list[2]).split('|')[0]}"
+                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                    elif len(answer_list) == 3:
+                        len_answer_list = 3
+                        선지번호 = [1, 2, 3]
+                        선지목록 = [1, 2, 3]
+                        선지목록_체크용 = [1, 2, 3]
+                        random.shuffle(선지번호)
+                        '''
+                        answer_list.remove(right_answer)
+                        random.shuffle(answer_list)
+                        answer_list = [right_answer] + answer_list
+                        '''
+                        선지목록_체크용[선지번호[0] -
+                                1] = f"{str(answer_list[0]).split('|')[0]}"
+                        선지목록_체크용[선지번호[1] -
+                                1] = f"{str(answer_list[1]).split('|')[0]}"
+                        선지목록_체크용[선지번호[2] -
+                                1] = f"{str(answer_list[2]).split('|')[0]}"
+
+                        선지목록[선지번호[0] -
+                            1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                        선지목록[선지번호[1] -
+                            1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                        선지목록[선지번호[2] -
+                            1] = f"{선지번호[2]}. {str(answer_list[2]).split('|')[0]}"
                         print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
                     elif len(answer_list) == 2:
                         len_answer_list = 2
@@ -174,20 +198,20 @@ def tkinter_eng_word_test(data_direct, filename):
                         선지목록 = [1, 2]
                         선지목록_체크용 = [1, 2]
                         random.shuffle(선지번호)
-
+                        '''
                         answer_list.remove(right_answer)
                         random.shuffle(answer_list)
                         answer_list = [right_answer] + answer_list
-
+                        '''
                         선지목록_체크용[선지번호[0] -
-                                 1] = f"{str(answer_list[0]).split('|')[0]}"
+                                1] = f"{str(answer_list[0]).split('|')[0]}"
                         선지목록_체크용[선지번호[1] -
-                                 1] = f"{str(answer_list[1]).split('|')[0]}"
+                                1] = f"{str(answer_list[1]).split('|')[0]}"
 
                         선지목록[선지번호[0] -
-                             1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                            1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
                         선지목록[선지번호[1] -
-                             1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                            1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
 
                         print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
                     else:
@@ -199,12 +223,12 @@ def tkinter_eng_word_test(data_direct, filename):
                         answer_list = [right_answer]
 
                         선지목록_체크용[선지번호[0] -
-                                 1] = f"{str(answer_list[0]).split('|')[0]}"
+                                1] = f"{str(answer_list[0]).split('|')[0]}"
 
                         선지목록[선지번호[0] -
-                             1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                            1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
 
-                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n\n"
+                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n"
                 else:
                     ask = df["Text 1"][i]
                     right_answer = df["Text 2"][i]

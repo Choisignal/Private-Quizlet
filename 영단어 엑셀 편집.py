@@ -9,7 +9,13 @@ for ans in ans_list:
     mask = data['대답'].isin([ans])
     data = data[~mask]
 data_기출 = data.drop_duplicates(['대답'], keep = 'first')
-#data_기출.to_excel(file.replace(".xlsx","_기출.xlsx"),index=False)
+try:
+    data_기출_original = pd.read_excel(f"{file.replace('.xlsx','_기출.xlsx')}")
+    data_기출 = pd.concat([data_기출_original, data_기출], ignore_index=True)
+    data_기출 = data_기출.drop_duplicates(['질문','대답'])
+except:
+    print(f"기존 파일 없음 : {file.replace('.xlsx','_기출.xlsx')}")
+data_기출.to_excel(file.replace(".xlsx","_기출.xlsx"),index=False)
 
 data_유의어 = data.copy()
 ans_list = list(data_기출["질문"])
