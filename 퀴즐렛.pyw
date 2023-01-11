@@ -408,7 +408,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     pass
                 answer_list_print = []
                 for answer_list_word in answer_list:
-                    answer_list_print += [answer_list_word.split('|')[0]]
+                    try:
+                        answer_list_print += [answer_list_word.split('|')[0]]
+                    except:
+                        answer_list_print += [answer_list_word]
                 answer_list_print = list(set(answer_list_print.copy()))
                 if len(answer_list_print) > 3:
                     len_answer_list = 3
