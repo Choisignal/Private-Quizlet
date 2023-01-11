@@ -337,9 +337,6 @@ def tkinter_eng_word_test(data_direct, filename):
 
 
 def tkinter_eng_word_roof(data_direct, filename):
-    total_study_hour = 학습시간(모드="읽기")
-    print(total_study_hour)
-    start_time = datetime.now()
     entry.delete(0, END)
     text.delete("1.0", "end")
     from time import sleep
@@ -409,32 +406,36 @@ def tkinter_eng_word_roof(data_direct, filename):
                     print_ask = print_ask.replace(right_answer, "[   ]")
                 except:
                     pass
-                if len(answer_list) > 3:
+                answer_list_print = []
+                for answer_list_word in answer_list:
+                    answer_list_print += [answer_list_word.split('|')[0]]
+                answer_list_print = list(set(answer_list_print.copy()))
+                if len(answer_list_print) > 3:
                     len_answer_list = 3
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
                     random.shuffle(선지번호)
 
-                    answer_list.remove(right_answer)
-                    random.shuffle(answer_list)
-                    answer_list = [right_answer] + answer_list
+                    answer_list_print.remove(right_answer)
+                    random.shuffle(answer_list_print)
+                    answer_list_print = [right_answer] + answer_list_print
 
                     선지목록_체크용[선지번호[0] -
-                             1] = f"{str(answer_list[0]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[0])}"
                     선지목록_체크용[선지번호[1] -
-                             1] = f"{str(answer_list[1]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[1])}"
                     선지목록_체크용[선지번호[2] -
-                             1] = f"{str(answer_list[2]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[2])}"
 
                     선지목록[선지번호[0] -
-                         1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                         1] = f"{선지번호[0]}. {str(answer_list_print[0])}"
                     선지목록[선지번호[1] -
-                         1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                         1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
                     선지목록[선지번호[2] -
-                         1] = f"{선지번호[2]}. {str(answer_list[2]).split('|')[0]}"
+                         1] = f"{선지번호[2]}. {str(answer_list_print[2])}"
                     print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
-                elif len(answer_list) == 3:
+                elif len(answer_list_print) == 3:
                     len_answer_list = 3
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
@@ -446,20 +447,20 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer_list = [right_answer] + answer_list
                     '''
                     선지목록_체크용[선지번호[0] -
-                             1] = f"{str(answer_list[0]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[0])}"
                     선지목록_체크용[선지번호[1] -
-                             1] = f"{str(answer_list[1]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[1])}"
                     선지목록_체크용[선지번호[2] -
-                             1] = f"{str(answer_list[2]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[2])}"
 
                     선지목록[선지번호[0] -
-                         1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                         1] = f"{선지번호[0]}. {str(answer_list_print[0])}"
                     선지목록[선지번호[1] -
-                         1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                         1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
                     선지목록[선지번호[2] -
-                         1] = f"{선지번호[2]}. {str(answer_list[2]).split('|')[0]}"
+                         1] = f"{선지번호[2]}. {str(answer_list_print[2])}"
                     print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
-                elif len(answer_list) == 2:
+                elif len(answer_list_print) == 2:
                     len_answer_list = 2
                     선지번호 = [1, 2]
                     선지목록 = [1, 2]
@@ -471,14 +472,14 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer_list = [right_answer] + answer_list
                     '''
                     선지목록_체크용[선지번호[0] -
-                             1] = f"{str(answer_list[0]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[0])}"
                     선지목록_체크용[선지번호[1] -
-                             1] = f"{str(answer_list[1]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[1])}"
 
                     선지목록[선지번호[0] -
-                         1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                         1] = f"{선지번호[0]}. {str(answer_list_print[0])}"
                     선지목록[선지번호[1] -
-                         1] = f"{선지번호[1]}. {str(answer_list[1]).split('|')[0]}"
+                         1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
 
                     print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
                 else:
@@ -490,10 +491,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer_list = [right_answer]
 
                     선지목록_체크용[선지번호[0] -
-                             1] = f"{str(answer_list[0]).split('|')[0]}"
+                             1] = f"{str(answer_list_print[0])}"
 
                     선지목록[선지번호[0] -
-                         1] = f"{선지번호[0]}. {str(answer_list[0]).split('|')[0]}"
+                         1] = f"{선지번호[0]}. {str(answer_list_print[0])}"
 
                     print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n"
             else:
@@ -532,8 +533,10 @@ def tkinter_eng_word_roof(data_direct, filename):
             answer = ""
             check_ans = False
             now = ""
+            '''
             study_time_pre = int(
                 (datetime.now() - start_time).total_seconds()/60)
+            '''
             while check_ans == False:
                 lang = button8.cget("text")
                 '''
