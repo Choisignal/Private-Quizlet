@@ -416,8 +416,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer_list_print = list(set(answer_list_print.copy()))
                 answer_list_print = sorted(answer_list_print)
                 try:
-                    if print_ask.replace(right_answer, "[   ]").strip() != "[   ]":
-                        print_ask = print_ask.replace(right_answer, "[   ]")
+                    if print_ask.replace(right_answer.split("|")[0], "[   ]").strip() != "[   ]":
+                        print_ask = print_ask.replace(right_answer.split("|")[0], "[   ]")
                 except:
                     pass
                 if len(answer_list_print) > 3:
