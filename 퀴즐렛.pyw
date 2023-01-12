@@ -408,7 +408,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                     for num in range(len(answer_list_print)):
                         answer_list_print[num] = str(answer_list_print[num].split("|")[0]).strip()
                     answer_list_print = list(sorted(answer_list_print))
-                    right_answer = str(right_answer.split("//")[0]).strip()
+                    right_answer = f"{str(right_answer.split('//')[0]).strip()}|{str(right_answer.split('|')[-1])}"
                 else:
                     answer_list_print = []
                     for answer_list_word in answer_list:
