@@ -402,17 +402,24 @@ def tkinter_eng_word_roof(data_direct, filename):
                 df2 = df[df["구분"] == category]
                 answer_list = list(set(df2["대답"]))
                 print_ask = df["질문"][i]
+
+                if "//" in right_answer:
+                    answer_list_print = right_answer.split("//")
+                    for num in range(len(answer_list_print)):
+                        answer_list_print[num] = str(answer_list_print[num].split("|")[0]).strip()
+                    answer_list_print = list(sorted(answer_list_print))
+                    right_answer = str(right_answer.split("//")[0]).strip()
+                else:
+                    answer_list_print = []
+                    for answer_list_word in answer_list:
+                        answer_list_print += [answer_list_word.split('|')[0]]
+                    answer_list_print = list(set(answer_list_print.copy()))
+                answer_list_print = sorted(answer_list_print)
                 try:
-                    print_ask = print_ask.replace(right_answer, "[   ]")
+                    if print_ask.replace(right_answer, "[   ]").strip() != "[   ]":
+                        print_ask = print_ask.replace(right_answer, "[   ]")
                 except:
                     pass
-                answer_list_print = []
-                for answer_list_word in answer_list:
-                    try:
-                        answer_list_print += [answer_list_word.split('|')[0]]
-                    except:
-                        answer_list_print += [answer_list_word]
-                answer_list_print = list(set(answer_list_print.copy()))
                 if len(answer_list_print) > 3:
                     len_answer_list = 3
                     선지번호 = [1, 2, 3]
@@ -443,8 +450,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
-                    random.shuffle(선지번호)
                     '''
+                    random.shuffle(선지번호)
                     answer_list.remove(right_answer)
                     random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
@@ -468,8 +475,8 @@ def tkinter_eng_word_roof(data_direct, filename):
                     선지번호 = [1, 2]
                     선지목록 = [1, 2]
                     선지목록_체크용 = [1, 2]
-                    random.shuffle(선지번호)
                     '''
+                    random.shuffle(선지번호)
                     answer_list.remove(right_answer)
                     random.shuffle(answer_list)
                     answer_list = [right_answer] + answer_list
@@ -497,7 +504,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                              1] = f"{str(answer_list_print[0])}"
 
                     선지목록[선지번호[0] -
-                         1] = f"{선지번호[0]}. {str(answer_list_print[0])}"
+                         1] = f"직접 입력하세요!"
 
                     print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n\n"
             else:
