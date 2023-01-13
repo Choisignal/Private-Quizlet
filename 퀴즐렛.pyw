@@ -416,7 +416,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                         answer_list_print += [random.choice(["둘 다 맞음","둘 다 아님"])]
                     '''
                     answer_list_print = list(sorted(answer_list_print))
-                    right_answer = f"{str(right_answer.split('//')[0]).strip()}|{str(right_answer.split('|')[-1])}"
+                    if "//" not in str(right_answer).split('|')[-1]:
+                        right_answer = f"{str(right_answer.split('//')[0]).strip()}|{str(right_answer.split('|')[-1])}"
+                    else:
+                        right_answer = f"{str(right_answer.split('//')[0]).strip()}"
                 else:
                     answer_list_print = []
                     for answer_list_word in answer_list:
@@ -428,13 +431,13 @@ def tkinter_eng_word_roof(data_direct, filename):
                         print_ask = print_ask.replace(right_answer.split("|")[0], "[   ]")
                 except:
                     pass
+                print(right_answer)
                 if len(answer_list_print) > 3:
                     len_answer_list = 3
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
                     random.shuffle(선지번호)
-
                     answer_list_print.remove(right_answer)
                     random.shuffle(answer_list_print)
                     answer_list_print = [right_answer] + answer_list_print
