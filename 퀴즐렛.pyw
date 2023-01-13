@@ -349,6 +349,10 @@ def tkinter_eng_word_roof(data_direct, filename):
     if '구분' not in list(df.keys()):
         df['구분'] = ['기본' for i in range(len(df))]
     df['구분'] = df['구분'].fillna('기본')
+    if '질문' not in list(df.keys()):
+        df['질문'] = ['옳은 것은?' for i in range(len(df))]
+    df['질문'] = df['질문'].fillna('옳은 것은?')
+
     for key in list(df.keys()):
         if 'Unnamed' in key:
             df = df.drop(columns=key)
@@ -407,6 +411,10 @@ def tkinter_eng_word_roof(data_direct, filename):
                     answer_list_print = right_answer.split("//")
                     for num in range(len(answer_list_print)):
                         answer_list_print[num] = str(answer_list_print[num].split("|")[0]).strip()
+                    '''
+                    if len(answer_list_print) == 2 and (("둘 다 맞음" not in answer_list_print) or ("둘 다 아님" not in answer_list_print)):
+                        answer_list_print += [random.choice(["둘 다 맞음","둘 다 아님"])]
+                    '''
                     answer_list_print = list(sorted(answer_list_print))
                     right_answer = f"{str(right_answer.split('//')[0]).strip()}|{str(right_answer.split('|')[-1])}"
                 else:
