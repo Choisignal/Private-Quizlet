@@ -407,7 +407,7 @@ def tkinter_eng_word_roof(data_direct, filename):
                 answer_list = list(set(df2["대답"]))
                 print_ask = df["질문"][i]
 
-                if "//" in right_answer:
+                if "//" in str(right_answer):
                     answer_list_print = right_answer.split("//")
                     for num in range(len(answer_list_print)):
                         answer_list_print[num] = str(answer_list_print[num].split("|")[0]).strip()
@@ -423,24 +423,31 @@ def tkinter_eng_word_roof(data_direct, filename):
                 else:
                     answer_list_print = []
                     for answer_list_word in answer_list:
-                        answer_list_print += [answer_list_word.split('|')[0]]
+                        answer_list_print += [str(answer_list_word).split('|')[0]]
                     answer_list_print = list(set(answer_list_print.copy()))
                 answer_list_print = sorted(answer_list_print)
+
                 try:
                     if print_ask.replace(right_answer.split("|")[0], "[   ]").strip() != "[   ]":
-                        print_ask = print_ask.replace(right_answer.split("|")[0], "[   ]")
+                        print_ask = print_ask.replace(str(right_answer.split("|")[0]).strip(), "[   ]")
                 except:
                     pass
-                print(right_answer)
+                right_answer = str(right_answer)
+                word_list = []
+                for word1 in answer_list_print:
+                    word_list += [str(word1)]
+                word_list.sort(key=len)
+                answer_list_print = word_list
+
                 if len(answer_list_print) > 3:
                     len_answer_list = 3
                     선지번호 = [1, 2, 3]
                     선지목록 = [1, 2, 3]
                     선지목록_체크용 = [1, 2, 3]
                     random.shuffle(선지번호)
-                    answer_list_print.remove(right_answer)
+                    answer_list_print.remove(str(right_answer).split("|")[0])
                     random.shuffle(answer_list_print)
-                    answer_list_print = [right_answer] + answer_list_print
+                    answer_list_print = [str(right_answer).split("|")[0]] + answer_list_print
 
                     선지목록_체크용[선지번호[0] -
                              1] = f"{str(answer_list_print[0])}"
