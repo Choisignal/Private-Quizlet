@@ -702,11 +702,11 @@ def 매인함수(text_size2=0):
                         elif lang == "단답형":
                             if len(right_answer2)>=33 and len(ask)<=5:
                                 enter_in_text(
-                                    f"정답! {ask} : {right_answer2}")
+                                    f"\n정답! {ask} : {right_answer2}")
                             else:
                                 right_answer2 = right_answer2.replace("|",",")
                                 enter_in_text(
-                                    f"정답! '{right_answer2}':")
+                                    f"\n정답! '{right_answer2}':")
                             era = ask.count("\n")+1
                         elif lang == "객관식":
                             if len(right_answer2)>=33 and len(ask)<=5:
