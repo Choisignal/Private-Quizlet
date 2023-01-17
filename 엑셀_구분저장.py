@@ -72,7 +72,7 @@ def 국어_복습():
         except:
             print(f"기존 파일 없음 : {data_direct}{filename}_단답형.xlsx")
         data_단답형1.replace({'대답': {',': ' |'}}, inplace = True)
-        data_단답형1.to_excel(f"{data_direct}{filename}_단답형.xlsx")
+        data_단답형1.to_excel(f"{data_direct}{filename}_단답형.xlsx",index=False)
 
 
     # 띄어쓰기 추출
@@ -91,7 +91,7 @@ def 국어_복습():
         except:
             print(f"기존 파일 없음 : {data_direct}{filename}_띄어쓰기.xlsx")
         data_단답형1.replace({'대답': {',': ' |'}}, inplace = True)
-        data_단답형1.to_excel(f"{data_direct}{filename}_띄어쓰기.xlsx")
+        data_단답형1.to_excel(f"{data_direct}{filename}_띄어쓰기.xlsx",index=False)
 
     if len(객관식_목록) > 0:
 
@@ -109,7 +109,7 @@ def 국어_복습():
             data_객관식1 = data_객관식1.drop_duplicates(['질문','대답'])
         except:
             print(f"기존 파일 없음 : {data_direct}{filename}_객관식.xlsx")
-        data_객관식1.to_excel(f"{data_direct}{filename}_객관식.xlsx")
+        data_객관식1.to_excel(f"{data_direct}{filename}_객관식.xlsx",index=False)
 
     data_한자어1 = data[data["구분"] == "한자어"]
 
@@ -119,4 +119,4 @@ def 국어_복습():
         data_한자어1 = data_한자어1.drop_duplicates(['질문', '대답'])
     except:
         print(f"기존 파일 없음 : {data_direct}{filename}_한자어.xlsx")
-    data_한자어1.to_excel(f"{data_direct}{filename}_한자어.xlsx")
+    data_한자어1.to_excel(f"{data_direct}{filename}_한자어.xlsx",index=False)
