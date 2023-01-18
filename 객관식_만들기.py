@@ -159,7 +159,10 @@ def 단답형_만들기_한자어(파일명, data_direct, 단답형=True, 설명
                     한자번역 = translator.translate(질문, dest='en')
                     한자번역 = 한자번역.text
                     if len(한자번역.split(" ")) <= 2 and 한자번역 != "no":
-                        대답 = f"{대답}({한자번역})"
+                        if "|" in 대답:
+                            대답 = f"{대답.split('|')[0]}({한자번역})|{대답.split('|')[-1]}"
+                        else:
+                            대답 = f"{대답}({한자번역})"
                 except:
                     print(f"번역 에러! : {질문}")
             한자 += [질문]
@@ -345,6 +348,9 @@ def OX퀴즈만들기(data_direct, filename):
     chi = chi[two_list]
     pri = pri[two_list]
     kor = np.array(kor)
+    for i in range(len(kor)):
+        if "|" in kor[i]:
+            kor[i] = kor[i].split("|")[0]
     chi = np.array(chi)
     pri = np.array(pri)
     딕셔너리1 = {}
@@ -386,7 +392,7 @@ def OX퀴즈만들기(data_direct, filename):
                     if kor1 == kor2 and chi1 == chi2:
                         print_word = f"'{kor1}{trans}' = {chi2}?/o , ㅇ , {chi2}"
                         if print_word not in print_list:
-                            print(print_word)
+                            #print(print_word)
                             text1 += [f"'{kor1}{trans}' = {chi2}?"]
                             text2 += [f"ㅇ"]
                             text3 += [f"{chi2}"]
@@ -476,12 +482,12 @@ def 구분_생성(data_direct, filename):
 data_direct = "./학습자료/단답형/"
 filename = "국어_복습"
 if filename == "국어_복습":
-    엑셀_구분저장.국어_복습()
+    #엑셀_구분저장.국어_복습()
     #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=1,번역= False)
     #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=2,번역=True)
     #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=3,번역=True)
     #단답형_만들기_한자어("국어_복습_한자어", data_direct, 단답형=False,설명=False,글자수=4,번역=False)
-    #OX퀴즈만들기(data_direct, "국어_복습_한자어")
+    OX퀴즈만들기(data_direct, "국어_복습_한자어")
 
 elif filename == "국어_암기자료":
     엑셀파일구분하기(data_direct, filename,보존=True,구분_나누기=False,날짜_나누기=True)

@@ -445,8 +445,6 @@ def 매인함수(text_size2=0):
                         answer_list_print.remove(str(right_answer).split("|")[0])
                         random.shuffle(answer_list_print)
                         answer_list_print = [str(right_answer).split("|")[0]] + answer_list_print
-                        answer_list_print = answer_list_print[:3]
-                        answer_list_print.sort(key=len)
                         선지목록_체크용[선지번호[0] -
                                 1] = f"{str(answer_list_print[0])}"
                         선지목록_체크용[선지번호[1] -
@@ -466,7 +464,6 @@ def 매인함수(text_size2=0):
                         선지번호 = [1, 2, 3]
                         선지목록 = [1, 2, 3]
                         선지목록_체크용 = [1, 2, 3]
-                        answer_list_print.sort(key=len)
                         선지목록_체크용[선지번호[0] -
                                 1] = f"{str(answer_list_print[0])}"
                         선지목록_체크용[선지번호[1] -
