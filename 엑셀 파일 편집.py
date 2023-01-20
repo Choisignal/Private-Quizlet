@@ -6,7 +6,13 @@ def 수정(단어,이전,이후):
         단어 = 단어.replace(이전,이후)
         print("수정 후 : ",단어,"\n")
     return 단어
-    
+
+def 확인(질문,대답,구분,검색):
+    if 검색 in 질문:
+        print(f"{질문.replace(검색,f'[{검색}]'):20} : {대답.replace(검색,f'[{검색}]'):20} : {구분:20}")
+    elif 검색 in 대답:
+        print(f"{질문.replace(검색,f'[{검색}]'):20} : {대답.replace(검색,f'[{검색}]'):20} : {구분:20}")
+
 def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx"):
     data = pd.read_excel(file)
     data.to_excel(file.replace(".xlsx","_백업.xlsx"),index=False)
@@ -21,9 +27,8 @@ def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
         질문 = str(질문).strip()
         대답 = str(대답).strip()
         구분 = str(구분).strip()
-        if "(목적어 유형)" in 질문 and 대답 == "동사원형":
-            #질문 = 수정(질문,"to부정사", "to 동사원형")
-            대답 = 수정(대답,"동사원형", "to 동사원형")
+        #확인(질문,대답,구분,"집합명사")
+        대답 = 수정(대답,","," &")
         data.loc[i,"질문"] = 질문
         data.loc[i,"대답"] = 대답
         data.loc[i,"구분"] = 구분
