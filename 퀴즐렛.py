@@ -58,21 +58,22 @@ def 매인함수(text_size2=0):
 
 
     def make_list(right_answer):
-        right_answer_original = right_answer
-        right_answer = re.sub('\([^)]+\)', '', right_answer)
-        right_answer_list = []
-        try:
-            right_answer_list += right_answer.split(',')
-        except:
-            right_answer_list += [str(right_answer)]
-
-        try:
-            right_answer_list += right_answer.split("|")
-        except:
-            right_answer_list += [str(right_answer)]
         lang = button8.cget("text")
-        if lang == "연표":
-            right_answer_list += [str(right_answer)[2:]]
+        right_answer_original = right_answer
+        right_answer_list = []
+        if lang != "객관식":
+            right_answer = re.sub('\([^)]+\)', '', right_answer)
+            try:
+                right_answer_list += right_answer.split(',')
+            except:
+                right_answer_list += [str(right_answer)]
+
+            try:
+                right_answer_list += right_answer.split("|")
+            except:
+                right_answer_list += [str(right_answer)]
+            if lang == "연표":
+                right_answer_list += [str(right_answer)[2:]]
         right_answer_list += [right_answer_original]
         return right_answer_list
 
