@@ -61,19 +61,23 @@ def 매인함수(text_size2=0):
         lang = button8.cget("text")
         right_answer_original = right_answer
         right_answer_list = []
-        if lang != "객관식":
-            right_answer = re.sub('\([^)]+\)', '', right_answer)
-            try:
-                right_answer_list += right_answer.split(',')
-            except:
-                right_answer_list += [str(right_answer)]
+        right_answer = re.sub('\([^)]+\)', '', right_answer)
+        try:
+            right_answer_list += right_answer.split(',')
+        except:
+            right_answer_list += [str(right_answer)]
 
-            try:
-                right_answer_list += right_answer.split("|")
-            except:
-                right_answer_list += [str(right_answer)]
-            if lang == "연표":
-                right_answer_list += [str(right_answer)[2:]]
+        try:
+            right_answer_list += right_answer.split("|")
+        except:
+            right_answer_list += [str(right_answer)]            
+
+        try:
+            right_answer_list += right_answer.split(":")
+        except:
+            right_answer_list += [str(right_answer)]
+        if lang == "연표":
+            right_answer_list += [str(right_answer)[2:]]
         right_answer_list += [right_answer_original]
         return right_answer_list
 
@@ -678,7 +682,8 @@ def 매인함수(text_size2=0):
                         answer = right_answer[:2]+answer
 
                     right_answer_list = make_list(right_answer)
-
+                    print("answer : ",answer)
+                    print("right_answer_list : ",right_answer_list)
                     if answer != "" and answer in right_answer_list:
                         df["오답가산점"][i] = df["오답가산점"][i] - 1
                         keys = list(df.keys())
@@ -767,7 +772,6 @@ def 매인함수(text_size2=0):
                         elif lang == "객관식":
                             text.insert("1.0", f" 입니다.\n")
                             text.insert("1.0", right_answer2, "emphasis")
-                            print(right_answer2)
                             text.insert("1.0", "\n"+f"정답은 ")
                             era = ask.count("\n")+1
                         else:
