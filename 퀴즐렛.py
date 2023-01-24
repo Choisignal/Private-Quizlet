@@ -61,21 +61,20 @@ def 매인함수(text_size2=0):
         lang = button8.cget("text")
         right_answer_original = right_answer
         right_answer_list = []
-        right_answer = re.sub('\([^)]+\)', '', right_answer)
-        try:
-            right_answer_list += right_answer.split(',')
-        except:
-            right_answer_list += [str(right_answer)]
 
         try:
             right_answer_list += right_answer.split("|")
         except:
-            right_answer_list += [str(right_answer)]            
+            right_answer_list += [str(right_answer)]           
+            
+        if lang != "객관식":
+            right_answer = re.sub('\([^)]+\)', '', right_answer) 
+            
+            try:
+                right_answer_list += right_answer.split(',')
+            except:
+                right_answer_list += [str(right_answer)]
 
-        try:
-            right_answer_list += right_answer.split(":")
-        except:
-            right_answer_list += [str(right_answer)]
         if lang == "연표":
             right_answer_list += [str(right_answer)[2:]]
         right_answer_list += [right_answer_original]
@@ -599,7 +598,7 @@ def 매인함수(text_size2=0):
                         text.delete("1.0", f"3.0")
                     '''
                     answer = entry.get()
-                    if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "]"]):
+                    if len(answer) != 0 and (answer[-1] in ["+", "-", "*", "=", "]","[","/"]):
                         text.delete("1.0", "end")
                         click_open_btn()
                         entry.delete(0, END)
@@ -618,6 +617,8 @@ def 매인함수(text_size2=0):
                                             right_answer, "[   ]"), "emphasis")
                                     except:
                                         text.insert("1.0", ask, "emphasis")
+                            elif answer[-1] in ["[","/"]:
+                                click_wrong_btn()
                             else:
                                 try:
                                     text.insert("1.0", ask.replace(
@@ -630,6 +631,8 @@ def 매인함수(text_size2=0):
                                 text.insert("1.0", print_ask, "emphasis")
                             elif answer[-1] == "-":
                                 text.insert("1.0", print_ask, "emphasis")
+                            elif answer[-1] in ["[","/"]:
+                                click_wrong_btn()
                         else:
                             text.insert("1.0", f"{ask}\n", "emphasis")
                     if lang == "순서배열":
@@ -647,6 +650,8 @@ def 매인함수(text_size2=0):
                             check_ans = True
                         elif (lang == "객관식"):
                             try:
+                                if int(answer) in list(range(1+6, len_answer_list+1+6)):
+                                    answer = str(int(answer)-6)
                                 if int(answer) in list(range(1, len_answer_list+1)):
                                     answer = 선지목록_체크용[int(answer)-1].split('|')[0]
                                     check_ans = True
