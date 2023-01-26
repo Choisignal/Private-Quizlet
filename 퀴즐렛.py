@@ -685,6 +685,7 @@ def 매인함수(text_size2=0):
                     answer = str(answer).replace(" ", "")
                     if lang == "연표" and len(answer) == 2 and len(right_answer) > 2:
                         answer = right_answer[:2]+answer
+                        answer = right_answer[:2]+answer
 
                     right_answer_list = make_list(right_answer)
                     print("answer : ",answer)
@@ -1025,13 +1026,13 @@ def 매인함수(text_size2=0):
                         "1.0",
                         f"{str(len(ask) - i).zfill(2)}   ({date} {str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
-                text.insert("1.0", f"\n\n")
+                #text.insert("1.0", f"\n\n")
             else:
                 for i in range(len(ask)):
                     text.insert(
                         "1.0", f"{str(len(ask)-i).zfill(2)}   ({date} {str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
-                text.insert("1.0", f"\n\n")
+                #text.insert("1.0", f"\n\n")
         else:
             enter_in_text("실행할 수 없습니다. 파일을 선택했는지, 자료가 있는지 확인해주세요.")
 
