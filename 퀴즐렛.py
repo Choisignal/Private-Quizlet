@@ -400,7 +400,7 @@ def 매인함수(text_size2=0):
                     ask = df["질문"][i]
                     right_answer = df["대답"][i]
                 elif lang == "객관식":
-                    ask = df["질문"][i]
+                    ask = str(df["질문"][i])
                     ask = ask.replace(" \n","")
                     right_answer = df["대답"][i]
                     category = df["구분"][i]
