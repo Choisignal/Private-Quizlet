@@ -900,6 +900,8 @@ def 매인함수(text_size2=0):
                 df = df.drop_duplicates()
                 # df = df.sort_values(by="대답", ascending=True)
                 key_word = df["대답"].tolist()
+                for i1 in range(len(key_word)):
+                    key_word[i1]=str(key_word[i1]).split("//")[0]
                 content_to_print = df["질문"].tolist()
             line = button7.cget("text")
             if line == "줄바꿈 1":
