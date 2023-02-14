@@ -121,7 +121,7 @@ def 매인함수(text_size2=0):
                 qusetion_num = int(num_test.split("문항")[0])
                 if qusetion_num > num_total:
                     qusetion_num = num_total
-                # print(qusetion_num)
+                # #print(qusetion_num)
                 for i in range_list[0:qusetion_num]:
                     count += 1
                     if lang == "연표":
@@ -688,8 +688,8 @@ def 매인함수(text_size2=0):
                         answer = right_answer[:2]+answer
 
                     right_answer_list = make_list(right_answer)
-                    print("answer : ",answer)
-                    print("right_answer_list : ",right_answer_list)
+                    #print("answer : ",answer)
+                    #print("right_answer_list : ",right_answer_list)
                     if answer != "" and answer in right_answer_list:
                         df["오답가산점"][i] = df["오답가산점"][i] - 1
                         keys = list(df.keys())
@@ -832,7 +832,7 @@ def 매인함수(text_size2=0):
                 오답노트 = file.replace(filename, "")+"오답노트"
                 # shutil.rmtree(오답노트)
             except:
-                print(오답노트)
+                #print(오답노트)
                 pass
             label.config(text=file)
         except:
@@ -901,7 +901,8 @@ def 매인함수(text_size2=0):
                 # df = df.sort_values(by="대답", ascending=True)
                 key_word = df["대답"].tolist()
                 for i1 in range(len(key_word)):
-                    key_word[i1]=str(key_word[i1]).split("//")[0]
+                    key_word[i1] = str(key_word[i1]).split("//")[0]
+                    key_word[i1] = str(key_word[i1]).split("|")[0]
                 content_to_print = df["질문"].tolist()
             line = button7.cget("text")
             if line == "줄바꿈 1":
@@ -976,7 +977,7 @@ def 매인함수(text_size2=0):
                             search_check = True
                         else:
                             print_check = False
-                    # print(search, print_check)
+                    # #print(search, print_check)
                     if print_check == True:
                         if search_check == True:
                             text.insert(
@@ -1160,7 +1161,7 @@ def 매인함수(text_size2=0):
         top.config(menu=mb)
 
         file = "idea.txt"
-        # print(file, type(file))
+        # #print(file, type(file))
         top.title(basename(file) + " - 메모장")
         ta.delete(1.0, END)
         try:
@@ -1206,7 +1207,7 @@ def 매인함수(text_size2=0):
     else:
         background_color = _from_rgb((11, 58, 19))  # 칠판 초록색
 
-    print(os.path.abspath(__file__),width)
+    #print(os.path.abspath(__file__),width)
     window.columnconfigure(7, weight=1)
     window.rowconfigure(4, weight=1)
 
