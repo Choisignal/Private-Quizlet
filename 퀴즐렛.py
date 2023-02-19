@@ -50,8 +50,8 @@ def 매인함수(text_size2=0):
         import winsound as sd
 
         def beepsound():
-            fr = 1000    # range : 37 ~ 32767
-            du = 1000     # 1000 ms ==1second
+            fr = 750    # range : 37 ~ 32767
+            du = 500     # 1000 ms ==1second
             sd.Beep(fr, du)  # winsound.Beep(frequency, duration)
     except:
         pass
@@ -337,7 +337,7 @@ def 매인함수(text_size2=0):
             button8.configure(state="normal")
 
 
-    def tkinter_eng_word_roof(data_direct, filename):
+    def tkinter_eng_word_roof(data_direct, filename,text_size2):
         entry.delete(0, END)
         text.delete("1.0", "end")
         from time import sleep
@@ -462,7 +462,10 @@ def 매인함수(text_size2=0):
                             1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
                         선지목록[선지번호[2] -
                             1] = f"{선지번호[2]}. {str(answer_list_print[2])}"
-                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                        if text_size2 < 10:
+                            print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                        else:
+                            print_ask = f"{print_ask}\n{선지목록[0]}\n{선지목록[1]}\n{선지목록[2]}"
                     elif len(answer_list_print) == 3:
                         len_answer_list = 3
                         선지번호 = [1, 2, 3]
@@ -481,7 +484,12 @@ def 매인함수(text_size2=0):
                             1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
                         선지목록[선지번호[2] -
                             1] = f"{선지번호[2]}. {str(answer_list_print[2])}"
-                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                        #print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                        
+                        if text_size2 < 10:
+                            print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n{선지목록[2]}"
+                        else:
+                            print_ask = f"{print_ask}\n{선지목록[0]}\n{선지목록[1]}\n{선지목록[2]}"
                     elif len(answer_list_print) == 2:
                         len_answer_list = 2
                         선지번호 = [1, 2]
@@ -503,7 +511,12 @@ def 매인함수(text_size2=0):
                         선지목록[선지번호[1] -
                             1] = f"{선지번호[1]}. {str(answer_list_print[1])}"
 
-                        print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
+                        #print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
+                        
+                        if text_size2 < 10:
+                            print_ask = f"{print_ask}\n\n{선지목록[0]}\n\n{선지목록[1]}\n\n"
+                        else:
+                            print_ask = f"{print_ask}\n{선지목록[0]}\n{선지목록[1]}\n"
                     else:
                         len_answer_list = 1
                         선지번호 = [1]
@@ -532,11 +545,14 @@ def 매인함수(text_size2=0):
                     text.insert("1.0", "\n\n오답 체크 완료!")
                     try:
                         beep_check = button5.cget("text")
-                        if beep_check == "소리ON" and answer != "":
-                            beepsound()
-                            beepsound()
+                        if answer != "":
+                            if beep_check == "소리ON":
+                                beepsound()
+                                beepsound()
+                            else:
+                                sleep(1)
                     except:
-                        print("Beep!")
+                        sleep(1)
                 if lang == "객관식":
                     text.insert("1.0", f"{print_ask}\n", "emphasis")
                 elif lang != "순서배열":
@@ -718,7 +734,7 @@ def 매인함수(text_size2=0):
                                     f"\n정답! '{right_answer2}':")
                             era = ask.count("\n")+1
                         elif lang == "객관식":
-                            if len(right_answer2)>=33 and len(ask)<=5:
+                            if (len(right_answer2)>=33 and len(ask)<=5) or text_size2>10:
                                 enter_in_text(
                                     f"정답! {ask} : {right_answer2}")
                             else:
@@ -740,10 +756,11 @@ def 매인함수(text_size2=0):
                         df.to_excel(original_filename, index=False)
                         try:
                             beep_check = button5.cget("text")
-                            if beep_check == "소리ON" and answer != "":
-                                beepsound()
+                            if answer != "":
+                                if beep_check == "소리ON":
+                                    beepsound()
                         except:
-                            print("Beep!")
+                            sleep(1)
                         if lang == "O X 퀴즈":
                             # Answer - wrong
                             if answer == "ㅇ":
@@ -776,10 +793,13 @@ def 매인함수(text_size2=0):
                                 text.insert("1.0", "\n"+f"정답은 ")
                             era = ask.count("\n")+1
                         elif lang == "객관식":
-                            text.insert("1.0", f" 입니다.\n")
+                            text.insert("1.0", f" 입니다.\n")                            
                             text.insert("1.0", right_answer2, "emphasis")
                             text.insert("1.0", "\n"+f"정답은 ")
                             era = ask.count("\n")+1
+                            if text_size2 >= 10:
+                                window.update()
+                                sleep(3)
                         else:
                             text.insert("1.0", f"{exp}\n\n")
                             text.insert("1.0", f" 입니다.\n")
@@ -848,7 +868,7 @@ def 매인함수(text_size2=0):
             if RadioVariety_1.get() == 2:
                 tkinter_eng_word_test(data_direct, filename)
             elif RadioVariety_1.get() == 1:
-                tkinter_eng_word_roof(data_direct, filename)
+                tkinter_eng_word_roof(data_direct, filename,text_size2)
             else:
                 enter_in_text("원하는 작업을 선택해주세요.")
         else:
@@ -1027,13 +1047,13 @@ def 매인함수(text_size2=0):
                 for i in range(len(ask)):
                     text.insert(
                         "1.0",
-                        f"{str(len(ask) - i).zfill(2)}   ({date} {str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                        f"{str(len(ask) - i).zfill(2)}   ({str(times[i]).zfill(2)}). 질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
                 #text.insert("1.0", f"\n\n")
             else:
                 for i in range(len(ask)):
                     text.insert(
-                        "1.0", f"{str(len(ask)-i).zfill(2)}   ({date} {str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
+                        "1.0", f"{str(len(ask)-i).zfill(2)}   ({str(times[i]).zfill(2)})\n질문 | {'%-15s' % ask[i]}\n대답 | {ans[i]}\n정답 | {cor[i]}\n\n")
 
                 #text.insert("1.0", f"\n\n")
         else:
