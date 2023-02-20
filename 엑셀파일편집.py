@@ -38,6 +38,8 @@ def 확인(질문,대답,구분,검색):
 def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx"):
     data = pd.read_excel(file)
     data.to_excel(file.replace(".xlsx","_백업.xlsx"),index=False)
+    data.to_excel(file,index=False)
+    data = pd.read_excel(file)
     질문_list = list(data["질문"])
     대답_list = list(data["대답"])
     구분_list = list(data["구분"])
@@ -50,7 +52,29 @@ def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
         대답 = str(대답).strip()
         구분 = str(구분).strip()
 
-        대답 = re.sub('\([^)]+\)', '', 대답)
+        질문 = re.sub('\([^)]+\)', '', 질문)
+    #    print(f"{질문}\n{대답}\n{구분}\n\n")
+        if 대답 == 'nan':
+            if "[" in 질문:
+                대답 = 질문[질문.find("]")+1:]
+                질문 = 질문[0:질문.find("[")]
+                대답 = re.sub('\([^)]+\)', '', 대답)
+            elif "：" in 질문:
+                대답 = 질문.split("：")[1]
+                질문 = 질문.split("：")[0]
+                대답 = re.sub('\([^)]+\)', '', 대답)
+            else:
+                print(f"{질문} | {대답} | {구분}")
+                대답 = 질문.split(" ")[1]
+                질문 = 질문.split(" ")[0]
+                대답 = re.sub('\([^)]+\)', '', 대답)
+            if "□ " in 질문:
+                질문 = 질문[질문.find("□ ")+1:]
+
+            질문 = str(질문).strip()
+            대답 = str(대답).strip()
+            구분 = str(구분).strip()
+            print(f"{질문} | {대답} | {구분}")
 
         data.loc[i,"질문"] = 질문
         data.loc[i,"대답"] = 대답
@@ -59,4 +83,4 @@ def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
 
 #파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
 #파일수정(file = "./학습자료/단답형/영어_복습.xlsx")
-파일수정(file = "./학습자료/단답형/국어_한자.xlsx")
+파일수정(file = "./학습자료/단답형/영단어 기초.xlsx")
