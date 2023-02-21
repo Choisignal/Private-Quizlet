@@ -38,8 +38,6 @@ def 확인(질문,대답,구분,검색):
 def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx"):
     data = pd.read_excel(file)
     data.to_excel(file.replace(".xlsx","_백업.xlsx"),index=False)
-    data.to_excel(file,index=False)
-    data = pd.read_excel(file)
     질문_list = list(data["질문"])
     대답_list = list(data["대답"])
     구분_list = list(data["구분"])
@@ -83,4 +81,4 @@ def 파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
 
 #파일수정(file = "./학습자료/단답형/국어_복습_객관식.xlsx")
 #파일수정(file = "./학습자료/단답형/영어_복습.xlsx")
-파일수정(file = "./학습자료/단답형/영단어 기초.xlsx")
+파일수정(file = "./학습자료/단답형/영단어.xlsx")
