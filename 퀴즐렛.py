@@ -759,6 +759,8 @@ def 매인함수(text_size2=0):
                             if answer != "":
                                 if beep_check == "소리ON":
                                     beepsound()
+                                elif text_size2<10:
+                                    sleep(2)
                         except:
                             sleep(1)
                         if lang == "O X 퀴즈":
