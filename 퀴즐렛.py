@@ -797,7 +797,7 @@ def 매인함수(text_size2=0):
                         elif lang == "객관식":
                             text.insert("1.0", f" 입니다.\n")                            
                             text.insert("1.0", right_answer2, "emphasis")
-                            text.insert("1.0", "\n"+f"정답은 ")
+                            text.insert("1.0", f"정답은 ")
                             era = ask.count("\n")+1
                             if text_size2 >= 10:
                                 window.update()
