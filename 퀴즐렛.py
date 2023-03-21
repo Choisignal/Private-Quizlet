@@ -742,6 +742,16 @@ def 매인함수(text_size2=0):
                                 enter_in_text(
                                     f"정답! '{right_answer2}':")
                             era = ask.count("\n")+1
+                            if text_size2 >= 10:
+                                entry.delete(0, END)
+                                pass_check = True
+                                while pass_check == True:
+                                    window.update()
+                                    sleep(0.05)
+                                    pass_enter = entry.get()
+                                    if pass_enter != "":
+                                        pass_check = False
+
                         else:
                             enter_in_text(
                                 f"정답! \n{exp}\n")
@@ -800,8 +810,14 @@ def 매인함수(text_size2=0):
                             text.insert("1.0", f"정답은 ")
                             era = ask.count("\n")+1
                             if text_size2 >= 10:
-                                window.update()
-                                sleep(3)
+                                entry.delete(0, END)
+                                pass_check = True
+                                while pass_check == True:
+                                    window.update()
+                                    sleep(0.05)
+                                    pass_enter = entry.get()
+                                    if pass_enter != "":
+                                        pass_check = False
                         else:
                             text.insert("1.0", f"{exp}\n\n")
                             text.insert("1.0", f" 입니다.\n")
