@@ -388,6 +388,21 @@ def 매인함수(text_size2=0):
                 range_list = 틀린목록 + 틀릭적없는목록 + 맞은목록
                 text.insert(
                     "1.0", f"오답 체크 : {len(틀린목록)}개 ({newdf['오답가산점'].max()}점)")
+            
+            num_test = button_test.cget("text")
+            qusetion_num = int(num_test.split("문항")[0])
+            range_list = range_list[:qusetion_num]
+            if count2 != 0:
+                    try:
+                        beep_check = button5.cget("text")
+                        if answer != "":
+                            if beep_check == "소리ON":
+                                beepsound()
+                                beepsound()
+                            else:
+                                sleep(1)
+                    except:
+                        sleep(1)
             for i in range_list:
                 if stop_check != False:
                     break
@@ -495,12 +510,6 @@ def 매인함수(text_size2=0):
                         선지번호 = [1, 2]
                         선지목록 = [1, 2]
                         선지목록_체크용 = [1, 2]
-                        '''
-                        random.shuffle(선지번호)
-                        answer_list.remove(right_answer)
-                        random.shuffle(answer_list)
-                        answer_list = [right_answer] + answer_list
-                        '''
                         선지목록_체크용[선지번호[0] -
                                 1] = f"{str(answer_list_print[0])}"
                         선지목록_체크용[선지번호[1] -
@@ -668,6 +677,8 @@ def 매인함수(text_size2=0):
                             try:
                                 if int(answer) in list(range(1+6, len_answer_list+1+6)):
                                     answer = str(int(answer)-6)
+                                if int(answer) in list(range(1+3, len_answer_list+1+3)):
+                                    answer = str(int(answer)-3)
                                 if int(answer) in list(range(1, len_answer_list+1)):
                                     answer = 선지목록_체크용[int(answer)-1].split('|')[0]
                                     check_ans = True
@@ -1286,7 +1297,7 @@ def 매인함수(text_size2=0):
     radio2.configure(bg=background_color, foreground="white", selectcolor=background_color,
                     activebackground=background_color, activeforeground="yellow", highlightthickness=0)
 
-    button_test = Button(window, relief="flat", overrelief="flat", width=8, height=1, text="5문항", font=('Courier', 20+text_size),
+    button_test = Button(window, relief="flat", overrelief="flat", width=8, height=1, text="10문항", font=('Courier', 20+text_size),
                         command=click_test_number_btn)
     button_test.grid(column=8, row=2)
     button_test.configure(bg=background_color, foreground="white",
